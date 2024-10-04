@@ -4,8 +4,8 @@ export default function Document() {
   const meta = {
     title: 'LFG Labs',
     description:
-      'Web3-focused team of builders creating user-friendly products, from design to code.',
-    image: 'https://assets.vercel.com/image/upload/q_auto/front/vercel/dps.png'
+      'We are a web3-focused company creating user-friendly products, from design to code.',
+    image: '/images/lfg_banner.webp'
   }
   return (
     <Html lang="en">
