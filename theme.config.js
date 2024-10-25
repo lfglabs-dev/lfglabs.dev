@@ -17,5 +17,16 @@ export default {
       `}</style>
     </small>
   ),
-  darkMode: true
+  darkMode: true,
+  components: (
+    <span>
+      <img
+        src="/path/to/your/logo.png"
+        alt="LFG Labs Logo"
+        width={32}
+        height={32}
+      />
+      <span style={{ marginLeft: '.4em', fontWeight: 800 }}>LFG Labs</span>
+    </span>
+  )
 }
