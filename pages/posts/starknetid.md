@@ -1,9 +1,10 @@
 ---
 title: Starknet ID - We got 239K on-chain customers.
-description: Starknet ID serves as a versatile passport for Starknet, facilitating seamless storage and sharing of user-specific data within the Starknet ID ecosystem.
+description: Digital identity for Starknet users.
 tag: social, user-oriented
 author: LFG Labs
 image: /images/starknetid.webp
+date: 2022-12-01
 ---
 
 ![Starknet ID](/images/starknetid.webp)

@@ -1,9 +1,10 @@
 ---
 title: StarkFighter - We brought 413K players on-chain.
-description: A retro-style mini-game offering players the chance to compete for prizes.
+description: Retro game with on-chain rewards.
 tag: game, user-oriented
 author: LFG Labs
 image: /images/starkfighter.webp
+date: 2023-06-01
 ---
 
 ![Starkfighter](/images/starkfighter.webp)

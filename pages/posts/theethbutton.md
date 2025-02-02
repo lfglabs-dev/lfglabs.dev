@@ -1,8 +1,9 @@
 ---
 title: The Ethereum Button - We gave 13,671$ to the winner.
-description: A game experiment to bring Ethereum users to Starknet.
+description: Game theory experiment with ETH rewards.
 tag: game, user-oriented
 author: LFG Labs
+date: 2024-08-01
 ---
 
 ![The Ethereum Button](/images/theethereumbutton.webp)

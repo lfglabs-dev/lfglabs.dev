@@ -1,9 +1,10 @@
 ---
 title: Starknet Quest - We brought 614K users to web3 apps.
-description: Starknet Quest helps protocols to attract and retain users by creating gamified quest experiences on Starknet.
+description: Gamified onboarding for Starknet apps.
 tag: quests, user-oriented
 author: LFG Labs
 image: /images/starknetquest.webp
+date: 2023-06-01
 ---
 
 ![Starknet Quest](/images/starknetquest.webp)

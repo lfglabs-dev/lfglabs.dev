@@ -1,9 +1,10 @@
 ---
 title: The Cairo Book - We built the most used Cairo resource.
-description: A community-built book covering all aspects of the Cairo programming language and Starknet smart contracts
+description: Comprehensive guide to Cairo programming.
 tag: documentation, dev-oriented
 author: LFG Labs
 image: /images/thecairobook.webp
+date: 2023-04-01
 ---
 
 ![The Cairo Book](/images/thecairobook.webp)

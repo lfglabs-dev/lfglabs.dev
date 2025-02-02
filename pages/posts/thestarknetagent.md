@@ -1,9 +1,10 @@
 ---
 title: The Starknet Agent - We automated your dev research.
-description: An AI agent trained on Cairo and Starknet to provide instant, sourced answers and in-depth explanations
+description: AI-powered Cairo documentation assistant.
 tag: AI, dev-oriented
 author: LFG Labs
 image: /images/thestarknetagent.webp
+date: 2024-09-01
 ---
 
 ![The Starknet Agent](/images/thestarknetagent.webp)
