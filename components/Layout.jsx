@@ -1,7 +1,7 @@
 import Navbar from './Navbar'
 import HomeSidebar from './HomeSidebar'
 
-export default function Layout({ children }) {
+export default function Layout({ children, footer }) {
   return (
     <div className="min-h-screen flex flex-col bg-white">
       <Navbar />
@@ -15,6 +15,7 @@ export default function Layout({ children }) {
           <main className="flex-1 min-w-0">{children}</main>
         </div>
       </div>
+      {footer}
     </div>
   )
 }

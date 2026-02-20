@@ -5,7 +5,7 @@ export default function Document() {
     title: 'LFG Labs',
     description:
       'Open-source software team building AI and web3 infrastructure.',
-    image: '/images/lfg_banner.webp',
+    image: 'https://lfglabs.dev/images/lfg_banner.webp',
   }
 
   return (

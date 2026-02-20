@@ -15,6 +15,8 @@ export default function SocialProof() {
             src={partner.logo}
             alt={partner.name}
             className={`${partner.className || 'h-7'} w-auto grayscale opacity-40`}
+            loading="lazy"
+            decoding="async"
           />
         ))}
       </div>

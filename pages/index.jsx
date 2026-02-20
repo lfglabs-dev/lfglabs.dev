@@ -14,7 +14,7 @@ export default function Home() {
       <Head>
         <title>LFG Labs | Web3 infrastructure, built AI-first</title>
       </Head>
-      <Layout>
+      <Layout footer={<Footer />}>
         <Hero />
 
         <SocialProof />
@@ -41,7 +41,6 @@ export default function Home() {
           </div>
         </section>
 
-        <Footer />
       </Layout>
     </>
   )

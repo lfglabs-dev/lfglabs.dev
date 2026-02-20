@@ -33,7 +33,7 @@ const mdxComponents = {
 
 function formatDate(dateString) {
   const date = new Date(dateString)
-  return date.toLocaleDateString('en-US', { month: 'long', year: 'numeric' })
+  return date.toLocaleDateString('en-US', { month: 'long', year: 'numeric', timeZone: 'UTC' })
 }
 
 export default function ProjectPage({ frontmatter, source, recommendedProjects }) {
