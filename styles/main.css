@@ -1,65 +1,55 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Caveat:wght@400;700&display=swap');
+
 @font-face {
-  font-family: 'Inter var';
+  font-family: 'ET Book';
   font-style: normal;
-  font-weight: 100 900;
-  font-display: block;
-  src: url(/fonts/Inter-roman.latin.var.woff2) format('woff2');
+  font-weight: 400;
+  font-display: swap;
+  src: url(/fonts/serif/etbookot-roman-webfont.woff2) format('woff2');
 }
+
 @font-face {
-  font-family: 'Inter var';
+  font-family: 'ET Book';
   font-style: italic;
-  font-weight: 100 900;
-  font-display: block;
-  src: url(/fonts/Inter-italic.latin.var.woff2) format('woff2');
-  font-named-instance: 'Italic';
+  font-weight: 400;
+  font-display: swap;
+  src: url(/fonts/serif/etbookot-italic-webfont.woff2) format('woff2');
 }
 
-body {
-  font-family: 'Inter var', system-ui, -apple-system, BlinkMacSystemFont,
-    'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif,
-    'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
-  -webkit-font-smoothing: subpixel-antialiased;
-  font-feature-settings: 'case' 1, 'cpsp' 1, 'dlig' 1, 'cv01' 1, 'cv02',
-    'cv03' 1, 'cv04' 1;
-  font-variation-settings: 'wght' 450;
-  font-variant: common-ligatures contextual;
-  letter-spacing: -0.02em;
-}
-b,
-strong,
-h3,
-h4,
-h5,
-h6 {
-  font-variation-settings: 'wght' 650;
-}
-h1 {
-  font-variation-settings: 'wght' 850;
-}
-h2 {
-  font-variation-settings: 'wght' 750;
+@font-face {
+  font-family: 'ET Book';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url(/fonts/serif/etbookot-bold-webfont.woff2) format('woff2');
 }
 
-@media screen and (min-device-pixel-ratio: 1.5),
-  screen and (min-resolution: 1.5dppx) {
+@layer base {
   body {
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
+    @apply font-sans antialiased bg-white;
+    color: #404040;
+    letter-spacing: -0.02em;
   }
-}
 
-details summary {
-  cursor: pointer;
-}
+  h1 {
+    font-weight: 700;
+  }
 
-img.next-image {
-  margin: 0;
-}
+  h2 {
+    font-weight: 700;
+  }
 
-.prose a {
-  color: #0074de;
-}
-
-.nav-line .nav-link {
-  color: #69778c;
+  h3,
+  h4,
+  h5,
+  h6,
+  b,
+  strong {
+    font-weight: 700;
+  }
 }

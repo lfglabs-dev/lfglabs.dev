@@ -1,13 +1,11 @@
 ---
-title: Starknet Quest - We brought 614K users to web3 apps.
+title: We brought 614K users to web3 apps.
+subtitle: A gamified quest platform built for the Starknet ecosystem.
 description: Gamified onboarding for Starknet apps.
-tag: quests, user-oriented
 author: LFG Labs
 image: /images/starknetquest.webp
 date: 2023-06-01
 ---
-
-![Starknet Quest](/images/starknetquest.webp)
 
 Starknet Quest is an web3 quest platform designed to engage users in the Starknet ecosystem through gamified learning experiences and reward systems. It offers a series of quests and challenges that allow participants to earn exclusive tokens and NFTs while exploring and interacting with Starknet apps.
 

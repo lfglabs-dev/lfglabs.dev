@@ -1,13 +1,22 @@
-const withNextra = require('nextra')('nextra-theme-blog', './theme.config.js')
+const remarkFrontmatter = require('remark-frontmatter')
 
-module.exports = withNextra({
+const withMDX = require('@next/mdx')({
+  extension: /\.mdx?$/,
+  options: {
+    remarkPlugins: [remarkFrontmatter],
+    rehypePlugins: [],
+  },
+})
+
+module.exports = withMDX({
+  pageExtensions: ['js', 'jsx', 'md', 'mdx'],
   async redirects() {
     return [
       {
         source: '/portfolio',
-        destination: '/',
-        permanent: true
-      }
+        destination: '/projects',
+        permanent: true,
+      },
     ]
-  }
+  },
 })

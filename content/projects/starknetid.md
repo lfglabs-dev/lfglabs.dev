@@ -1,13 +1,11 @@
 ---
-title: Starknet ID - We got 239K on-chain customers.
+title: We got 239K on-chain customers.
+subtitle: The decentralized identity protocol powering 30+ apps on Starknet.
 description: Digital identity for Starknet users.
-tag: social, user-oriented
 author: LFG Labs
 image: /images/starknetid.webp
 date: 2022-12-01
 ---
-
-![Starknet ID](/images/starknetid.webp)
 
 Starknet ID is a decentralized identity protocol built for the Starknet ecosystem. The protocol allows users to create their Starknet profile using their username, Starknet address and profile picture.
 
