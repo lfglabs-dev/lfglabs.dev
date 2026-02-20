@@ -1,13 +1,11 @@
 ---
-title: The Starknet Agent - We automated your dev research.
+title: We automated your dev research.
+subtitle: An AI-powered Cairo assistant built for Starkware & the Starknet Foundation.
 description: AI-powered Cairo documentation assistant.
-tag: AI, dev-oriented
 author: LFG Labs
 image: /images/thestarknetagent.webp
 date: 2024-09-01
 ---
-
-![The Starknet Agent](/images/thestarknetagent.webp)
 
 The Starknet Agent is an AI-powered chatbot specifically trained on Cairo programming language and the Starknet ecosystem. It aims to simplify the onboarding process for Starknet and Cairo developers by providing instant, accurate answers to queries, along with sourced information and the ability to engage in deeper explanations. This project solves the problem of time-consuming documentation searches and helps developers quickly find the information they need while sourcing it.
 

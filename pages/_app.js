@@ -1,27 +1,32 @@
-import 'nextra-theme-blog/style.css'
 import Head from 'next/head'
-
+import { useRouter } from 'next/router'
+import LegalLayout from '../components/LegalLayout'
 import '../styles/main.css'
 
-export default function Nextra({ Component, pageProps }) {
+export default function App({ Component, pageProps }) {
+  const router = useRouter()
+  const isLegalPage =
+    router.pathname.startsWith('/privacy') ||
+    router.pathname.startsWith('/terms') ||
+    router.pathname === '/support'
+
   return (
     <>
       <Head>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link
-          rel="alternate"
-          type="application/rss+xml"
-          title="RSS"
-          href="/feed.xml"
-        />
-        <link
-          rel="preload"
-          href="/fonts/Inter-roman.latin.var.woff2"
-          as="font"
-          type="font/woff2"
+          rel="preconnect"
+          href="https://fonts.gstatic.com"
           crossOrigin="anonymous"
         />
       </Head>
-      <Component {...pageProps} />
+      {isLegalPage ? (
+        <LegalLayout>
+          <Component {...pageProps} />
+        </LegalLayout>
+      ) : (
+        <Component {...pageProps} />
+      )}
     </>
   )
 }

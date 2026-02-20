@@ -1,13 +1,11 @@
 ---
-title: StarkFighter - We brought 413K players on-chain.
+title: We brought 413K players on-chain.
+subtitle: A retro on-chain game sponsored by 21 web3 protocols on Starknet.
 description: Retro game with on-chain rewards.
-tag: game, user-oriented
 author: LFG Labs
 image: /images/starkfighter.webp
 date: 2023-06-01
 ---
-
-![Starkfighter](/images/starkfighter.webp)
 
 Starkfighter is an exciting mini-game developed for the Starknet ecosystem, offering players the opportunity to compete for prizes and mint exclusive NFTs. This gamified experience has successfully engaged thousands of participants, introducing them to the Starknet blockchain in an entertaining and rewarding way.
 
