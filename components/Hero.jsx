@@ -9,10 +9,10 @@ export default function Hero() {
         <span className="text-accent">mathematical proofs.</span>
       </h1>
       <p className="text-lg text-primary leading-relaxed mb-8 max-w-2xl mx-auto">
-        Audits give you opinions. We give you certainty. We formally prove that
-        your smart contracts do exactly what they&apos;re supposed to using Lean
-        4 and mathematical proofs that cover every possible execution path, not
-        just the ones a human reviewer thought to check.
+        We formally verify that your smart contracts do exactly what
+        they&apos;re supposed to using Lean 4 and mathematical proofs that cover
+        every possible execution path, not just the ones a human reviewer
+        thought to check.
       </p>
       <ContactButton />
     </section>
