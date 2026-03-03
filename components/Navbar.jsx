@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import Image from 'next/image'
 import { useRouter } from 'next/router'
 import OrangeHighlight from './OrangeHighlight'
 
@@ -26,8 +27,14 @@ export default function Navbar() {
   return (
     <nav className="w-full bg-white py-5 px-6 sm:px-8">
       <div className="max-w-6xl mx-auto flex items-center justify-between">
-        <Link href="/" className="font-serif text-2xl text-heading">
-          LFG Labs
+        <Link href="/" className="flex items-center">
+          <Image
+            src="/images/lfg_logo.webp"
+            alt="LFG Labs"
+            width={40}
+            height={40}
+            className="rounded-full"
+          />
         </Link>
         <div className="flex items-center gap-8">
           <NavLink

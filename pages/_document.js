@@ -4,7 +4,7 @@ export default function Document() {
   const meta = {
     title: 'LFG Labs',
     description:
-      'Open-source software team building AI and web3 infrastructure.',
+      'Audits give you opinions. We give you certainty. LFG Labs formally proves your smart contracts do exactly what they\'re supposed to using Lean 4 and mathematical proofs.',
     image: 'https://lfglabs.dev/images/lfg_banner.webp',
   }
 
