@@ -8,7 +8,8 @@ const partners = [
 export default function SocialProof() {
   return (
     <section className="mb-16">
-      <div className="flex items-center gap-8 flex-wrap">
+      <p className="text-sm text-muted mb-4 text-center">Trusted by</p>
+      <div className="flex items-center justify-center gap-8 flex-wrap">
         {partners.map((partner) => (
           <img
             key={partner.name}

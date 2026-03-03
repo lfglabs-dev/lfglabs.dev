@@ -3,6 +3,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import PageLayout from '../components/PageLayout'
 import OrangeHighlight from '../components/OrangeHighlight'
+import ContactButton from '../components/ContactButton'
 
 export default function AboutPage() {
   return (
@@ -77,19 +78,14 @@ export default function AboutPage() {
 
           <div className="border-t border-gray-200 mt-12" />
 
-          <div className="bg-card-bg rounded-xl p-8 mt-12">
+          <div className="bg-card-bg rounded-xl p-8 mt-12 text-center">
             <p className="text-base font-bold text-heading mb-2">
               Get in touch
             </p>
             <p className="text-sm text-muted mb-4">
               Reach out for partnerships, collaborations, or inquiries.
             </p>
-            <a
-              href="mailto:ben@lfglabs.dev"
-              className="text-accent font-bold hover:underline"
-            >
-              ben@lfglabs.dev
-            </a>
+            <ContactButton />
           </div>
         </div>
       </PageLayout>
