@@ -4,7 +4,7 @@ export default function Hero() {
   return (
     <section className="mb-16 pt-4 sm:pt-8 text-center">
       <h1 className="font-serif text-[36px] sm:text-[48px] text-heading tracking-tight mb-8 leading-[1.15]">
-        We secure web3 with
+        We secure smart contracts with
         <br />
         <span className="text-accent">mathematical proofs.</span>
       </h1>

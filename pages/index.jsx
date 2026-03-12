@@ -8,7 +8,7 @@ export default function Home() {
   return (
     <>
       <Head>
-        <title>LFG Labs | We secure web3 with mathematical proofs</title>
+        <title>LFG Labs | We secure smart contracts with mathematical proofs</title>
       </Head>
       <Layout footer={<Footer />}>
         <Hero />
