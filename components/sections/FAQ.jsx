@@ -35,7 +35,7 @@ const faqs = [
   {
     question: 'What chains do you support?',
     answer:
-      'We verify Solidity contracts targeting the EVM. This covers Ethereum mainnet, L2s (Arbitrum, Optimism, Base, Starknet), and any EVM-compatible chain.',
+      'We verify Solidity contracts targeting the EVM. This covers Ethereum mainnet, L2s (Arbitrum, Optimism, Base), and any EVM-compatible chain.',
   },
 ]
 
