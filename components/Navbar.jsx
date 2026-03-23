@@ -2,6 +2,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { useRouter } from 'next/router'
 import OrangeHighlight from './OrangeHighlight'
+import ContactButton from './ContactButton'
 
 function NavLink({ href, active, children }) {
   if (active) {
@@ -46,6 +47,9 @@ export default function Navbar() {
           <NavLink href="/about" active={router.pathname === '/about'}>
             About
           </NavLink>
+          <span className="hidden sm:inline-flex">
+            <ContactButton />
+          </span>
         </div>
       </div>
     </nav>

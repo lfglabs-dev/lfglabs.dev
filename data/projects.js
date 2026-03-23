@@ -7,6 +7,7 @@ export const projects = [
     description: 'Lean 4 framework for mathematically proven Ethereum smart contracts.',
     image: '/images/verity.webp',
     date: '2025-07-01',
+    partner: { name: 'Ethereum Foundation', logo: '/images/logos/ethereum-foundation.png' },
   },
   {
     slug: 'safelens',
@@ -16,6 +17,7 @@ export const projects = [
     description: 'Offline Gnosis Safe transaction verification with ERC-7730 clear signing.',
     image: '/images/safelens.webp',
     date: '2025-06-01',
+    partner: { name: 'Ethereum Foundation', logo: '/images/logos/ethereum-foundation.png' },
   },
   {
     slug: 'runes',
@@ -25,6 +27,7 @@ export const projects = [
     description: 'Starknet <> Bitcoin bridge enabling non-BTC assets like USDC directly on Bitcoin via the Rune meta-protocol.',
     image: '/images/runes.webp',
     date: '2025-05-25',
+    partner: { name: 'Starkware', logo: '/images/logos/starkware.svg' },
   },
   {
     slug: 'lucid',
@@ -34,6 +37,7 @@ export const projects = [
     description: 'Transaction visualization and secure mobile signing for Gnosis Safe. Acquired by OpenCover.',
     image: null,
     date: '2025-04-01',
+    partner: { name: 'Nexus Mutual', logo: '/images/logos/nexus-mutual.png' },
   },
   {
     slug: 'thecairocorelib',
@@ -43,6 +47,7 @@ export const projects = [
     description: '8,000+ lines of documentation across 80+ pull requests for Cairo\'s Core Library.',
     image: '/images/thecairocorelib.webp',
     date: '2024-10-01',
+    partner: { name: 'Starkware', logo: '/images/logos/starkware.svg' },
   },
   {
     slug: 'thestarknetagent',
@@ -52,6 +57,7 @@ export const projects = [
     description: 'AI-powered chatbot trained on Cairo and the Starknet ecosystem.',
     image: '/images/thestarknetagent.webp',
     date: '2024-09-01',
+    partner: { name: 'Starkware', logo: '/images/logos/starkware.svg' },
   },
   {
     slug: 'theethbutton',
@@ -61,6 +67,7 @@ export const projects = [
     description: 'Game theory experiment: last to press the button wins 5 ETH.',
     image: '/images/theethereumbutton.webp',
     date: '2024-08-01',
+    partner: { name: 'Starknet Foundation', logo: '/images/logos/starknet-foundation.png' },
   },
   {
     slug: 'starkfighter',
@@ -70,6 +77,7 @@ export const projects = [
     description: 'Retro mini-game with on-chain rewards and 21 web3 protocol sponsors.',
     image: '/images/starkfighter.webp',
     date: '2023-06-01',
+    partner: { name: 'Starknet Foundation', logo: '/images/logos/starknet-foundation.png' },
   },
   {
     slug: 'starknetquest',
@@ -79,6 +87,7 @@ export const projects = [
     description: 'Gamified onboarding platform with 2.94M quests completed across the Starknet ecosystem.',
     image: '/images/starknetquest.webp',
     date: '2023-06-01',
+    partner: { name: 'Starknet Foundation', logo: '/images/logos/starknet-foundation.png' },
   },
   {
     slug: 'thecairobook',
@@ -88,6 +97,7 @@ export const projects = [
     description: 'Comprehensive community-built guide to Cairo programming and Starknet development.',
     image: '/images/thecairobook.webp',
     date: '2023-04-01',
+    partner: { name: 'Starkware', logo: '/images/logos/starkware.svg' },
   },
   {
     slug: 'starknetid',
@@ -97,5 +107,6 @@ export const projects = [
     description: 'Decentralized identity protocol with 500K+ domains registered, 30+ app integrations.',
     image: '/images/starknetid.webp',
     date: '2022-12-01',
+    partner: { name: 'Starknet ID', logo: '/images/logos/starknet-id.webp' },
   },
 ]

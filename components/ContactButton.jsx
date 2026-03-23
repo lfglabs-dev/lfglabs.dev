@@ -2,13 +2,6 @@ import { useState } from 'react'
 
 export default function ContactButton() {
   const [open, setOpen] = useState(false)
-  const [copied, setCopied] = useState(false)
-
-  const handleCopyEmail = () => {
-    navigator.clipboard.writeText('contact@lfglabs.dev')
-    setCopied(true)
-    setTimeout(() => setCopied(false), 2000)
-  }
 
   return (
     <>
@@ -22,10 +15,7 @@ export default function ContactButton() {
       {open && (
         <div
           className="fixed inset-0 z-50 flex items-center justify-center bg-black/40"
-          onClick={() => {
-            setOpen(false)
-            setCopied(false)
-          }}
+          onClick={() => setOpen(false)}
         >
           <div
             className="bg-white rounded-xl p-6 w-full max-w-sm mx-4 shadow-lg"
@@ -35,31 +25,6 @@ export default function ContactButton() {
               How would you like to reach us?
             </p>
             <div className="flex flex-col gap-3">
-              <button
-                onClick={handleCopyEmail}
-                className="flex items-center gap-3 w-full px-4 py-3 rounded-lg border border-gray-200 hover:border-accent transition-colors text-left"
-              >
-                <svg
-                  width="20"
-                  height="20"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  className="text-accent flex-shrink-0"
-                >
-                  <rect x="2" y="4" width="20" height="16" rx="2" />
-                  <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
-                </svg>
-                <div>
-                  <p className="text-sm font-bold text-heading">
-                    {copied ? 'Email copied!' : 'Email'}
-                  </p>
-                  <p className="text-xs text-muted">contact@lfglabs.dev</p>
-                </div>
-              </button>
               <a
                 href="https://t.me/fricoben"
                 target="_blank"
@@ -80,12 +45,34 @@ export default function ContactButton() {
                   <p className="text-xs text-muted">@fricoben</p>
                 </div>
               </a>
+              <a
+                href="https://cal.com/lfglabs/verity-discovery-call"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-3 w-full px-4 py-3 rounded-lg border border-gray-200 hover:border-accent transition-colors text-left"
+              >
+                <svg
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  className="text-accent flex-shrink-0"
+                >
+                  <rect x="3" y="4" width="18" height="18" rx="2" />
+                  <path d="M16 2v4M8 2v4M3 10h18" />
+                </svg>
+                <div>
+                  <p className="text-sm font-bold text-heading">Discovery call</p>
+                  <p className="text-xs text-muted">Book a 30-min call</p>
+                </div>
+              </a>
             </div>
             <button
-              onClick={() => {
-                setOpen(false)
-                setCopied(false)
-              }}
+              onClick={() => setOpen(false)}
               className="mt-4 w-full text-sm text-muted hover:text-primary transition-colors"
             >
               Close
