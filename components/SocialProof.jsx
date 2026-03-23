@@ -7,7 +7,7 @@ const partners = [
 
 export default function SocialProof() {
   return (
-    <section className="mb-16">
+    <section className="py-20 sm:py-28 border-t border-gray-100">
       <p className="text-sm text-muted mb-4 text-center">Trusted by</p>
       <div className="flex items-center justify-center gap-8 flex-wrap">
         {partners.map((partner) => (

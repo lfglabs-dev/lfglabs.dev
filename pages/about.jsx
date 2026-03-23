@@ -2,8 +2,8 @@ import Head from 'next/head'
 import Image from 'next/image'
 import Link from 'next/link'
 import PageLayout from '../components/PageLayout'
-import OrangeHighlight from '../components/OrangeHighlight'
-import ContactButton from '../components/ContactButton'
+import SectionHeader from '../components/ui/SectionHeader'
+import FinalCTA from '../components/sections/FinalCTA'
 
 export default function AboutPage() {
   return (
@@ -13,9 +13,9 @@ export default function AboutPage() {
       </Head>
       <PageLayout>
         <div className="max-w-3xl mx-auto px-6 py-12">
-          <h1 className="font-serif text-[38px] font-bold text-heading text-center mb-10 inline-block w-full">
-            <OrangeHighlight>Our story</OrangeHighlight>
-          </h1>
+          <SectionHeader>
+            Why we chose <span className="text-accent">formal.</span>
+          </SectionHeader>
 
           <div className="text-center mb-10">
             <Image
@@ -32,62 +32,49 @@ export default function AboutPage() {
 
           <div className="space-y-6 text-base text-primary leading-relaxed">
             <p>
-              We&apos;re Thomas and Ben. We met during our engineering studies in
-              France, became friends, and quickly realized we shared the same
-              itch: we wanted to build things that matter.
+              We&apos;re Thomas and Ben. We met studying engineering in France,
+              where we got to work with researchers on formal verification.
+              Proving software correct with math felt powerful, but the tools
+              weren&apos;t there yet.
             </p>
 
             <p>
-              It started with blockchain. We were fascinated by the idea of
-              open, permissionless systems, so we jumped in and started
-              shipping. Our first big project was Starknet ID, a decentralized
-              identity protocol that grew to 500K+ domains and 239K paying
-              users. Seeing it become the identity layer for an entire
-              ecosystem was the moment we knew we were onto something.
-            </p>
-
-            <p>
-              From there, things moved fast. We built a lot of other products
-              alongside great ecosystem partners, from developer tools and
-              documentation to on-chain games and cross-chain bridges. You can
-              check them all out on our{' '}
+              We got into crypto, shipped nine products on Starknet (starting
+              with{' '}
               <Link href="/projects" className="text-accent font-bold hover:underline">
-                projects page
+                Starknet ID
               </Link>
-              .
+              , 500K+ domains, 239K paying users), and got audited many times
+              by top firms. Always clean. But the process never sat right with
+              us: slow, expensive, and at the end of the day just someone&apos;s
+              opinion.
             </p>
 
             <p>
-              Nine products shipped. Hundreds of thousands of users. A successful
-              acquisition. Some of the biggest names in the space as partners
-              and clients. We&apos;ve been lucky to work with incredible people.
+              Now AI is changing everything. What used to be impossibly hard is
+              becoming practical: full formal verification of smart contracts.
+              Not checking a few test cases, actually proving correctness for
+              every possible input.
             </p>
 
             <p>
-              Then AI changed everything. We saw the same energy we&apos;d felt
-              with blockchain: a new way to build, faster than ever. So we
-              expanded beyond web3 and now help companies experiment at the
-              intersection of AI and blockchain.
+              So that&apos;s what we&apos;re building. Check out{' '}
+              <a
+                href="https://github.com/lfglabs-dev/verity"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-accent font-bold hover:underline"
+              >
+                Verity
+              </a>
+              , our formally verified smart contract compiler in Lean. We&apos;re
+              betting that AI agents will make full formal verification
+              practical.
             </p>
-
-            <p>
-              We&apos;re still building. If that sounds interesting to you,
-              let&apos;s talk.
-            </p>
-          </div>
-
-          <div className="border-t border-gray-200 mt-12" />
-
-          <div className="bg-card-bg rounded-xl p-8 mt-12 text-center">
-            <p className="text-base font-bold text-heading mb-2">
-              Get in touch
-            </p>
-            <p className="text-sm text-muted mb-4">
-              Reach out for partnerships, collaborations, or inquiries.
-            </p>
-            <ContactButton />
           </div>
         </div>
+
+        <FinalCTA />
       </PageLayout>
     </>
   )
