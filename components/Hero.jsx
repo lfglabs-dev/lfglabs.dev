@@ -9,7 +9,7 @@ const partners = [
 
 export default function Hero() {
   return (
-    <section className="pt-4 sm:pt-8 pb-8 text-center">
+    <section className="min-h-[calc(100svh-10rem)] flex flex-col items-center justify-center pb-8 text-center">
       <h1 className="font-serif text-[40px] sm:text-[56px] text-heading tracking-tight mb-8 leading-[1.15]">
         We secure smart contracts with
         <br />
