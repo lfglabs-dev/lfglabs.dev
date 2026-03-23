@@ -5,7 +5,7 @@ export default function Document() {
     title: 'LFG Labs',
     description:
       'Audits give you opinions. We give you certainty. LFG Labs formally proves your smart contracts do exactly what they\'re supposed to using Lean 4 and mathematical proofs.',
-    image: 'https://lfglabs.dev/images/lfg_banner.webp',
+    image: 'https://lfglabs.dev/images/previews.webp',
   }
 
   return (
