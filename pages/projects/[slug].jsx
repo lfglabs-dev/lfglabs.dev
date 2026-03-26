@@ -83,7 +83,7 @@ export default function ProjectPage({ frontmatter, source, recommendedProjects }
           {recommendedProjects.length > 0 && (
             <section className="mt-16 pt-8 border-t border-gray-200">
               <h2 className="text-base font-bold text-heading mb-6">
-                Recommended Projects
+                More Work
               </h2>
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                 {recommendedProjects.map((p) => (

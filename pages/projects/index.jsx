@@ -9,14 +9,14 @@ export default function ProjectsPage() {
   return (
     <>
       <Head>
-        <title>Projects | LFG Labs</title>
+        <title>Our Work | LFG Labs</title>
       </Head>
       <PageLayout>
         <div className="max-w-3xl mx-auto px-6 py-12">
           <SectionHeader
-            subtitle="A selection of what we've built over the years for the web3 ecosystem, from identity protocols to developer tools."
+            subtitle="Projects we've shipped with clients, from developer tools to formal proofs."
           >
-            Our <span className="text-accent">Projects</span>
+            Our <span className="text-accent">Work</span>
           </SectionHeader>
 
           <SocialProof />
