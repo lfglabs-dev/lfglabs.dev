@@ -19,7 +19,7 @@ export default function WhatIsAFormalProofPage() {
         />
       </Head>
       <PageLayout>
-        <div className="font-serif-body max-w-[680px] mx-auto px-6 py-20 md:py-32">
+        <div className="font-article max-w-[680px] mx-auto px-6 py-20 md:py-32">
           <nav className="mb-10">
             <Link
               href="/research"
