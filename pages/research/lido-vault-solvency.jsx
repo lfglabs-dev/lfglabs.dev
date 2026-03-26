@@ -76,22 +76,6 @@ export default function LidoVaultSolvencyPage() {
           <header className="mb-6">
             <h1 className="text-3xl md:text-4xl font-semibold tracking-tight leading-tight">
               Lido V3 Vault Solvency Guarantee
-              <span className="relative inline-block ml-2 translate-y-[12px] group cursor-default">
-                <svg
-                  viewBox="0 0 24 24"
-                  className="w-6 h-6 md:w-7 md:h-7 text-black/25"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2.5"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                >
-                  <polyline points="20 6 9 17 4 12" />
-                </svg>
-                <span className="pointer-events-none absolute left-1/2 -translate-x-1/2 top-full mt-2 px-2.5 py-1 rounded text-xs font-sans font-normal text-white bg-heading opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
-                  Formally proven
-                </span>
-              </span>
             </h1>
           </header>
 

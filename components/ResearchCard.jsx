@@ -41,16 +41,9 @@ export default function ResearchCard({ item, compact }) {
     >
       <div className="flex items-center justify-between gap-4">
         <div className="min-w-0">
-          <div className="flex items-center gap-2 mb-2">
-            <h3 className="font-serif text-[23px] text-primary">
-              {item.title}
-            </h3>
-            {item.featured && (
-              <span className="text-[10px] font-semibold uppercase tracking-wider text-accent">
-                Featured
-              </span>
-            )}
-          </div>
+          <h3 className="font-serif text-[23px] text-primary mb-2">
+            {item.title}
+          </h3>
           <p className="text-sm text-muted leading-relaxed">
             {item.subtitle}
           </p>

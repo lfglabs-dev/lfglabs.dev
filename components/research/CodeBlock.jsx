@@ -50,7 +50,7 @@ export default function CodeBlock({ children }) {
       <pre className="bg-[#f8f8f8] border border-gray-200 rounded px-5 py-4 pr-12 text-sm font-mono leading-relaxed overflow-x-auto text-primary">
         {children}
       </pre>
-      <CopyButton text={children} />
+      <CopyButton text={typeof children === 'string' ? children : String(children)} />
     </div>
   )
 }

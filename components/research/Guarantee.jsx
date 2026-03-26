@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import katex from 'katex'
 import { ExternalLinkIcon } from './ExternalLink'
 
@@ -35,16 +35,25 @@ function Term({ tex, label, detail, align = 'center' }) {
 
 export default function Guarantee() {
   const [showEnglish, setShowEnglish] = useState(true)
+  const timerRef = useRef(null)
 
   useEffect(() => {
-    const timer = setTimeout(() => setShowEnglish(false), 5000)
-    return () => clearTimeout(timer)
+    timerRef.current = setTimeout(() => setShowEnglish(false), 5000)
+    return () => clearTimeout(timerRef.current)
   }, [])
+
+  const handleToggle = () => {
+    if (timerRef.current) {
+      clearTimeout(timerRef.current)
+      timerRef.current = null
+    }
+    setShowEnglish((prev) => !prev)
+  }
 
   return (
     <div className="py-6">
       <button
-        onClick={() => setShowEnglish(!showEnglish)}
+        onClick={handleToggle}
         className="inline-flex items-center gap-1.5 text-[12px] font-semibold text-muted hover:text-heading transition-colors cursor-pointer mb-4"
       >
         <svg
@@ -77,33 +86,33 @@ export default function Guarantee() {
         >
           <span className="inline-flex items-baseline gap-[0.15em] flex-wrap justify-center">
             <Term
-              tex="\texttt{locked}"
+              tex={'\\texttt{locked}'}
               label="VaultHub._locked()"
               detail="ETH that cannot be withdrawn from the vault"
               align="left"
             />
-            <K tex="\;\cdot\;(" />
+            <K tex={'\\;\\cdot\\;('} />
             <Term
-              tex="\texttt{BP}"
+              tex={'\\texttt{BP}'}
               label="TOTAL_BASIS_POINTS"
               detail="= 10,000"
             />
             <K tex="-" />
             <Term
-              tex="\texttt{RR}"
+              tex={'\\texttt{RR}'}
               label="reserveRatioBP"
               detail="The vault's reserve ratio (e.g. 3000 = 30%)"
             />
-            <K tex=")\;\geq\;" />
+            <K tex={')\\;\\geq\\;'} />
             <Term
-              tex="\texttt{liability}"
+              tex={'\\texttt{liability}'}
               label="liabilityShares → ETH"
               detail="stETH owed to depositors, via getPooledEthBySharesRoundUp"
               align="right"
             />
-            <K tex="\;\cdot\;" />
+            <K tex={'\\;\\cdot\\;'} />
             <Term
-              tex="\texttt{BP}"
+              tex={'\\texttt{BP}'}
               label="TOTAL_BASIS_POINTS"
               detail="= 10,000"
               align="right"

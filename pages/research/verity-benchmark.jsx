@@ -201,7 +201,7 @@ export default function VerityBenchmarkPage() {
               Source
             </h2>
             <p className="leading-relaxed">
-              <ExternalLink href="https://github.com/Th0rgal/verity-benchmark">
+              <ExternalLink href="https://github.com/lfglabs-dev/verity-benchmark">
                 View on GitHub
               </ExternalLink>
             </p>
