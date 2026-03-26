@@ -19,7 +19,7 @@ export default function WhatIsAFormalProofPage() {
         />
       </Head>
       <PageLayout>
-        <div className="font-serif max-w-[680px] mx-auto px-6 py-20 md:py-32">
+        <div className="font-serif-body max-w-[680px] mx-auto px-6 py-20 md:py-32">
           <nav className="mb-10">
             <Link
               href="/research"
@@ -50,7 +50,7 @@ export default function WhatIsAFormalProofPage() {
           </section>
 
           <section className="mb-16">
-            <h2 className="text-lg font-semibold tracking-tight mb-4">
+            <h2 className="font-serif text-lg font-semibold tracking-tight mb-4">
               A concrete example
             </h2>
             <p className="leading-relaxed mb-6">
@@ -292,7 +292,7 @@ export default function WhatIsAFormalProofPage() {
           </section>
 
           <section className="mb-16">
-            <h2 className="text-lg font-semibold tracking-tight mb-4">
+            <h2 className="font-serif text-lg font-semibold tracking-tight mb-4">
               How does the checking work?
             </h2>
             <div className="leading-relaxed space-y-4">
@@ -310,7 +310,7 @@ export default function WhatIsAFormalProofPage() {
           </section>
 
           <section className="mb-16">
-            <h2 className="text-lg font-semibold tracking-tight mb-4">
+            <h2 className="font-serif text-lg font-semibold tracking-tight mb-4">
               Tests vs. formal proofs
             </h2>
             <div className="border border-gray-200 rounded px-6 py-5 leading-relaxed">
@@ -328,7 +328,7 @@ export default function WhatIsAFormalProofPage() {
           </section>
 
           <section className="mb-16">
-            <h2 className="text-lg font-semibold tracking-tight mb-4">
+            <h2 className="font-serif text-lg font-semibold tracking-tight mb-4">
               Why does this matter for smart contracts?
             </h2>
             <div className="leading-relaxed space-y-4">
@@ -346,7 +346,7 @@ export default function WhatIsAFormalProofPage() {
           </section>
 
           <section className="mb-16">
-            <h2 className="text-lg font-semibold tracking-tight mb-6">
+            <h2 className="font-serif text-lg font-semibold tracking-tight mb-6">
               See it in practice
             </h2>
             <p className="leading-relaxed">

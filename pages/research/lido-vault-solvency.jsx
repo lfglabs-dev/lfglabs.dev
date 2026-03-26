@@ -63,7 +63,7 @@ export default function LidoVaultSolvencyPage() {
         />
       </Head>
       <PageLayout>
-        <div className="font-serif max-w-[680px] mx-auto px-6 py-20 md:py-32">
+        <div className="font-serif-body max-w-[680px] mx-auto px-6 py-20 md:py-32">
           <nav className="mb-10">
             <Link
               href="/research"
@@ -98,7 +98,7 @@ export default function LidoVaultSolvencyPage() {
 
           {/* Why this matters */}
           <section className="mb-20">
-            <h2 className="text-lg font-semibold tracking-tight mb-4">
+            <h2 className="font-serif text-lg font-semibold tracking-tight mb-4">
               Why this matters
             </h2>
             <p className="leading-relaxed mb-6">
@@ -138,7 +138,7 @@ export default function LidoVaultSolvencyPage() {
 
           {/* How this was proven */}
           <section className="mb-20">
-            <h2 className="text-lg font-semibold tracking-tight mb-4">
+            <h2 className="font-serif text-lg font-semibold tracking-tight mb-4">
               How this was proven
             </h2>
             <p className="leading-relaxed mb-4">
@@ -189,7 +189,7 @@ export default function LidoVaultSolvencyPage() {
 
           {/* Hypotheses */}
           <section className="mb-20">
-            <h2 className="text-lg font-semibold tracking-tight mb-4">
+            <h2 className="font-serif text-lg font-semibold tracking-tight mb-4">
               Hypotheses
             </h2>
             <p className="leading-relaxed mb-4 text-muted text-[15px]">
@@ -283,7 +283,7 @@ export default function LidoVaultSolvencyPage() {
 
           {/* Learn more */}
           <section className="mb-16">
-            <h2 className="text-lg font-semibold tracking-tight mb-4">
+            <h2 className="font-serif text-lg font-semibold tracking-tight mb-4">
               Learn more
             </h2>
             <p className="leading-relaxed">
