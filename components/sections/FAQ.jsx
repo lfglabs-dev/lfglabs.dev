@@ -20,7 +20,7 @@ const faqs = [
   {
     question: 'How long does it take?',
     answer:
-      'It depends on the complexity and scope of your contracts. Get in touch and we\u2019ll assess the job and give you a clear timeline.',
+      'It depends on the complexity and scope of your contracts. Get a quote and we\u2019ll assess the job and give you a clear timeline.',
   },
   {
     question: 'What happens when our code changes?',

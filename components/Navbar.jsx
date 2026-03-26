@@ -42,7 +42,7 @@ export default function Navbar() {
             href="/projects"
             active={router.pathname.startsWith('/projects')}
           >
-            Projects
+            Our Work
           </NavLink>
           <NavLink href="/about" active={router.pathname === '/about'}>
             About

@@ -9,7 +9,7 @@ export default function ContactButton() {
         onClick={() => setOpen(true)}
         className="inline-flex items-center gap-2 bg-accent text-white font-bold text-sm px-5 py-2.5 rounded-lg hover:opacity-90 transition-opacity"
       >
-        Get in Touch
+        Get a Quote
       </button>
 
       {open && (
