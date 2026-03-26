@@ -23,6 +23,10 @@ export default function Document() {
         <meta name="twitter:description" content={meta.description} />
         <meta name="twitter:image" content={meta.image} />
         <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+        <link
+          rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/katex@0.16.43/dist/katex.min.css"
+        />
       </Head>
       <body>
         <Main />

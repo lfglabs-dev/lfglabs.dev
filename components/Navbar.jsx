@@ -39,6 +39,12 @@ export default function Navbar() {
         </Link>
         <div className="flex items-center gap-8">
           <NavLink
+            href="/research"
+            active={router.pathname.startsWith('/research')}
+          >
+            Research
+          </NavLink>
+          <NavLink
             href="/projects"
             active={router.pathname.startsWith('/projects')}
           >
