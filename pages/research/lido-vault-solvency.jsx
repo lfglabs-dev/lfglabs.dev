@@ -61,6 +61,10 @@ export default function LidoVaultSolvencyPage() {
           name="description"
           content="A formally verified solvency invariant of Lido V3 StakingVaults, proven using Verity and Lean 4."
         />
+        <link
+          rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/katex@0.16.43/dist/katex.min.css"
+        />
       </Head>
       <PageLayout>
         <div className="font-article max-w-[680px] mx-auto px-6 py-20 md:py-32">

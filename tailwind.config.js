@@ -25,7 +25,6 @@ module.exports = {
         ],
         decorative: ['Caveat', 'cursive'],
         serif: ['ET Book', 'Georgia', 'serif'],
-        article: ['Source Serif 4', 'Georgia', 'Times New Roman', 'serif'],
       },
     },
   },
