@@ -39,109 +39,62 @@ export default function VerityPage() {
 
           <section className="mb-16 leading-relaxed space-y-4">
             <p>
-              Verity is our attempt to bridge the gap between Solidity smart
-              contracts and formal mathematics. It lets you express contract
-              logic in{' '}
+              Verity lets you express smart contract logic in{' '}
               <ExternalLink href="https://lean-lang.org/">Lean 4</ExternalLink>,
               state properties about that logic, and produce machine-checkable
-              proofs that those properties hold, not for a sample of inputs,
-              but for all of them.
+              proofs that those properties hold for all inputs. The framework
+              compiles to EVM bytecode via Yul, so verified contracts can be
+              deployed directly.
             </p>
-
             <p>
-              The framework compiles to EVM bytecode via Yul, so verified
-              contracts can be deployed directly. The goal is to make it
-              possible to ship contracts where critical invariants are
-              mathematically guaranteed, not just tested.
+              Verity is still early: 431 theorems, 0 unproven steps, 1 axiom
+              (keccak256 collision resistance), 403 Foundry tests, 11
+              contracts. We are iterating on the framework as we use it on
+              real verification engagements.
             </p>
           </section>
 
           <section className="mb-16">
             <h2 className="font-serif text-lg font-semibold tracking-tight mb-4">
-              Where we are
+              Why
             </h2>
             <div className="leading-relaxed space-y-4">
               <p>
-                Verity is still early. The current state: 431 theorems, 0
-                unproven steps, 1 axiom (keccak256 collision resistance), 403
-                Foundry tests, and 11 contracts. We&apos;re iterating on the
-                framework as we use it on real verification engagements.
+                Audits check what the auditor thinks to check. Bounded model
+                checking can verify properties up to a search depth. Full formal
+                proofs can prove them universally, but they have historically
+                been too expensive for most teams.
               </p>
-
               <p>
-                We&apos;re writing a research paper that documents the approach
-                and our findings so far. The draft is available below.
+                We think this is a tooling problem. If the framework is good
+                enough, formal verification becomes practical, especially as
+                AI gets better at generating proofs.
               </p>
             </div>
           </section>
 
           <section className="mb-16">
             <h2 className="font-serif text-lg font-semibold tracking-tight mb-4">
-              What we&apos;re trying to solve
+              Links
             </h2>
-            <div className="leading-relaxed space-y-4">
+            <div className="leading-relaxed space-y-2">
               <p>
-                Audits are valuable but inherently limited: they check what the
-                auditor thinks to check. Bounded model checking (e.g. Certora)
-                can verify properties up to a search depth, but can&apos;t prove
-                them universally. Full formal proofs can, but they&apos;ve
-                historically been too expensive and too slow for most teams.
+                <a
+                  href="/papers/verity.pdf"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="underline underline-offset-3 hover:text-heading transition-colors"
+                >
+                  Research paper draft
+                </a>{' '}
+                <span className="text-muted text-sm">(PDF, work in progress)</span>
               </p>
-
               <p>
-                Verity is our bet that this is a tooling problem, not a
-                fundamental one. If the framework is good enough, formal
-                verification becomes practical, especially as AI gets better at
-                generating proofs.
+                <ExternalLink href="https://github.com/Th0rgal/verity">
+                  Source on GitHub
+                </ExternalLink>
               </p>
             </div>
-          </section>
-
-          <section className="mb-16">
-            <h2 className="font-serif text-lg font-semibold tracking-tight mb-4">
-              Research paper
-            </h2>
-            <p className="leading-relaxed mb-6">
-              The draft of our research paper covers the Verity architecture,
-              the compilation pipeline, and case studies from real contracts.
-            </p>
-
-            <a
-              href="/papers/verity.pdf"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-3 bg-card-bg hover:bg-gray-100 transition-colors rounded-xl px-6 py-4 font-sans"
-            >
-              <svg
-                viewBox="0 0 24 24"
-                className="w-5 h-5 text-muted flex-shrink-0"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="1.5"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              >
-                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
-                <polyline points="14 2 14 8 20 8" />
-                <line x1="16" y1="13" x2="8" y2="13" />
-                <line x1="16" y1="17" x2="8" y2="17" />
-                <polyline points="10 9 9 9 8 9" />
-              </svg>
-              <div>
-                <span className="font-medium text-heading text-sm block">
-                  Read the paper (PDF)
-                </span>
-                <span className="text-xs text-muted">
-                  Draft, work in progress
-                </span>
-              </div>
-            </a>
-
-            <p className="mt-4">
-              <ExternalLink href="https://github.com/Th0rgal/verity">
-                View source on GitHub
-              </ExternalLink>
-            </p>
           </section>
 
           {otherResearch.length > 0 && (
