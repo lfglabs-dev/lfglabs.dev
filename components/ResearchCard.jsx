@@ -33,11 +33,7 @@ export default function ResearchCard({ item, compact }) {
   return (
     <Link
       href={`/research/${item.slug}`}
-      className={`block rounded-xl p-6 transition-colors duration-200 ${
-        item.featured
-          ? 'bg-card-bg border border-accent/20 hover:border-accent/40 hover:bg-gray-50'
-          : 'bg-card-bg hover:bg-gray-100'
-      }`}
+      className="block rounded-xl p-6 transition-colors duration-200 bg-card-bg hover:bg-gray-100"
     >
       <div className="flex items-center justify-between gap-4">
         <div className="min-w-0">

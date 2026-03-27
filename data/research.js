@@ -7,8 +7,7 @@ export const research = [
     description:
       'Verity bridges Solidity and formal mathematics, compiling to EVM bytecode via Yul.',
     date: '2025-07-01',
-    tag: 'Publication',
-    featured: true
+    tag: 'Publication'
   },
   {
     slug: 'verity-benchmark',
