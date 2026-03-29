@@ -7,9 +7,9 @@ const benefits = [
       'Your contracts are proven correct across every possible input, not just the ones someone thought to test.',
   },
   {
-    title: 'Cheaper than an audit',
+    title: 'Skin in the game',
     description:
-      'Stronger guarantees at a lower price point.',
+      'We either find bugs or formally verify your contract is correct. If we can\'t, you\'re refunded. Our incentives are aligned with yours.',
   },
   {
     title: 'We stay with you',
