@@ -16,6 +16,19 @@ const mdxComponents = {
       <video {...props} className="rounded-lg w-full" />
     </div>
   ),
+  YouTube: ({ id, start }) => (
+    <div style={{ paddingBottom: '2.5rem' }}>
+      <div className="relative w-full" style={{ paddingTop: '56.25%' }}>
+        <iframe
+          className="absolute inset-0 w-full h-full rounded-lg"
+          src={`https://www.youtube.com/embed/${id}${start ? `?start=${start}` : ''}`}
+          title="YouTube video"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowFullScreen
+        />
+      </div>
+    </div>
+  ),
   a: (props) => (
     <a
       {...props}
