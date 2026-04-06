@@ -54,7 +54,7 @@ export const projects = [
   {
     slug: 'privatellm',
     name: 'Private LLM',
-    title: 'We built a private Ethereum assistant for the EF.',
+    title: 'We built a private Ethereum assistant.',
     subtitle: 'A local-first chat app for interacting with EVM chains, built for the Ethereum Foundation.',
     description: 'Private Ethereum assistant running LLMs locally — demoed on main stage at EthCC Cannes 2026.',
     image: null,

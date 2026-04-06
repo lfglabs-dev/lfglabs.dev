@@ -1,12 +1,14 @@
 ---
-title: We built a private Ethereum assistant for the Ethereum Foundation.
+title: We built a private Ethereum assistant.
 subtitle: A local-first chat app for interacting with EVM chains in natural language, without exposing keys or prompts to external servers.
 description: Private Ethereum assistant that runs LLMs locally via Ollama to read balances, send transactions, manage Safe multisigs, and run Railgun privacy flows — all without leaving your machine.
 author: LFG Labs
 date: 2026-04-01
 ---
 
-Nicolas Consigny from the Ethereum Foundation [demoed Private LLM on the main stage at EthCC Cannes 2026](https://youtu.be/yp2oW6Jw_yE?t=1863).
+<YouTube id="yp2oW6Jw_yE" start={1677} />
+
+Nicolas Consigny from the Ethereum Foundation [demoed Private LLM on the main stage at EthCC Cannes 2026](https://youtu.be/yp2oW6Jw_yE?t=1677).
 
 Private LLM is a local-first chat app that lets you interact with Ethereum and EVM chains using natural language. It runs a large language model entirely on your machine via Ollama — your private keys, prompts, and transaction data never leave your computer.
 
