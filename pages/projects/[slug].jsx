@@ -11,10 +11,15 @@ const mdxComponents = {
   img: (props) => (
     <img {...props} className="rounded-lg w-full my-6" loading="lazy" />
   ),
+  Video: (props) => (
+    <div style={{ paddingBottom: '2.5rem' }}>
+      <video {...props} className="rounded-lg w-full" />
+    </div>
+  ),
   a: (props) => (
     <a
       {...props}
-      className="text-accent hover:underline"
+      className="text-accent hover:underline mx-0.5"
       target={props.href?.startsWith('http') ? '_blank' : undefined}
       rel={props.href?.startsWith('http') ? 'noopener noreferrer' : undefined}
     />
