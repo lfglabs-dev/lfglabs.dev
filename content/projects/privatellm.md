@@ -6,7 +6,7 @@ author: LFG Labs
 date: 2026-04-01
 ---
 
-<YouTube id="yp2oW6Jw_yE" start={1677} />
+<YouTube id="yp2oW6Jw_yE" start="1677" />
 
 Nicolas Consigny from the Ethereum Foundation [demoed Private LLM on the main stage at EthCC Cannes 2026](https://youtu.be/yp2oW6Jw_yE?t=1677).
 

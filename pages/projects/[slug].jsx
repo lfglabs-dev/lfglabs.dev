@@ -21,7 +21,7 @@ const mdxComponents = {
       <div className="relative w-full" style={{ paddingTop: '56.25%' }}>
         <iframe
           className="absolute inset-0 w-full h-full rounded-lg"
-          src={`https://www.youtube.com/embed/${id}${start ? `?start=${start}` : ''}`}
+          src={`https://www.youtube-nocookie.com/embed/${id}?rel=0${start ? `&start=${start}` : ''}`}
           title="YouTube video"
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
           allowFullScreen
