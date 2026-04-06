@@ -7,7 +7,6 @@ export const projects = [
     description: 'Lean 4 framework for mathematically proven Ethereum smart contracts.',
     image: '/images/verity.webp',
     date: '2025-07-01',
-    partner: { name: 'Ethereum Foundation', logo: '/images/logos/ethereum-foundation.png' },
   },
   {
     slug: 'safelens',
