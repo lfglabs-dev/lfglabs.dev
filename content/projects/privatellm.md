@@ -59,5 +59,5 @@ Railgun integration uses zero-knowledge proofs for private transfers. Shielding 
 
 ## Relevant Links
 
-- [EthCC Demo by Nicolas Consigny](https://youtu.be/yp2oW6Jw_yE?t=1863)
+- [EthCC Demo by Nicolas Consigny](https://youtu.be/yp2oW6Jw_yE?t=1677)
 - [GitHub](https://github.com/lfglabs-dev/private-ethereum-assistant)
