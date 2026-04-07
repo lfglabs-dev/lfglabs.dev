@@ -62,11 +62,11 @@ export default function ProjectPage({ frontmatter, source, recommendedProjects }
         <meta name="description" content={frontmatter.description} />
       </Head>
       <PageLayout>
-        <div className="max-w-3xl mx-auto px-6 py-12">
+        <div className="font-article max-w-3xl mx-auto px-6 py-12">
           <nav className="mb-10">
             <Link
               href="/projects"
-              className="text-sm text-muted hover:text-primary transition-colors"
+              className="text-sm text-muted hover:text-primary transition-colors font-sans"
             >
               &larr; Back
             </Link>
@@ -94,7 +94,7 @@ export default function ProjectPage({ frontmatter, source, recommendedProjects }
             />
           )}
 
-          <div className="font-article">
+          <div>
             <MDXRemote {...source} components={mdxComponents} />
           </div>
 
