@@ -2,6 +2,7 @@ import Head from 'next/head'
 import Link from 'next/link'
 import PageLayout from '../../components/PageLayout'
 import ResearchCard from '../../components/ResearchCard'
+import CodeBlock from '../../components/research/CodeBlock'
 import ExternalLink from '../../components/research/ExternalLink'
 import { research } from '../../data/research'
 
@@ -62,6 +63,25 @@ export default function WhyClearSigningShouldNotRequireTrustPage() {
               presented as a UX improvement, but readability alone is not
               enough. If a wallet translates calldata into a sentence, the user
               still has to trust the translator.
+            </p>
+          </section>
+
+          <section className="mb-16">
+            <div className="rounded-lg overflow-hidden border border-gray-200 bg-[#f8f8f8]">
+              <video
+                src="/images/veryclear-demo.mp4"
+                controls
+                autoPlay
+                muted
+                loop
+                playsInline
+                className="w-full"
+              />
+            </div>
+            <p className="mt-3 text-sm text-muted leading-relaxed">
+              The demo takes a transaction that would normally be shown as raw
+              calldata, renders a human-readable interpretation, and binds that
+              interpretation to the calldata with a proof.
             </p>
           </section>
 
@@ -159,6 +179,54 @@ export default function WhyClearSigningShouldNotRequireTrustPage() {
                 whether the displayed sentence can be derived from a public
                 specification and proved from the calldata itself. That is a
                 much smaller and more defensible trust boundary.
+              </p>
+            </div>
+
+            <div className="mt-8 space-y-4">
+              <p className="text-sm font-sans uppercase tracking-[0.14em] text-muted">
+                One possible specification
+              </p>
+              <CodeBlock>{`match approve(spender, amount)
+| amount == maxUint256 =>
+    "Approve {spender} to spend unlimited USDC"
+| otherwise =>
+    "Approve {spender} to spend {amount} USDC"`}</CodeBlock>
+              <p className="text-sm text-muted leading-relaxed">
+                The important property is not the exact syntax. It is that the
+                explanation exists as a small public object that can be audited
+                independently from the wallet implementation.
+              </p>
+            </div>
+          </section>
+
+          <section className="mb-16">
+            <h2 className="font-serif text-lg font-semibold tracking-tight mb-4">
+              What you trust in practice
+            </h2>
+            <div className="leading-relaxed space-y-4">
+              <p>
+                VeryClear does not ask the user to trust nothing. It asks the
+                user to trust a smaller and more legible stack.
+              </p>
+              <ol className="list-decimal pl-6 space-y-2 text-primary">
+                <li>
+                  Trust that the published specification is the right way to
+                  describe the transaction.
+                </li>
+                <li>
+                  Trust the proof system and verifier rather than a large
+                  translation layer running on the host.
+                </li>
+                <li>
+                  Optionally trust a hardware device to verify the proof before
+                  displaying the final claim.
+                </li>
+              </ol>
+              <p>
+                That is a meaningful reduction. Instead of trusting hidden UI
+                logic, users can inspect the spec themselves or rely on an
+                auditor, protocol team, or wallet vendor they already trust to
+                do it.
               </p>
             </div>
           </section>
