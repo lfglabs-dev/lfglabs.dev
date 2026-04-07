@@ -185,88 +185,105 @@ export default function WhyClearSigningShouldNotRequireTrustPage() {
           </section>
 
           <section className="mb-16">
-            <div className="rounded-lg border border-gray-200 bg-[#f8f8f8] px-6 py-5">
-              <p className="font-sans text-[11px] uppercase tracking-[0.18em] text-muted">
-                Thesis
-              </p>
-              <p className="mt-3 text-[17px] leading-relaxed">
-                Clear signing only really helps if the sentence on screen is
-                not just readable, but justified. VeryClear moves trust away
-                from opaque wallet code and toward small public specifications
-                that can be audited independently and checked by machines.
-              </p>
-            </div>
-          </section>
-
-          <section className="mb-16">
             <h2 className="font-serif text-xl font-semibold tracking-tight mb-4">
-              Trust assumptions, explicitly
+              Specifications as code
             </h2>
-            <div className="grid gap-4 md:grid-cols-3 text-sm leading-relaxed">
-              <div className="rounded-lg border border-gray-200 bg-white p-5">
-                <p className="font-sans text-[11px] uppercase tracking-[0.18em] text-muted">
-                  Reduced
-                </p>
-                <p className="mt-3">
-                  The user no longer has to trust a hidden frontend translator
-                  to decide what a transaction means.
-                </p>
-              </div>
-              <div className="rounded-lg border border-gray-200 bg-white p-5">
-                <p className="font-sans text-[11px] uppercase tracking-[0.18em] text-muted">
-                  Retained
-                </p>
-                <p className="mt-3">
-                  The user still needs to trust the published specification and
-                  the proof system that checks the displayed claim.
-                </p>
-              </div>
-              <div className="rounded-lg border border-gray-200 bg-white p-5">
-                <p className="font-sans text-[11px] uppercase tracking-[0.18em] text-muted">
-                  Open
-                </p>
-                <p className="mt-3">
-                  The ecosystem still needs better answers for who authors the
-                  spec and how the right human-facing explanation should be
-                  expressed.
-                </p>
-              </div>
+            <div className="leading-relaxed space-y-4">
+              <p>
+                The standard approach to clear signing today
+                is{' '}
+                <ExternalLink href="https://eips.ethereum.org/EIPS/eip-7730">
+                  ERC-7730
+                </ExternalLink>
+                : a JSON file that maps selectors to display templates. It
+                works, but the descriptions are static. They cannot branch on
+                parameter values, compute derived fields, or resolve external
+                labels. A single JSON entry cannot distinguish an unlimited
+                approval from a bounded one.
+              </p>
+              <p>
+                VeryClear replaces that static mapping with a small program
+                written in the Verity DSL, an extension of the Lean 4
+                framework we built for formal verification of smart contracts.
+                A Verity spec is scriptable: it can pattern-match on decoded
+                arguments, format token amounts with the right number of
+                decimals, and select different human-readable sentences
+                depending on runtime values.
+              </p>
+              <p>
+                Because the spec is code, it can live in the same repository
+                as the contract itself. The developer who writes the contract
+                is the person best positioned to describe what each call means.
+                Instead of hoping that a third-party registry eventually adds
+                a JSON entry for your function, you ship the display spec
+                alongside the implementation.
+              </p>
             </div>
-            <p className="mt-4 text-sm text-muted leading-relaxed">
-              This is the main claim of the project. VeryClear does not remove
-              trust. It compresses it into smaller objects that can be audited,
-              compared, and eventually standardized.
-            </p>
-          </section>
 
-          <section className="mb-16">
-            <div className="grid gap-4 md:grid-cols-3 text-sm leading-relaxed">
+            <div className="mt-8 space-y-4">
+              <p className="text-sm font-sans uppercase tracking-[0.14em] text-muted">
+                Example: the full USDC display spec
+              </p>
+              <HighlightedDSL source={`import Verity.Intent.DSL
+
+namespace Contracts.USDC
+open Verity.Intent.DSL
+
+private def maxUint256 : Int := (2 ^ 256 : Nat) - 1
+
+intent_spec "USDC" where
+  const decimals := 6
+
+  intent transfer(to : address, amount : uint256) where
+    when amount == maxUint256 =>
+      emit "Send all USDC to {to}"
+    otherwise =>
+      emit "Send {amount:fixed decimals} USDC to {to}"
+
+  intent approve(spender : address, amount : uint256) where
+    when amount == maxUint256 =>
+      emit "Approve {spender} to spend unlimited USDC"
+    otherwise =>
+      emit "Approve {spender} to spend {amount:fixed decimals} USDC"
+
+  intent transferFrom(from : address, to : address, amount : uint256) where
+    when amount == maxUint256 =>
+      emit "Transfer all USDC from {from} to {to}"
+    otherwise =>
+      emit "Transfer {amount:fixed decimals} USDC from {from} to {to}"
+
+end Contracts.USDC`} />
+              <p className="text-sm text-muted leading-relaxed">
+                This is the entire display specification for USDC. It reads
+                like documentation: for each function, list the cases and what
+                the wallet should say. The compiler turns it into both an
+                ERC-7730-compatible JSON descriptor and a ZK circuit that
+                proves any wallet follows it exactly.
+              </p>
+            </div>
+
+            <div className="mt-8 grid gap-4 md:grid-cols-2 text-sm leading-relaxed">
               <div className="rounded-lg border border-gray-200 bg-white p-5">
                 <p className="font-sans text-[11px] uppercase tracking-[0.18em] text-muted">
-                  Problem
+                  ERC-7730 (static JSON)
                 </p>
-                <p className="mt-3">
-                  Normal clear signing still asks users to trust the software
-                  that translated calldata into a sentence.
-                </p>
+                <ul className="mt-3 space-y-1.5 list-disc pl-4">
+                  <li>One template per selector</li>
+                  <li>Cannot branch on parameter values</li>
+                  <li>Written by a third-party registry</li>
+                  <li>No link to the contract source</li>
+                </ul>
               </div>
               <div className="rounded-lg border border-gray-200 bg-white p-5">
                 <p className="font-sans text-[11px] uppercase tracking-[0.18em] text-muted">
-                  VeryClear
+                  Verity DSL (scriptable spec)
                 </p>
-                <p className="mt-3">
-                  A Verity spec defines what the wallet is allowed to say, and
-                  a proof binds that claim to the calldata.
-                </p>
-              </div>
-              <div className="rounded-lg border border-gray-200 bg-white p-5">
-                <p className="font-sans text-[11px] uppercase tracking-[0.18em] text-muted">
-                  Limit
-                </p>
-                <p className="mt-3">
-                  This proves the implementation followed the spec. It does not
-                  fully solve how intent should be expressed to humans.
-                </p>
+                <ul className="mt-3 space-y-1.5 list-disc pl-4">
+                  <li>Pattern-matches on decoded arguments</li>
+                  <li>Formats amounts, resolves labels</li>
+                  <li>Written by the contract developer</li>
+                  <li>Compiles to JSON + ZK circuit</li>
+                </ul>
               </div>
             </div>
           </section>
@@ -475,48 +492,16 @@ amount:  0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff`}</C
               </p>
             </div>
 
-            <div className="mt-8 space-y-4">
-              <p className="text-sm font-sans uppercase tracking-[0.14em] text-muted">
-                The USDC specification, written in the Verity DSL
-              </p>
-              <HighlightedDSL source={`import Verity.Intent.DSL
+            <p className="mt-8 text-sm text-muted leading-relaxed">
+              The USDC spec shown above handles this case. The{' '}
+              <code className="font-mono text-[13px]">approve</code> intent
+              checks whether the amount
+              equals <code className="font-mono text-[13px]">maxUint256</code>,
+              picks the unlimited template, and fills in the spender. The
+              pipeline then runs in four steps:
+            </p>
 
-namespace Contracts.USDC
-open Verity.Intent.DSL
-
-private def maxUint256 : Int := (2 ^ 256 : Nat) - 1
-
-intent_spec "USDC" where
-  const decimals := 6
-
-  intent transfer(to : address, amount : uint256) where
-    when amount == maxUint256 =>
-      emit "Send all USDC to {to}"
-    otherwise =>
-      emit "Send {amount:fixed decimals} USDC to {to}"
-
-  intent approve(spender : address, amount : uint256) where
-    when amount == maxUint256 =>
-      emit "Approve {spender} to spend unlimited USDC"
-    otherwise =>
-      emit "Approve {spender} to spend {amount:fixed decimals} USDC"
-
-  intent transferFrom(from : address, to : address, amount : uint256) where
-    when amount == maxUint256 =>
-      emit "Transfer all USDC from {from} to {to}"
-    otherwise =>
-      emit "Transfer {amount:fixed decimals} USDC from {from} to {to}"
-
-end Contracts.USDC`} />
-              <p className="text-sm text-muted leading-relaxed">
-                This is the full spec for USDC. It reads like a short document:
-                for each function, list the cases and what the wallet should say.
-                Anyone can audit it, and the ZK circuit guarantees the wallet
-                follows it exactly.
-              </p>
-            </div>
-
-            <div className="mt-8 grid gap-4 md:grid-cols-4 text-sm leading-relaxed">
+            <div className="mt-6 grid gap-4 md:grid-cols-4 text-sm leading-relaxed">
               <div className="rounded-lg border border-gray-200 bg-white p-4">
                 <p className="font-sans text-[11px] uppercase tracking-[0.18em] text-muted">
                   1. Decode
