@@ -455,38 +455,8 @@ amount:  0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff`}</C
             </h2>
             <div className="leading-relaxed space-y-2">
               <p>
-                <ExternalLink href="https://explain.md/clear-signing">
-                  Clear-signing demo
-                </ExternalLink>
-              </p>
-              <p>
-                <ExternalLink href="https://explain.md/clear-signing-hw">
-                  Hardware verification demo
-                </ExternalLink>
-              </p>
-              <p>
-                <ExternalLink href="https://github.com/lfglabs-dev/verity/pull/1677">
-                  Verity PR: Provable Intent DSL for clear signing
-                </ExternalLink>
-              </p>
-              <p>
-                <ExternalLink href="https://github.com/lfglabs-dev/explain.md/blob/main/README.md">
-                  Prototype architecture README
-                </ExternalLink>
-              </p>
-              <p>
-                <ExternalLink href="https://github.com/lfglabs-dev/verity/pull/1677/files">
-                  Provable Intent DSL implementation diff
-                </ExternalLink>
-              </p>
-              <p>
                 <ExternalLink href="https://ethglobal.com/showcase/veryclear-vu8i7">
                   ETHGlobal showcase
-                </ExternalLink>
-              </p>
-              <p>
-                <ExternalLink href="https://github.com/lfglabs-dev/explain.md">
-                  explain.md source
                 </ExternalLink>
               </p>
               <p>
