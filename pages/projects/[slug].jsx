@@ -38,7 +38,7 @@ const mdxComponents = {
     />
   ),
   h2: (props) => (
-    <h2 {...props} className="text-xl font-bold text-heading mt-10 mb-4 tracking-tight" />
+    <h2 {...props} className="font-serif text-lg font-semibold text-heading mt-10 mb-4 tracking-tight" />
   ),
   ul: (props) => (
     <ul {...props} className="list-disc pl-5 space-y-1.5 my-4 text-primary" />
@@ -94,7 +94,7 @@ export default function ProjectPage({ frontmatter, source, recommendedProjects }
             />
           )}
 
-          <div>
+          <div className="font-article">
             <MDXRemote {...source} components={mdxComponents} />
           </div>
 
