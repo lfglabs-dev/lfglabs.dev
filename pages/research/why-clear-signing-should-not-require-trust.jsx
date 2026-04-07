@@ -144,16 +144,31 @@ export default function WhyClearSigningShouldNotRequireTrustPage() {
 
           <section className="mb-16 leading-relaxed space-y-4">
             <p>
-              When you sign an Ethereum transaction, your wallet shows you raw
+              For years, signing an Ethereum transaction meant staring at raw
               calldata, a hex blob that means nothing to a human. Clear signing
-              solves this by translating calldata into a sentence
+              changed that by translating calldata into sentences
               like &ldquo;Approve Uniswap to spend unlimited USDC.&rdquo;
             </p>
             <p>
-              But who guarantees the translation is correct? A buggy or
-              malicious translator could show a friendly sentence while the
-              underlying transaction does something entirely different. You
-              have replaced trusting calldata with trusting a translator.
+              The{' '}
+              <ExternalLink href="https://eips.ethereum.org/EIPS/eip-7730">
+                ERC-7730
+              </ExternalLink>{' '}
+              standard has been a major step forward, and adoption is growing
+              fast. But it has two practical limitations. First, most ERC-7730
+              descriptors are not written by the contract developers
+              themselves. They are contributed by third parties to the Ledger
+              repository, which means the people closest to the code are not
+              the ones describing what it does. Second, when using a hardware
+              wallet like a Ledger, the device fetches the descriptor from
+              Ledger&apos;s backend. The user has to trust that backend to
+              serve the correct ERC-7730 file for the contract they are
+              interacting with.
+            </p>
+            <p>
+              In both cases, the user is trusting a translator. VeryClear asks
+              a different question: can the sentence on screen be proved
+              correct from the calldata and a public specification?
             </p>
             <p>
               VeryClear removes that trust. Instead of asking whether the
