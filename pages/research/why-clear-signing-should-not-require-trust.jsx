@@ -22,6 +22,42 @@ export default function WhyClearSigningShouldNotRequireTrustPage() {
           name="description"
           content="If code is law, users need a way to trust what a wallet says code will do. VeryClear reframes clear signing as a verification problem."
         />
+        <meta
+          property="og:title"
+          content="Why Clear Signing Should Not Require Trust"
+        />
+        <meta
+          property="og:description"
+          content="If code is law, users need a way to trust what a wallet says code will do. VeryClear reframes clear signing as a verification problem."
+        />
+        <meta
+          property="og:type"
+          content="article"
+        />
+        <meta
+          property="og:url"
+          content="https://lfglabs.dev/research/why-clear-signing-should-not-require-trust"
+        />
+        <meta
+          property="og:image"
+          content="https://lfglabs.dev/images/veryclear-thumb.webp"
+        />
+        <meta
+          name="twitter:card"
+          content="summary_large_image"
+        />
+        <meta
+          name="twitter:title"
+          content="Why Clear Signing Should Not Require Trust"
+        />
+        <meta
+          name="twitter:description"
+          content="VeryClear reframes wallet transaction explanation as a verifiable claim, not a UI promise."
+        />
+        <meta
+          name="twitter:image"
+          content="https://lfglabs.dev/images/veryclear-thumb.webp"
+        />
       </Head>
       <PageLayout>
         <div className="font-article max-w-[680px] mx-auto px-6 py-20 md:py-32">
@@ -70,6 +106,37 @@ export default function WhyClearSigningShouldNotRequireTrustPage() {
               is not enough. If a wallet translates calldata into a sentence,
               the user still has to trust the translator.
             </p>
+          </section>
+
+          <section className="mb-16">
+            <div className="grid gap-4 md:grid-cols-2">
+              <div className="rounded-lg border border-gray-200 bg-[#f8f8f8] p-5">
+                <p className="font-sans text-[11px] uppercase tracking-[0.18em] text-muted">
+                  What users get today
+                </p>
+                <p className="mt-4 font-mono text-[13px] leading-relaxed text-primary break-all">
+                  0x095ea7b300000000000000000000000...
+                </p>
+                <p className="mt-4 text-sm leading-relaxed">
+                  Or, at best, a sentence like &ldquo;Approve Uniswap to spend
+                  unlimited USDC&rdquo; that the wallet asks you to trust.
+                </p>
+              </div>
+              <div className="rounded-lg border border-gray-200 bg-white p-5">
+                <p className="font-sans text-[11px] uppercase tracking-[0.18em] text-muted">
+                  What we want instead
+                </p>
+                <p className="mt-4 text-sm leading-relaxed">
+                  A public spec says what that calldata means, and the wallet
+                  proves that the sentence on screen is the one the spec allows
+                  for this exact transaction.
+                </p>
+                <p className="mt-4 text-sm leading-relaxed text-muted">
+                  The user no longer has to trust a hidden translator. They can
+                  trust a small auditable specification and a verifier.
+                </p>
+              </div>
+            </div>
           </section>
 
           <section className="mb-16">
