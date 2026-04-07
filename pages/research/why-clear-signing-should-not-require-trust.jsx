@@ -67,6 +67,45 @@ export default function WhyClearSigningShouldNotRequireTrustPage() {
 
           <section className="mb-16">
             <h2 className="font-serif text-lg font-semibold tracking-tight mb-4">
+              What changes with VeryClear
+            </h2>
+            <div className="border border-gray-200 rounded overflow-hidden text-sm">
+              <div className="grid grid-cols-2 gap-4 px-5 py-3 bg-[#f8f8f8] font-sans font-semibold text-heading text-xs uppercase tracking-wider">
+                <div>Standard clear signing</div>
+                <div>VeryClear</div>
+              </div>
+              <div className="grid grid-cols-2 gap-4 px-5 py-4 border-t border-gray-200">
+                <div className="leading-relaxed text-primary">
+                  Wallet software decodes calldata and displays a sentence.
+                </div>
+                <div className="leading-relaxed text-primary">
+                  A public spec defines the sentence, and the wallet proves that
+                  the displayed interpretation follows from that spec.
+                </div>
+              </div>
+              <div className="grid grid-cols-2 gap-4 px-5 py-4 border-t border-gray-200">
+                <div className="leading-relaxed text-primary">
+                  The user trusts the translator.
+                </div>
+                <div className="leading-relaxed text-primary">
+                  The user trusts an auditable specification, or someone they
+                  trust to audit it.
+                </div>
+              </div>
+              <div className="grid grid-cols-2 gap-4 px-5 py-4 border-t border-gray-200">
+                <div className="leading-relaxed text-primary">
+                  A hardware wallet usually trusts what the host sends.
+                </div>
+                <div className="leading-relaxed text-primary">
+                  A hardware wallet can verify a proof before trusting the
+                  displayed claim.
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <section className="mb-16">
+            <h2 className="font-serif text-lg font-semibold tracking-tight mb-4">
               The real trust problem
             </h2>
             <div className="leading-relaxed space-y-4">
