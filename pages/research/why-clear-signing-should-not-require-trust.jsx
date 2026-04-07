@@ -157,8 +157,11 @@ export default function WhyClearSigningShouldNotRequireTrustPage() {
               standard has been a major step forward, and adoption is growing
               fast. But it has two practical limitations. First, most ERC-7730
               descriptors are not written by the contract developers
-              themselves. They are contributed by third parties to the Ledger
-              repository, which means the people closest to the code are not
+              themselves. They are contributed by third parties to the{' '}
+              <ExternalLink href="https://github.com/LedgerHQ/clear-signing-erc7730-registry">
+                Ledger registry
+              </ExternalLink>
+              , which means the people closest to the code are not
               the ones describing what it does. Second, when using a hardware
               wallet like a Ledger, the device fetches the descriptor from
               Ledger&apos;s backend. The user has to trust that backend to
