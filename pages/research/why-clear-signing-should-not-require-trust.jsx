@@ -37,7 +37,8 @@ export default function WhyClearSigningShouldNotRequireTrustPage() {
               Why Clear Signing Should Not Require Trust
             </h1>
             <p className="mt-3 text-muted text-base">
-              VeryClear, Verity, and a smaller trust boundary for wallet UX.
+              VeryClear, Verity, and a smaller trust boundary for transaction
+              explanations.
             </p>
           </header>
 
@@ -53,8 +54,8 @@ export default function WhyClearSigningShouldNotRequireTrustPage() {
               asking users to trust a large implementation, we want to reduce
               trust to small specifications that can be audited directly, or
               audited by people they trust. That works well for proving what a
-              contract does. Until now, it did not help much with a simpler
-              question users face every day: what am I about to sign?
+              contract does. Until now, it did not help enough with the more
+              immediate question users face every day: what am I about to sign?
             </p>
             <p>
               That is the problem behind VeryClear. Clear signing is usually
@@ -182,16 +183,23 @@ export default function WhyClearSigningShouldNotRequireTrustPage() {
             </h2>
             <div className="leading-relaxed space-y-4">
               <p>
-                The part we solved is: does the implementation produce the
-                explanation required by the formal specification? That is
-                already a meaningful shift. A fragile software promise becomes a
-                machine-checkable claim.
-              </p>
-              <p>
-                The harder question is above that layer: is the specification
-                itself the right way to explain the transaction to a human?
-                Natural language is ambiguous, context matters, and a sentence
-                can be technically correct while still failing to communicate
+              The part we solved is: does the implementation produce the
+              explanation required by the formal specification? That is
+              already a meaningful shift. A fragile software promise becomes a
+              machine-checkable claim.
+            </p>
+            <p>
+              That distinction matters because transaction explanation sits on a
+              security boundary. If the host machine, browser extension, or
+              wallet integration is compromised, a friendly sentence is not
+              enough. The sentence has to be justified by something smaller and
+              more stable than the UI stack that produced it.
+            </p>
+            <p>
+              The harder question is above that layer: is the specification
+              itself the right way to explain the transaction to a human?
+              Natural language is ambiguous, context matters, and a sentence
+              can be technically correct while still failing to communicate
                 risk.
               </p>
               <p>
@@ -242,6 +250,11 @@ export default function WhyClearSigningShouldNotRequireTrustPage() {
                 </ExternalLink>
               </p>
               <p>
+                <ExternalLink href="https://lfglabs.dev/projects/veryclear">
+                  VeryClear project page
+                </ExternalLink>
+              </p>
+              <p>
                 <ExternalLink href="https://explain.md/clear-signing-hw">
                   Hardware verification demo
                 </ExternalLink>
@@ -249,6 +262,11 @@ export default function WhyClearSigningShouldNotRequireTrustPage() {
               <p>
                 <ExternalLink href="https://github.com/lfglabs-dev/verity/pull/1677">
                   Verity PR: Provable Intent DSL for clear signing
+                </ExternalLink>
+              </p>
+              <p>
+                <ExternalLink href="https://ethglobal.com/showcase/veryclear-vu8i7">
+                  ETHGlobal showcase
                 </ExternalLink>
               </p>
               <p>
