@@ -244,7 +244,7 @@ end Contracts.USDC`} />
 
             <div className="mt-8 grid gap-4 md:grid-cols-2 text-sm leading-relaxed">
               <div className="rounded-lg border border-gray-200 bg-white p-5">
-                <p className="font-sans text-[11px] uppercase tracking-[0.18em] text-muted">
+                <p className="font-serif text-sm font-semibold tracking-tight text-heading">
                   ERC-7730 (static JSON)
                 </p>
                 <ul className="mt-3 space-y-1.5 list-disc pl-4">
@@ -255,7 +255,7 @@ end Contracts.USDC`} />
                 </ul>
               </div>
               <div className="rounded-lg border border-gray-200 bg-white p-5">
-                <p className="font-sans text-[11px] uppercase tracking-[0.18em] text-muted">
+                <p className="font-serif text-sm font-semibold tracking-tight text-heading">
                   Verity DSL (scriptable spec)
                 </p>
                 <ul className="mt-3 space-y-1.5 list-disc pl-4">
