@@ -119,8 +119,7 @@ export default function WhyClearSigningShouldNotRequireTrustPage() {
               Formalizing Transaction Interpretation
             </h1>
             <p className="mt-3 text-muted text-base">
-              Developer-authored display specs, compiled to JSON and ZK
-              circuits.
+              What if we formalized natural language interpretation?
             </p>
           </header>
 
