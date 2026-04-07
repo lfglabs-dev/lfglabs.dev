@@ -434,9 +434,8 @@ amount:  0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff`}</C
                   contract developers themselves, reviewed publicly, and
                   approved explicitly by users. The next open question is
                   connecting these display specs to the formal proofs of the
-                  contract itself, so that the sentence the user reads is not
-                  just consistent with the spec, but with the verified behavior
-                  of the code.
+                  contract itself, so that the sentence the user reads is
+                  consistent with the verified behavior of the code.
                 </p>
               </Disclosure>
               <Disclosure title="Can this work in languages other than English?">
