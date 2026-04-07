@@ -372,6 +372,13 @@ amount:  0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff`}</C
                 wallet prompts for re-approval, which also gives spec authors
                 a natural window to publish updates.
               </p>
+              <p>
+                This also opens the door to multiple languages. Since the
+                proof validates the template structure, not the display
+                strings, a French-speaking user could approve a French
+                translation of the same spec. The ZK circuit is identical;
+                only the human-readable text changes.
+              </p>
             </div>
           </section>
 
