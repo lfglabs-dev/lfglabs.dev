@@ -20,7 +20,7 @@ export default function ResearchCard({ item, compact }) {
             <h3 className="font-serif text-lg text-primary mb-1">
               {item.title}
             </h3>
-            <p className="text-sm text-muted leading-relaxed">
+            <p className="text-sm text-muted leading-relaxed font-article">
               {item.subtitle}
             </p>
           </div>
@@ -40,7 +40,7 @@ export default function ResearchCard({ item, compact }) {
           <h3 className="font-serif text-[23px] text-primary mb-2">
             {item.title}
           </h3>
-          <p className="text-sm text-muted leading-relaxed">
+          <p className="text-sm text-muted leading-relaxed font-article">
             {item.subtitle}
           </p>
         </div>
