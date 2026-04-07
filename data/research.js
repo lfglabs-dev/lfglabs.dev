@@ -3,7 +3,7 @@ export const research = [
     slug: 'why-clear-signing-should-not-require-trust',
     title: 'Formalizing Transaction Interpretation',
     subtitle:
-      'Developer-authored display specs, compiled to JSON and ZK circuits.',
+      'What if we formalized natural language interpretation?',
     description:
       'How VeryClear uses Verity specs and zero-knowledge proofs to turn clear signing from a UI promise into a verifiable claim.',
     date: '2026-04-07',

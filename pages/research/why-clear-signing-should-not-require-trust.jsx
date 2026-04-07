@@ -17,7 +17,7 @@ export default function WhyClearSigningShouldNotRequireTrustPage() {
     '@type': 'Article',
     headline: 'Formalizing Transaction Interpretation',
     description:
-      'Developer-authored display specs, compiled to JSON and ZK circuits.',
+      'What if we formalized natural language interpretation?',
     image: ['https://lfglabs.dev/images/veryclear-thumb.webp'],
     datePublished: `${publishedDate}T00:00:00Z`,
     dateModified: `${publishedDate}T00:00:00Z`,
@@ -48,7 +48,7 @@ export default function WhyClearSigningShouldNotRequireTrustPage() {
         </title>
         <meta
           name="description"
-          content="Developer-authored display specs, compiled to JSON and ZK circuits."
+          content="What if we formalized natural language interpretation?"
         />
         <meta
           property="og:title"
@@ -56,7 +56,7 @@ export default function WhyClearSigningShouldNotRequireTrustPage() {
         />
         <meta
           property="og:description"
-          content="Developer-authored display specs, compiled to JSON and ZK circuits."
+          content="What if we formalized natural language interpretation?"
         />
         <meta
           property="og:type"
@@ -88,7 +88,7 @@ export default function WhyClearSigningShouldNotRequireTrustPage() {
         />
         <meta
           name="twitter:description"
-          content="Developer-authored display specs, compiled to JSON and ZK circuits."
+          content="What if we formalized natural language interpretation?"
         />
         <meta
           name="twitter:image"
