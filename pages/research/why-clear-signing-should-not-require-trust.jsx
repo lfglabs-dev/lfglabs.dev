@@ -35,6 +35,9 @@ export default function WhyClearSigningShouldNotRequireTrustPage() {
           </nav>
 
           <header className="mb-20">
+            <div className="font-sans text-[11px] uppercase tracking-[0.18em] text-muted">
+              April 7, 2026 · Case study
+            </div>
             <h1 className="text-3xl md:text-4xl font-semibold tracking-tight leading-tight">
               Why Clear Signing Should Not Require Trust
             </h1>
@@ -46,10 +49,9 @@ export default function WhyClearSigningShouldNotRequireTrustPage() {
 
           <section className="mb-16 leading-relaxed space-y-4">
             <p>
-              In crypto, we like to say that code is law. The problem is that
-              code is not legible at the moment a user needs to make a security
-              decision. When a wallet asks for a signature, what most people
-              see is not meaningfully auditable code. It is an opaque blob of
+              In crypto, we like to say that code is law. But code is not what
+              a user sees when a wallet asks for a signature. At that moment,
+              the thing they need to judge is usually an opaque blob of
               calldata.
             </p>
             <p>
@@ -82,6 +84,38 @@ export default function WhyClearSigningShouldNotRequireTrustPage() {
                 specifications that can be audited independently and checked by
                 machines.
               </p>
+            </div>
+          </section>
+
+          <section className="mb-16">
+            <div className="grid gap-4 md:grid-cols-3 text-sm leading-relaxed">
+              <div className="rounded-lg border border-gray-200 bg-white p-5">
+                <p className="font-sans text-[11px] uppercase tracking-[0.18em] text-muted">
+                  Problem
+                </p>
+                <p className="mt-3">
+                  Normal clear signing still asks users to trust the software
+                  that translated calldata into a sentence.
+                </p>
+              </div>
+              <div className="rounded-lg border border-gray-200 bg-white p-5">
+                <p className="font-sans text-[11px] uppercase tracking-[0.18em] text-muted">
+                  VeryClear
+                </p>
+                <p className="mt-3">
+                  A Verity spec defines what the wallet is allowed to say, and
+                  a proof binds that claim to the calldata.
+                </p>
+              </div>
+              <div className="rounded-lg border border-gray-200 bg-white p-5">
+                <p className="font-sans text-[11px] uppercase tracking-[0.18em] text-muted">
+                  Limit
+                </p>
+                <p className="mt-3">
+                  This proves the implementation followed the spec. It does not
+                  fully solve how intent should be expressed to humans.
+                </p>
+              </div>
             </div>
           </section>
 
@@ -278,18 +312,13 @@ export default function WhyClearSigningShouldNotRequireTrustPage() {
                 </code>{' '}
                 tells a human almost nothing. Clear signing improves that by
                 showing a sentence such as &ldquo;Approve Uniswap to spend
-                unlimited USDC.&rdquo;
+                unlimited USDC.&rdquo; But if that sentence is wrong, the UI is
+                clearer while the trust model is still broken.
               </p>
               <p>
-                But the sentence is only useful if it is correct. Otherwise,
-                clear signing just moves the trust boundary. Instead of trusting
-                unreadable calldata, the user trusts a piece of software that
-                claims to have interpreted it correctly.
-              </p>
-              <p>
-                We think this gap should be explicit. The problem is not only
-                how to display a transaction. The problem is how to justify the
-                claim being displayed.
+                That is the boundary we want to make explicit. The question is
+                not only how to display a transaction. It is why the displayed
+                claim should be trusted at all.
               </p>
             </div>
           </section>
@@ -339,6 +368,29 @@ export default function WhyClearSigningShouldNotRequireTrustPage() {
                 independently from the wallet implementation.
               </p>
             </div>
+
+            <div className="mt-8 space-y-4">
+              <p className="text-sm font-sans uppercase tracking-[0.14em] text-muted">
+                The claim the wallet should be able to justify
+              </p>
+              <CodeBlock>{`{
+  contract: "USDC",
+  selector: "approve(address,uint256)",
+  template: "erc20.approve.unlimited",
+  fields: {
+    spender: "Uniswap V2 Router",
+    token: "USDC"
+  },
+  display: "Approve Uniswap V2 Router to spend unlimited USDC"
+}`}</CodeBlock>
+              <p className="text-sm text-muted leading-relaxed">
+                This is the useful distinction in practice. The proof does not
+                need to certify every nuance of free-form prose. It needs to
+                certify that one structured display claim is the correct result
+                of evaluating the public spec on the calldata. The sentence the
+                user reads is then a rendering of that claim.
+              </p>
+            </div>
           </section>
 
           <section className="mb-16">
@@ -356,11 +408,11 @@ export default function WhyClearSigningShouldNotRequireTrustPage() {
                   describe the transaction.
                 </li>
                 <li>
-                  Trust the proof system and verifier rather than a large
+                  Trust the proof system and verifier instead of a large
                   translation layer running on the host.
                 </li>
                 <li>
-                  Optionally trust a hardware device to verify the proof before
+                  On hardware, trust the device to verify the proof before
                   displaying the final claim.
                 </li>
               </ol>
@@ -381,9 +433,9 @@ export default function WhyClearSigningShouldNotRequireTrustPage() {
               <p>
                 Our broader view is that users should not need to trust large
                 opaque codebases. They should trust small specifications. A
-                specification is easier to audit, easier to compare, and easier
-                to publish as a public object that different implementations can
-                follow.
+                specification is easier to audit, easier to compare across
+                implementations, and easier to publish as a public object that
+                many parties can review.
               </p>
               <p>
                 That does not mean code stops mattering. It means code should be
@@ -431,6 +483,67 @@ export default function WhyClearSigningShouldNotRequireTrustPage() {
 
           <section className="mb-16">
             <h2 className="font-serif text-lg font-semibold tracking-tight mb-4">
+              How the claim is bound
+            </h2>
+            <div className="leading-relaxed space-y-4">
+              <p>
+                The critical detail is that the proof is not asserting a vague
+                statement like &ldquo;the UI seems reasonable.&rdquo; It binds
+                two concrete commitments: one to the transaction input, and one
+                to the structured display output produced by the spec.
+              </p>
+              <p>
+                In the prototype, the circuit checks the selector, evaluates
+                the Verity intent rules, and computes commitments over both the
+                calldata and the resulting display claim. The proof then
+                certifies that these commitments are consistent with each other
+                under the public specification.
+              </p>
+            </div>
+
+            <div className="mt-8 grid gap-4 md:grid-cols-2 text-sm leading-relaxed">
+              <div className="rounded-lg border border-gray-200 bg-white p-5">
+                <p className="font-sans text-[11px] uppercase tracking-[0.18em] text-muted">
+                  Inside the circuit
+                </p>
+                <ul className="mt-3 space-y-2 text-primary list-disc pl-5">
+                  <li>Match the function selector against a known intent.</li>
+                  <li>Decode typed parameters from calldata.</li>
+                  <li>Evaluate the display template required by the spec.</li>
+                  <li>
+                    Commit to the calldata and to the output claim with
+                    Poseidon.
+                  </li>
+                </ul>
+              </div>
+              <div className="rounded-lg border border-gray-200 bg-white p-5">
+                <p className="font-sans text-[11px] uppercase tracking-[0.18em] text-muted">
+                  On the verifier side
+                </p>
+                <ul className="mt-3 space-y-2 text-primary list-disc pl-5">
+                  <li>Check the proof against the public commitments.</li>
+                  <li>
+                    Check that the circuit verification key matches the hash
+                    committed in ENS.
+                  </li>
+                  <li>
+                    On hardware, verify both the proof and the storage proof
+                    for the ENS verification-key commitment before trusting the
+                    host&apos;s display claim.
+                  </li>
+                </ul>
+              </div>
+            </div>
+
+            <p className="mt-4 text-sm text-muted leading-relaxed">
+              That is what makes the trust model different in practice. The
+              browser is no longer just a translator. It is a prover whose work
+              can be checked.
+            </p>
+          </section>
+
+          <section className="mb-16">
+            <h2 className="font-serif text-lg font-semibold tracking-tight mb-4">
               The pipeline
             </h2>
             <div className="leading-relaxed space-y-4">
@@ -455,9 +568,49 @@ export default function WhyClearSigningShouldNotRequireTrustPage() {
                 <ExternalLink href="https://explain.md/clear-signing-hw">
                   hardware flow
                 </ExternalLink>
-                , the proof can be checked on a Ledger device, which reduces
-                the need to trust the host machine for the final display.
+                , the proof can be checked on a Ledger device, alongside a
+                storage proof for the ENS-published verification-key hash,
+                which reduces the need to trust the host machine for the final
+                display.
               </p>
+            </div>
+          </section>
+
+          <section className="mb-16">
+            <h2 className="font-serif text-lg font-semibold tracking-tight mb-4">
+              Verify it yourself
+            </h2>
+            <div className="leading-relaxed space-y-4">
+              <p>
+                The strongest part of the VeryClear story is that the
+                prototype is inspectable. The easiest way to understand the
+                trust model is to compare the three pieces directly.
+              </p>
+              <ol className="list-decimal pl-6 space-y-2 text-primary">
+                <li>
+                  Open the{' '}
+                  <ExternalLink href="https://explain.md/clear-signing">
+                    browser demo
+                  </ExternalLink>{' '}
+                  and inspect the step-by-step pipeline from spec lookup to
+                  proof verification.
+                </li>
+                <li>
+                  Open the{' '}
+                  <ExternalLink href="https://explain.md/clear-signing-hw">
+                    hardware demo
+                  </ExternalLink>{' '}
+                  to see the same display claim checked on a Ledger device.
+                </li>
+                <li>
+                  Read the{' '}
+                  <ExternalLink href="https://github.com/lfglabs-dev/explain.md/blob/main/README.md">
+                    prototype README
+                  </ExternalLink>{' '}
+                  for the concrete trust chain: ENS registry, verification-key
+                  hash commitment, and storage-proof verification on hardware.
+                </li>
+              </ol>
             </div>
           </section>
 
@@ -525,6 +678,12 @@ export default function WhyClearSigningShouldNotRequireTrustPage() {
                 direction clearly: clear signing should not mean &ldquo;the
                 wallet showed me something readable.&rdquo; It should mean
                 &ldquo;the claim I am reading is justified.&rdquo;
+              </p>
+              <p>
+                If code is law, users need a way to rely on something smaller
+                than code at signing time. Our view is that this object should
+                be an auditable public specification, and the wallet should
+                prove that its explanation really follows from it.
               </p>
             </div>
           </section>
@@ -620,8 +779,13 @@ export default function WhyClearSigningShouldNotRequireTrustPage() {
                 </ExternalLink>
               </p>
               <p>
-                <ExternalLink href="https://github.com/lfglabs-dev/verity/blob/main/docs/PROVABLE_INTENT_DSL.md">
-                  Provable Intent DSL documentation
+                <ExternalLink href="https://github.com/lfglabs-dev/explain.md/blob/main/README.md">
+                  Prototype architecture README
+                </ExternalLink>
+              </p>
+              <p>
+                <ExternalLink href="https://github.com/lfglabs-dev/verity/pull/1677/files">
+                  Provable Intent DSL implementation diff
                 </ExternalLink>
               </p>
               <p>
@@ -632,6 +796,11 @@ export default function WhyClearSigningShouldNotRequireTrustPage() {
               <p>
                 <ExternalLink href="https://github.com/lfglabs-dev/explain.md">
                   explain.md source
+                </ExternalLink>
+              </p>
+              <p>
+                <ExternalLink href="https://zknox.eth.limo/posts/2026/03/13/zk_clear_signing_160326.html">
+                  ZKNOX write-up on hardware-verified clear signing
                 </ExternalLink>
               </p>
             </div>
