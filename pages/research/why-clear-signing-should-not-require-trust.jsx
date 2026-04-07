@@ -15,9 +15,9 @@ export default function WhyClearSigningShouldNotRequireTrustPage() {
   const articleJsonLd = {
     '@context': 'https://schema.org',
     '@type': 'Article',
-    headline: 'Why Clear Signing Should Not Require Trust',
+    headline: 'Formalizing Transaction Interpretation',
     description:
-      'If code is law, the sentence your wallet shows should be justified, not trusted. VeryClear reframes clear signing as a verification problem.',
+      'Developer-authored display specs, compiled to JSON and ZK circuits.',
     image: ['https://lfglabs.dev/images/veryclear-thumb.webp'],
     datePublished: `${publishedDate}T00:00:00Z`,
     dateModified: `${publishedDate}T00:00:00Z`,
@@ -44,19 +44,19 @@ export default function WhyClearSigningShouldNotRequireTrustPage() {
     <>
       <Head>
         <title>
-          Why Clear Signing Should Not Require Trust | Research | LFG Labs
+          Formalizing Transaction Interpretation | Research | LFG Labs
         </title>
         <meta
           name="description"
-          content="If code is law, the sentence your wallet shows should be justified, not trusted. VeryClear reframes clear signing as a verification problem."
+          content="Developer-authored display specs, compiled to JSON and ZK circuits."
         />
         <meta
           property="og:title"
-          content="Why Clear Signing Should Not Require Trust"
+          content="Formalizing Transaction Interpretation"
         />
         <meta
           property="og:description"
-          content="If code is law, the sentence your wallet shows should be justified, not trusted. VeryClear reframes clear signing as a verification problem."
+          content="Developer-authored display specs, compiled to JSON and ZK circuits."
         />
         <meta
           property="og:type"
@@ -84,11 +84,11 @@ export default function WhyClearSigningShouldNotRequireTrustPage() {
         />
         <meta
           name="twitter:title"
-          content="Why Clear Signing Should Not Require Trust"
+          content="Formalizing Transaction Interpretation"
         />
         <meta
           name="twitter:description"
-          content="If code is law, the sentence your wallet shows should be justified, not trusted."
+          content="Developer-authored display specs, compiled to JSON and ZK circuits."
         />
         <meta
           name="twitter:image"
@@ -116,11 +116,11 @@ export default function WhyClearSigningShouldNotRequireTrustPage() {
 
           <header className="mb-12">
             <h1 className="text-3xl md:text-4xl font-semibold tracking-tight leading-tight">
-              Why Clear Signing Should Not Require Trust
+              Formalizing Transaction Interpretation
             </h1>
             <p className="mt-3 text-muted text-base">
-              If code is law, the sentence your wallet shows should be
-              justified, not trusted.
+              Developer-authored display specs, compiled to JSON and ZK
+              circuits.
             </p>
           </header>
 
