@@ -137,8 +137,9 @@ export default function WhyClearSigningShouldNotRequireTrustPage() {
             <p className="mt-3 text-sm text-muted leading-relaxed">
               VeryClear won 1st place in Ledger&apos;s &ldquo;Clear Signing,
               Integrations &amp; Apps&rdquo; category at ETHGlobal Cannes 2026.
-              We built it in under 36 hours with{' '}
-              <ExternalLink href="https://zknox.com">ZKNOX</ExternalLink>.
+              We built it in under 36 hours with the{' '}
+              <ExternalLink href="https://zknox.com">ZKNOX</ExternalLink>{' '}
+              team.
             </p>
           </section>
 
