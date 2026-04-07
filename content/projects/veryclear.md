@@ -18,7 +18,7 @@ VeryClear won **1st place in the Ledger "Clear Signing, Integrations & Apps" cat
 
 ## The problem
 
-When you sign an Ethereum transaction, your wallet shows you raw calldata — a hex blob that means nothing to a human:
+When you sign an Ethereum transaction, your wallet shows you raw calldata, a hex blob that means nothing to a human:
 
 `0x095ea7b300000000000000000000000...`
 
@@ -38,27 +38,27 @@ VeryClear uses an extended [Verity](https://github.com/Th0rgal/verity) DSL writt
 The compiler takes each spec and produces **two artifacts**:
 
 1. **A JSON descriptor** that any frontend can load to decode calldata into a human-readable sentence.
-2. **A Groth16 ZK circuit** (via Circom) that lets anyone — including an embedded device like a Ledger — verify that the displayed sentence is a correct interpretation of the raw calldata.
+2. **A Groth16 ZK circuit** (via Circom) that lets anyone, including an embedded device like a Ledger, verify that the displayed sentence is a correct interpretation of the raw calldata.
 
-The proof binds the two together cryptographically: the circuit computes a commitment over the calldata and a commitment over the evaluated template using Poseidon hashing, and the Groth16 proof guarantees they match. No trust in the frontend, no trust in the translator — just math.
+The proof binds the two together cryptographically: the circuit computes a commitment over the calldata and a commitment over the evaluated template using Poseidon hashing, and the Groth16 proof guarantees they match. No trust in the frontend, no trust in the translator. Just math.
 
 ## The pipeline
 
 When a transaction arrives, VeryClear processes it in seven steps:
 
-1. **Spec lookup** — find the right spec by contract address (registry on ENS)
-2. **Function identification** — match the 4-byte selector to a known function
-3. **Calldata decoding** — decode raw bytes into typed parameters via ABI
-4. **Intent evaluation** — the DSL program selects a template and fills the holes
-5. **External resolution** — addresses in the template are resolved against other known specs (e.g. turning `0xA0b8...` into "USDC")
-6. **Verified display** — the final human-readable sentence is shown to the user
-7. **Proof generation** — a Groth16 proof is generated and verified in-browser using snarkjs
+1. **Spec lookup**: find the right spec by contract address (registry on ENS)
+2. **Function identification**: match the 4-byte selector to a known function
+3. **Calldata decoding**: decode raw bytes into typed parameters via ABI
+4. **Intent evaluation**: the DSL program selects a template and fills the holes
+5. **External resolution**: addresses in the template are resolved against other known specs (e.g. turning `0xA0b8...` into "USDC")
+6. **Verified display**: the final human-readable sentence is shown to the user
+7. **Proof generation**: a Groth16 proof is generated and verified in-browser using snarkjs
 
-The result: a sentence you can read, backed by a proof you can verify — even on a hardware wallet.
+The result: a sentence you can read, backed by a proof you can verify, even on a hardware wallet.
 
 ## Facts about VeryClear
 
-- **Prize:** 1st place, Ledger "Clear Signing, Integrations & Apps" — ETHGlobal Cannes 2026
+- **Prize:** 1st place, Ledger "Clear Signing, Integrations & Apps" at ETHGlobal Cannes 2026
 - **Built with:** [ZKNOX](https://zknox.com)
 - **Proof system:** Groth16 over BLS12-381 with Poseidon hashing
 - **Standard:** Scriptable ERC-7730 descriptions for Ethereum transactions
@@ -68,5 +68,5 @@ The result: a sentence you can read, backed by a proof you can verify — even o
 
 - [Long-form article on LFG Labs](/research/why-clear-signing-should-not-require-trust)
 - [VeryClear on ETHGlobal](https://ethglobal.com/showcase/veryclear-vu8i7)
-- [explain.md — Clear Signing](https://explain.md/clear-signing)
+- [explain.md - Clear Signing](https://explain.md/clear-signing)
 - [ZKNOX](https://zknox.com)

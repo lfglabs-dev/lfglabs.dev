@@ -5,6 +5,7 @@ import ResearchCard from '../../components/ResearchCard'
 import CodeBlock from '../../components/research/CodeBlock'
 import Disclosure from '../../components/research/Disclosure'
 import ExternalLink from '../../components/research/ExternalLink'
+import HighlightedDSL from '../../components/research/HighlightedDSL'
 import { research } from '../../data/research'
 
 export default function WhyClearSigningShouldNotRequireTrustPage() {
@@ -198,7 +199,7 @@ export default function WhyClearSigningShouldNotRequireTrustPage() {
           </section>
 
           <section className="mb-16">
-            <h2 className="font-serif text-lg font-semibold tracking-tight mb-4">
+            <h2 className="font-serif text-xl font-semibold tracking-tight mb-4">
               Trust assumptions, explicitly
             </h2>
             <div className="grid gap-4 md:grid-cols-3 text-sm leading-relaxed">
@@ -271,7 +272,7 @@ export default function WhyClearSigningShouldNotRequireTrustPage() {
           </section>
 
           <section className="mb-16">
-            <h2 className="font-serif text-lg font-semibold tracking-tight mb-4">
+            <h2 className="font-serif text-xl font-semibold tracking-tight mb-4">
               What is actually being proved
             </h2>
             <div className="leading-relaxed space-y-4">
@@ -322,7 +323,7 @@ export default function WhyClearSigningShouldNotRequireTrustPage() {
           </section>
 
           <section className="mb-16">
-            <h2 className="font-serif text-lg font-semibold tracking-tight mb-4">
+            <h2 className="font-serif text-xl font-semibold tracking-tight mb-4">
               The trust boundary, before and after
             </h2>
             <div className="grid gap-4 md:grid-cols-2">
@@ -391,7 +392,7 @@ export default function WhyClearSigningShouldNotRequireTrustPage() {
           </section>
 
           <section className="mb-16">
-            <h2 className="font-serif text-lg font-semibold tracking-tight mb-4">
+            <h2 className="font-serif text-xl font-semibold tracking-tight mb-4">
               What changes with VeryClear
             </h2>
             <div className="border border-gray-200 rounded overflow-hidden text-sm">
@@ -430,7 +431,7 @@ export default function WhyClearSigningShouldNotRequireTrustPage() {
           </section>
 
           <section className="mb-16">
-            <h2 className="font-serif text-lg font-semibold tracking-tight mb-4">
+            <h2 className="font-serif text-xl font-semibold tracking-tight mb-4">
               One transaction, end to end
             </h2>
             <div className="leading-relaxed space-y-4">
@@ -476,17 +477,42 @@ amount:  0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff`}</C
 
             <div className="mt-8 space-y-4">
               <p className="text-sm font-sans uppercase tracking-[0.14em] text-muted">
-                One possible specification
+                The USDC specification, written in the Verity DSL
               </p>
-              <CodeBlock>{`match approve(spender, amount)
-| amount == maxUint256 =>
-    "Approve {spender} to spend unlimited USDC"
-| otherwise =>
-    "Approve {spender} to spend {amount} USDC"`}</CodeBlock>
+              <HighlightedDSL source={`import Verity.Intent.DSL
+
+namespace Contracts.USDC
+open Verity.Intent.DSL
+
+private def maxUint256 : Int := (2 ^ 256 : Nat) - 1
+
+intent_spec "USDC" where
+  const decimals := 6
+
+  intent transfer(to : address, amount : uint256) where
+    when amount == maxUint256 =>
+      emit "Send all USDC to {to}"
+    otherwise =>
+      emit "Send {amount:fixed decimals} USDC to {to}"
+
+  intent approve(spender : address, amount : uint256) where
+    when amount == maxUint256 =>
+      emit "Approve {spender} to spend unlimited USDC"
+    otherwise =>
+      emit "Approve {spender} to spend {amount:fixed decimals} USDC"
+
+  intent transferFrom(from : address, to : address, amount : uint256) where
+    when amount == maxUint256 =>
+      emit "Transfer all USDC from {from} to {to}"
+    otherwise =>
+      emit "Transfer {amount:fixed decimals} USDC from {from} to {to}"
+
+end Contracts.USDC`} />
               <p className="text-sm text-muted leading-relaxed">
-                The important property is not the exact syntax. It is that the
-                explanation exists as a small public object that can be audited
-                independently from the wallet implementation.
+                This is the full spec for USDC. It reads like a short document:
+                for each function, list the cases and what the wallet should say.
+                Anyone can audit it, and the ZK circuit guarantees the wallet
+                follows it exactly.
               </p>
             </div>
 
@@ -565,7 +591,7 @@ amount:  0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff`}</C
           </section>
 
           <section className="mb-16">
-            <h2 className="font-serif text-lg font-semibold tracking-tight mb-4">
+            <h2 className="font-serif text-xl font-semibold tracking-tight mb-4">
               What you trust in practice
             </h2>
             <div className="leading-relaxed space-y-4">
@@ -597,7 +623,7 @@ amount:  0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff`}</C
           </section>
 
           <section className="mb-16">
-            <h2 className="font-serif text-lg font-semibold tracking-tight mb-4">
+            <h2 className="font-serif text-xl font-semibold tracking-tight mb-4">
               Trust specifications, not code
             </h2>
             <div className="leading-relaxed space-y-4">
@@ -617,7 +643,7 @@ amount:  0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff`}</C
           </section>
 
           <section className="mb-16">
-            <h2 className="font-serif text-lg font-semibold tracking-tight mb-4">
+            <h2 className="font-serif text-xl font-semibold tracking-tight mb-4">
               What VeryClear builds
             </h2>
             <div className="leading-relaxed space-y-4">
@@ -647,7 +673,7 @@ amount:  0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff`}</C
           </section>
 
           <section className="mb-16">
-            <h2 className="font-serif text-lg font-semibold tracking-tight mb-4">
+            <h2 className="font-serif text-xl font-semibold tracking-tight mb-4">
               How the claim is bound
             </h2>
             <div className="leading-relaxed space-y-4">
@@ -708,7 +734,7 @@ amount:  0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff`}</C
           </section>
 
           <section className="mb-16">
-            <h2 className="font-serif text-lg font-semibold tracking-tight mb-4">
+            <h2 className="font-serif text-xl font-semibold tracking-tight mb-4">
               The pipeline
             </h2>
             <div className="leading-relaxed space-y-4">
@@ -742,7 +768,7 @@ amount:  0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff`}</C
           </section>
 
           <section className="mb-16">
-            <h2 className="font-serif text-lg font-semibold tracking-tight mb-4">
+            <h2 className="font-serif text-xl font-semibold tracking-tight mb-4">
               Verify it yourself
             </h2>
             <div className="leading-relaxed space-y-4">
@@ -780,7 +806,7 @@ amount:  0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff`}</C
           </section>
 
           <section className="mb-16">
-            <h2 className="font-serif text-lg font-semibold tracking-tight mb-4">
+            <h2 className="font-serif text-xl font-semibold tracking-tight mb-4">
               What this proves, and what it does not
             </h2>
             <div className="leading-relaxed space-y-4">
@@ -822,7 +848,7 @@ amount:  0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff`}</C
           </section>
 
           <section className="mb-16">
-            <h2 className="font-serif text-lg font-semibold tracking-tight mb-4">
+            <h2 className="font-serif text-xl font-semibold tracking-tight mb-4">
               Where we want this to go
             </h2>
             <div className="leading-relaxed space-y-4">
@@ -848,7 +874,7 @@ amount:  0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff`}</C
           </section>
 
           <section className="mb-16">
-            <h2 className="font-serif text-lg font-semibold tracking-tight mb-4">
+            <h2 className="font-serif text-xl font-semibold tracking-tight mb-4">
               Why this is better than static descriptors
             </h2>
             <div className="leading-relaxed space-y-4">
@@ -907,7 +933,7 @@ amount:  0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff`}</C
           </section>
 
           <section className="mb-16">
-            <h2 className="font-serif text-lg font-semibold tracking-tight mb-4">
+            <h2 className="font-serif text-xl font-semibold tracking-tight mb-4">
               Likely objections
             </h2>
             <div className="space-y-4">
@@ -946,7 +972,7 @@ amount:  0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff`}</C
           </section>
 
           <section className="mb-16">
-            <h2 className="font-serif text-lg font-semibold tracking-tight mb-4">
+            <h2 className="font-serif text-xl font-semibold tracking-tight mb-4">
               Links
             </h2>
             <div className="leading-relaxed space-y-2">
