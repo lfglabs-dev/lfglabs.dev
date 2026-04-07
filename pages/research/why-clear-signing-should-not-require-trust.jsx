@@ -368,23 +368,44 @@ amount:  0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff`}</C
   display: "Approve Uniswap V2 Router to spend unlimited USDC"
 }`}</CodeBlock>
               <p className="text-sm text-muted leading-relaxed">
-                This is the useful distinction in practice. The proof does not
-                need to certify every nuance of free-form prose. It needs to
-                certify that one structured display claim is the correct result
-                of evaluating the public spec on the calldata. The sentence the
-                user reads is then a rendering of that claim.
+                The proof certifies that this structured claim is the correct
+                result of evaluating the public spec on the calldata. But the
+                claim is still a template with typed holes. To show a
+                human-readable sentence, the wallet needs to fill those holes
+                with the actual display strings from the spec.
               </p>
-              <p className="text-sm text-muted leading-relaxed">
-                The browser prototype and the hardware flow are both public, so
-                a reader can inspect the same example in the{' '}
-                <ExternalLink href="https://explain.md/clear-signing">
-                  browser demo
-                </ExternalLink>{' '}
-                and the{' '}
-                <ExternalLink href="https://explain.md/clear-signing-hw">
-                  hardware demo
-                </ExternalLink>
-                .
+            </div>
+          </section>
+
+          <section className="mb-16">
+            <h2 className="font-serif text-xl font-semibold tracking-tight mb-4">
+              Where the spec text comes from
+            </h2>
+            <div className="leading-relaxed space-y-4">
+              <p>
+                Once the proof confirms which template matches, the wallet
+                still needs the human-readable text that fills the template.
+                That text lives in the spec itself, so the question becomes:
+                how does the wallet get a spec it can trust?
+              </p>
+              <p>
+                In our proof of concept, we stored specs directly in an ENS
+                registry we deployed on chain. That works, but it means users
+                trust whoever published the registry entry. A better model
+                would let users review and approve a spec the first time they
+                interact with a new contract. The wallet would show the spec,
+                the user would sign their approval, and that approval would
+                remain valid for a fixed period, say one year. After that, the
+                wallet prompts for re-approval, which also gives spec authors
+                a natural window to publish updates.
+              </p>
+              <p>
+                This is a meaningful difference. Instead of silently trusting
+                an on-chain registry forever, the user makes an explicit,
+                time-bounded decision about which specifications they accept.
+                The proof still guarantees that the wallet follows the spec
+                exactly. The approval step guarantees that the user chose the
+                spec knowingly.
               </p>
             </div>
           </section>
