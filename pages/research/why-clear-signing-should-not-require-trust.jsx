@@ -20,7 +20,7 @@ export default function WhyClearSigningShouldNotRequireTrustPage() {
         </title>
         <meta
           name="description"
-          content="If code is law, users need a way to trust what a wallet says code will do. VeryClear reframes clear signing as a verification problem."
+          content="If code is law, the sentence your wallet shows should be justified, not trusted. VeryClear reframes clear signing as a verification problem."
         />
         <meta
           property="og:title"
@@ -28,7 +28,7 @@ export default function WhyClearSigningShouldNotRequireTrustPage() {
         />
         <meta
           property="og:description"
-          content="If code is law, users need a way to trust what a wallet says code will do. VeryClear reframes clear signing as a verification problem."
+          content="If code is law, the sentence your wallet shows should be justified, not trusted. VeryClear reframes clear signing as a verification problem."
         />
         <meta
           property="og:type"
@@ -52,7 +52,7 @@ export default function WhyClearSigningShouldNotRequireTrustPage() {
         />
         <meta
           name="twitter:description"
-          content="VeryClear reframes wallet transaction explanation as a verifiable claim, not a UI promise."
+          content="If code is law, the sentence your wallet shows should be justified, not trusted."
         />
         <meta
           name="twitter:image"
@@ -78,34 +78,34 @@ export default function WhyClearSigningShouldNotRequireTrustPage() {
               Why Clear Signing Should Not Require Trust
             </h1>
             <p className="mt-3 text-muted text-base">
-              VeryClear reframes wallet transaction explanation as a verifiable
-              claim, not a UI promise.
+              If code is law, the sentence your wallet shows should be
+              justified, not trusted.
             </p>
           </header>
 
           <section className="mb-16 leading-relaxed space-y-4">
             <p>
               In crypto, we like to say that code is law. The problem is that
-              code is hard to read, and transaction calldata is even worse. At
-              signing time, the user is not judging a protocol paper or a
-              contract implementation. They are judging an opaque blob of bytes
-              and trying to decide whether it is safe.
+              code is hard to understand, and transaction calldata is worse.
+              At signing time, the user is not reviewing a protocol design or
+              a contract implementation. They are staring at an opaque blob of
+              bytes and trying to decide whether it is safe.
             </p>
             <p>
               Verity exists to reduce what people need to trust. Instead of
               asking users to trust a large implementation, we want to reduce
               trust to small specifications that can be audited directly, or by
               people they already trust. That helps when the question is what a
-              contract does in general. But until recently, it did not help
-              enough with the more immediate question users face every day:
-              what am I about to sign?
+              contract does in general. But until recently, it did not solve
+              the question users face every day: what exactly am I about to
+              sign?
             </p>
             <p>
-              That is the gap VeryClear targets. Clear signing is usually
-              presented as a UX improvement: take unreadable calldata, turn it
-              into a sentence, and let the user decide. But readability alone
-              is not enough. If a wallet translates calldata into a sentence,
-              the user still has to trust the translator.
+              That is the gap VeryClear targets. Clear signing is usually sold
+              as a UX improvement: take unreadable calldata, turn it into a
+              sentence, and let the user decide. But readability alone is not
+              enough. If a wallet translates calldata into a sentence, the user
+              still has to trust the translator.
             </p>
           </section>
 
@@ -147,10 +147,9 @@ export default function WhyClearSigningShouldNotRequireTrustPage() {
               </p>
               <p className="mt-3 text-[17px] leading-relaxed">
                 Clear signing only really helps if the sentence on screen is
-                not just readable, but justified. Our goal is to move trust
-                away from opaque wallet code and toward small public
-                specifications that can be audited independently and checked by
-                machines.
+                not just readable, but justified. VeryClear moves trust away
+                from opaque wallet code and toward small public specifications
+                that can be audited independently and checked by machines.
               </p>
             </div>
           </section>
@@ -321,9 +320,8 @@ export default function WhyClearSigningShouldNotRequireTrustPage() {
                   Wallet software decodes calldata and displays a sentence.
                 </div>
                 <div className="leading-relaxed text-primary">
-                  A public spec defines a structured display claim, and the
-                  wallet proves that the displayed interpretation follows from
-                  that spec.
+                  A public spec defines the allowed display claim, and the
+                  wallet proves that the displayed interpretation follows it.
                 </div>
               </div>
               <div className="grid grid-cols-2 gap-4 px-5 py-4 border-t border-gray-200">
@@ -457,20 +455,14 @@ export default function WhyClearSigningShouldNotRequireTrustPage() {
               <p>
                 Our broader view is that users should not need to trust large
                 opaque codebases. They should trust small specifications. A
-                specification is easier to audit, easier to compare across
-                implementations, and easier to publish as a public object that
-                many parties can review.
+                specification is easier to audit, compare across
+                implementations, and publish as a public object that many
+                parties can review.
               </p>
               <p>
                 That does not mean code stops mattering. It means code should be
                 forced to prove that it follows the specification, instead of
                 asking users to trust that it probably does.
-              </p>
-              <p>
-                VeryClear is a first step in that direction. We focused on a
-                narrow but important property: ensuring that the explanation
-                shown to the user really follows from the calldata and from a
-                formal intent specification.
               </p>
             </div>
           </section>
@@ -702,12 +694,6 @@ export default function WhyClearSigningShouldNotRequireTrustPage() {
                 direction clearly: clear signing should not mean &ldquo;the
                 wallet showed me something readable.&rdquo; It should mean
                 &ldquo;the claim I am reading is justified.&rdquo;
-              </p>
-              <p>
-                If code is law, users need a way to rely on something smaller
-                than code at signing time. Our view is that this object should
-                be an auditable public specification, and the wallet should
-                prove that its explanation really follows from it.
               </p>
             </div>
           </section>
