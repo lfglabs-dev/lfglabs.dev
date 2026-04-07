@@ -1,6 +1,6 @@
 export const research = [
   {
-    slug: 'why-clear-signing-should-not-require-trust',
+    slug: 'formalizing-transaction-interpretation',
     title: 'Formalizing Transaction Interpretation',
     subtitle:
       'What if we formalized natural language interpretation?',

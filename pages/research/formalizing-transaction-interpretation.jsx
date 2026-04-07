@@ -10,7 +10,7 @@ import { research } from '../../data/research'
 
 export default function WhyClearSigningShouldNotRequireTrustPage() {
   const canonicalUrl =
-    'https://lfglabs.dev/research/why-clear-signing-should-not-require-trust'
+    'https://lfglabs.dev/research/formalizing-transaction-interpretation'
   const publishedDate = '2026-04-07'
   const articleJsonLd = {
     '@context': 'https://schema.org',
@@ -37,7 +37,7 @@ export default function WhyClearSigningShouldNotRequireTrustPage() {
     mainEntityOfPage: canonicalUrl
   }
   const otherResearch = research.filter(
-    (r) => r.slug !== 'why-clear-signing-should-not-require-trust'
+    (r) => r.slug !== 'formalizing-transaction-interpretation'
   )
 
   return (
