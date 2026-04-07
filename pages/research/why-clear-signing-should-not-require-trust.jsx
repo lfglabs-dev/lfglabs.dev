@@ -83,6 +83,57 @@ export default function WhyClearSigningShouldNotRequireTrustPage() {
           </section>
 
           <section className="mb-16">
+            <h2 className="font-serif text-lg font-semibold tracking-tight mb-4">
+              The trust boundary, before and after
+            </h2>
+            <div className="grid gap-4 md:grid-cols-2">
+              <div className="rounded-lg border border-gray-200 bg-white p-5">
+                <p className="font-sans text-[11px] uppercase tracking-[0.18em] text-muted">
+                  Standard flow
+                </p>
+                <div className="mt-4 space-y-3 text-sm leading-relaxed">
+                  <div className="rounded border border-gray-200 bg-[#f8f8f8] px-4 py-3">
+                    Raw calldata
+                  </div>
+                  <div className="text-center text-muted">&darr;</div>
+                  <div className="rounded border border-gray-200 bg-[#f8f8f8] px-4 py-3">
+                    Wallet or frontend translator
+                  </div>
+                  <div className="text-center text-muted">&darr;</div>
+                  <div className="rounded border border-gray-200 bg-[#fdf4e7] px-4 py-3">
+                    User trusts the sentence because the software said so
+                  </div>
+                </div>
+              </div>
+
+              <div className="rounded-lg border border-gray-200 bg-white p-5">
+                <p className="font-sans text-[11px] uppercase tracking-[0.18em] text-muted">
+                  VeryClear flow
+                </p>
+                <div className="mt-4 space-y-3 text-sm leading-relaxed">
+                  <div className="rounded border border-gray-200 bg-[#f8f8f8] px-4 py-3">
+                    Raw calldata + public intent spec
+                  </div>
+                  <div className="text-center text-muted">&darr;</div>
+                  <div className="rounded border border-gray-200 bg-[#f8f8f8] px-4 py-3">
+                    Prover derives the display claim from the spec
+                  </div>
+                  <div className="text-center text-muted">&darr;</div>
+                  <div className="rounded border border-gray-200 bg-[#edf6ee] px-4 py-3">
+                    User trusts an auditable spec and a verifier, not a hidden
+                    translator
+                  </div>
+                </div>
+              </div>
+            </div>
+            <p className="mt-4 text-sm text-muted leading-relaxed">
+              The shift is not from trust to no trust. It is from trusting a
+              large implementation to trusting a much smaller public object and
+              checking that the implementation followed it.
+            </p>
+          </section>
+
+          <section className="mb-16">
             <div className="rounded-lg overflow-hidden border border-gray-200 bg-[#f8f8f8]">
               <video
                 src="/images/veryclear-demo.mp4"
