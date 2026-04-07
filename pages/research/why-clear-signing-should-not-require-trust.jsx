@@ -115,9 +115,6 @@ export default function WhyClearSigningShouldNotRequireTrustPage() {
           </nav>
 
           <header className="mb-20">
-            <div className="font-sans text-[11px] uppercase tracking-[0.18em] text-muted">
-              April 7, 2026 · Case study
-            </div>
             <h1 className="text-3xl md:text-4xl font-semibold tracking-tight leading-tight">
               Why Clear Signing Should Not Require Trust
             </h1>
