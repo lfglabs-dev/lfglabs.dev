@@ -347,7 +347,7 @@ export default function WhyClearSigningShouldNotRequireTrustPage() {
 
           <section className="mb-16">
             <h2 className="font-serif text-lg font-semibold tracking-tight mb-4">
-              A concrete example
+              One transaction, end to end
             </h2>
             <div className="leading-relaxed space-y-4">
               <p>
@@ -375,6 +375,21 @@ export default function WhyClearSigningShouldNotRequireTrustPage() {
               </p>
             </div>
 
+            <div className="mt-8 rounded-lg border border-gray-200 bg-white p-5">
+              <p className="text-sm font-sans uppercase tracking-[0.14em] text-muted">
+                The raw input
+              </p>
+              <CodeBlock>{`0x095ea7b3...
+selector: approve(address,uint256)
+spender: 0x7a250d5630b4cf539739df2c5dacab4c659f2488
+amount:  0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff`}</CodeBlock>
+              <p className="text-sm text-muted leading-relaxed">
+                A normal wallet pipeline decodes this and asks the user to
+                trust the result. VeryClear treats the result as a claim that
+                must be justified from a public spec.
+              </p>
+            </div>
+
             <div className="mt-8 space-y-4">
               <p className="text-sm font-sans uppercase tracking-[0.14em] text-muted">
                 One possible specification
@@ -389,6 +404,44 @@ export default function WhyClearSigningShouldNotRequireTrustPage() {
                 explanation exists as a small public object that can be audited
                 independently from the wallet implementation.
               </p>
+            </div>
+
+            <div className="mt-8 grid gap-4 md:grid-cols-4 text-sm leading-relaxed">
+              <div className="rounded-lg border border-gray-200 bg-white p-4">
+                <p className="font-sans text-[11px] uppercase tracking-[0.18em] text-muted">
+                  1. Decode
+                </p>
+                <p className="mt-3">
+                  Parse the selector and typed arguments from calldata.
+                </p>
+              </div>
+              <div className="rounded-lg border border-gray-200 bg-white p-4">
+                <p className="font-sans text-[11px] uppercase tracking-[0.18em] text-muted">
+                  2. Evaluate
+                </p>
+                <p className="mt-3">
+                  Run the public intent rules and select the unlimited-approval
+                  template.
+                </p>
+              </div>
+              <div className="rounded-lg border border-gray-200 bg-white p-4">
+                <p className="font-sans text-[11px] uppercase tracking-[0.18em] text-muted">
+                  3. Commit
+                </p>
+                <p className="mt-3">
+                  Bind both the calldata and the structured output claim inside
+                  the circuit.
+                </p>
+              </div>
+              <div className="rounded-lg border border-gray-200 bg-white p-4">
+                <p className="font-sans text-[11px] uppercase tracking-[0.18em] text-muted">
+                  4. Verify
+                </p>
+                <p className="mt-3">
+                  Check on the browser or hardware wallet that the displayed
+                  claim is the one the spec permits.
+                </p>
+              </div>
             </div>
 
             <div className="mt-8 space-y-4">
@@ -411,6 +464,18 @@ export default function WhyClearSigningShouldNotRequireTrustPage() {
                 certify that one structured display claim is the correct result
                 of evaluating the public spec on the calldata. The sentence the
                 user reads is then a rendering of that claim.
+              </p>
+              <p className="text-sm text-muted leading-relaxed">
+                The browser prototype and the hardware flow are both public, so
+                a reader can inspect the same example in the{' '}
+                <ExternalLink href="https://explain.md/clear-signing">
+                  browser demo
+                </ExternalLink>{' '}
+                and the{' '}
+                <ExternalLink href="https://explain.md/clear-signing-hw">
+                  hardware demo
+                </ExternalLink>
+                .
               </p>
             </div>
           </section>
