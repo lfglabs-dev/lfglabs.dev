@@ -483,9 +483,12 @@ export default function WhyClearSigningShouldNotRequireTrustPage() {
                 </ExternalLink>
               </p>
               <p>
-                <ExternalLink href="https://lfglabs.dev/projects/veryclear">
+                <Link
+                  href="/projects/veryclear"
+                  className="underline underline-offset-3 hover:text-heading transition-colors"
+                >
                   VeryClear project page
-                </ExternalLink>
+                </Link>
               </p>
               <p>
                 <ExternalLink href="https://explain.md/clear-signing-hw">
