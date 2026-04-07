@@ -1,5 +1,4 @@
 import Head from 'next/head'
-import Image from 'next/image'
 import Link from 'next/link'
 import PageLayout from '../components/PageLayout'
 import SectionHeader from '../components/ui/SectionHeader'
@@ -16,19 +15,6 @@ export default function AboutPage() {
           <SectionHeader>
             Why we chose <span className="text-accent">formal.</span>
           </SectionHeader>
-
-          <div className="text-center mb-10">
-            <Image
-              src="/images/founders.png"
-              alt="Ben and Thomas, Founders of LFG Labs"
-              width={480}
-              height={320}
-              className="rounded-xl mx-auto"
-            />
-            <p className="text-sm text-muted mt-4">
-              Ben &amp; Thomas, co-founders
-            </p>
-          </div>
 
           <div className="space-y-6 text-base text-primary leading-relaxed">
             <p>
