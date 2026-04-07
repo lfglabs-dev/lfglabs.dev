@@ -95,6 +95,37 @@ export default function WhyClearSigningShouldNotRequireTrustPage() {
 
           <section className="mb-16">
             <h2 className="font-serif text-lg font-semibold tracking-tight mb-4">
+              A concrete example
+            </h2>
+            <div className="leading-relaxed space-y-4">
+              <p>
+                Take a standard ERC-20{' '}
+                <code className="font-mono text-[13px]">approve</code> call.
+                The raw transaction says almost nothing to a human. A good
+                wallet UI might translate it into something like
+                &ldquo;Approve Uniswap to spend unlimited USDC.&rdquo;
+              </p>
+              <p>
+                That is better, but the user still has no direct reason to
+                trust the sentence. Was the spender decoded correctly? Was the
+                token resolved correctly? Did the software correctly detect that{' '}
+                <code className="font-mono text-[13px]">2^256 - 1</code> means
+                an unlimited approval in this context? A normal clear-signing
+                stack asks the user to assume all of that machinery behaved
+                correctly.
+              </p>
+              <p>
+                VeryClear changes that question. Instead of asking whether the
+                frontend probably interpreted the calldata correctly, we ask
+                whether the displayed sentence can be derived from a public
+                specification and proved from the calldata itself. That is a
+                much smaller and more defensible trust boundary.
+              </p>
+            </div>
+          </section>
+
+          <section className="mb-16">
+            <h2 className="font-serif text-lg font-semibold tracking-tight mb-4">
               Trust specifications, not code
             </h2>
             <div className="leading-relaxed space-y-4">
@@ -183,23 +214,23 @@ export default function WhyClearSigningShouldNotRequireTrustPage() {
             </h2>
             <div className="leading-relaxed space-y-4">
               <p>
-              The part we solved is: does the implementation produce the
-              explanation required by the formal specification? That is
-              already a meaningful shift. A fragile software promise becomes a
-              machine-checkable claim.
-            </p>
-            <p>
-              That distinction matters because transaction explanation sits on a
-              security boundary. If the host machine, browser extension, or
-              wallet integration is compromised, a friendly sentence is not
-              enough. The sentence has to be justified by something smaller and
-              more stable than the UI stack that produced it.
-            </p>
-            <p>
-              The harder question is above that layer: is the specification
-              itself the right way to explain the transaction to a human?
-              Natural language is ambiguous, context matters, and a sentence
-              can be technically correct while still failing to communicate
+                The part we solved is narrow, but important: does the
+                implementation produce the explanation required by the formal
+                specification? That is already a meaningful shift. A fragile
+                software promise becomes a machine-checkable claim.
+              </p>
+              <p>
+                That distinction matters because transaction explanation sits
+                on a security boundary. If the host machine, browser extension,
+                or wallet integration is compromised, a friendly sentence is
+                not enough. The sentence has to be justified by something
+                smaller and more stable than the UI stack that produced it.
+              </p>
+              <p>
+                The harder question is above that layer: is the specification
+                itself the right way to explain the transaction to a human?
+                Natural language is ambiguous, context matters, and a sentence
+                can be technically correct while still failing to communicate
                 risk.
               </p>
               <p>
@@ -207,8 +238,14 @@ export default function WhyClearSigningShouldNotRequireTrustPage() {
                 team from{' '}
                 <ExternalLink href="https://zknox.com">ZKNOX</ExternalLink>.
                 In parallel, we also explored the second one: how formal intent
-                specifications should eventually be expressed so humans can rely
-                on them, not just verify that a program followed them.
+                specifications should eventually be expressed so humans can
+                rely on them, not just verify that a program followed them.
+              </p>
+              <p>
+                Put differently: VeryClear can help prove that the wallet is
+                faithfully saying what the spec says. It does not yet solve the
+                full problem of making sure the spec says exactly what a human
+                needs to hear before making a security decision.
               </p>
             </div>
           </section>
