@@ -32,8 +32,8 @@ But this introduces a new trust assumption: who guarantees the translation is co
 
 VeryClear uses an extended [Verity](https://github.com/Th0rgal/verity) DSL written in Lean 4 to formalize how transaction intents are interpreted. For each contract, a spec maps calldata patterns to human-readable templates with typed holes. For example, a USDC spec might look like:
 
-- `when amount == maxUint256` → *"Approve {spender} to spend unlimited USDC"*
-- `otherwise` → *"Approve {spender} to spend {amount} USDC"*
+- `when amount == maxUint256` → *"Approve \{spender\} to spend unlimited USDC"*
+- `otherwise` → *"Approve \{spender\} to spend \{amount\} USDC"*
 
 The compiler takes each spec and produces **two artifacts**:
 
