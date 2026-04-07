@@ -169,9 +169,12 @@ export default function WhyClearSigningShouldNotRequireTrustPage() {
               interacting with.
             </p>
             <p>
-              In both cases, the user is trusting a translator. VeryClear asks
-              a different question: can the sentence on screen be proved
-              correct from the calldata and a public specification?
+              Verity&apos;s philosophy is to reduce trust to the simplest
+              possible specification of how a contract behaves. VeryClear
+              applies that idea to clear signing: a short, auditable spec
+              written by the contract developer defines exactly what the
+              wallet is allowed to say, and a ZK proof guarantees it followed
+              the spec.
             </p>
           </section>
 
