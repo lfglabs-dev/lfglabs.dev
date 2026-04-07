@@ -60,7 +60,7 @@ The result: a sentence you can read, backed by a proof you can verify — even o
 
 ## Relevant Links
 
-- [Long-form article on LFG Labs](https://lfglabs.dev/research/why-clear-signing-should-not-require-trust)
+- [Long-form article on LFG Labs](/research/why-clear-signing-should-not-require-trust)
 - [VeryClear on ETHGlobal](https://ethglobal.com/showcase/veryclear-vu8i7)
 - [explain.md — Clear Signing](https://explain.md/clear-signing)
 - [ZKNOX](https://zknox.com)
