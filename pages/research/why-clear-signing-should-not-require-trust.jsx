@@ -372,13 +372,6 @@ amount:  0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff`}</C
                 wallet prompts for re-approval, which also gives spec authors
                 a natural window to publish updates.
               </p>
-              <p>
-                This also opens the door to multiple languages. Since the
-                proof validates the template structure, not the display
-                strings, a French-speaking user could approve a French
-                translation of the same spec. The ZK circuit is identical;
-                only the human-readable text changes.
-              </p>
             </div>
           </section>
 
@@ -418,7 +411,7 @@ amount:  0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff`}</C
 
           <section className="mb-16">
             <h2 className="font-serif text-xl font-semibold tracking-tight mb-4">
-              Likely objections
+              Questions worth asking
             </h2>
             <div className="space-y-4">
               <Disclosure
@@ -426,30 +419,31 @@ amount:  0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff`}</C
                 defaultOpen
               >
                 <p>
-                  Yes, but that is the point. We are not claiming to remove
-                  trust completely. We are trying to move it from a large,
-                  opaque, fast-moving software stack to a much smaller object:
-                  a public specification. That object can be reviewed,
-                  versioned, compared across implementations, and audited by
-                  people other than the wallet vendor.
+                  Yes, and that is the point. Trust moves from a large, opaque
+                  software stack to a small public specification that can be
+                  reviewed, versioned, and audited by people other than the
+                  wallet vendor.
                 </p>
               </Disclosure>
-              <Disclosure title="Why not just standardize better wallet metadata?">
+              <Disclosure title="Does VeryClear solve the natural-language problem?">
                 <p>
-                  Better metadata helps, and standards work is valuable. But
-                  metadata alone still leaves the user trusting that the host
-                  software interpreted and rendered everything correctly. The
-                  extra step here is proving that the displayed claim actually
-                  follows from the calldata and the published rules.
+                  The proof guarantees the wallet followed the spec. Whether
+                  the spec says the right thing to a human is a separate
+                  problem. That is why we think specs should be written by the
+                  contract developers themselves, reviewed publicly, and
+                  approved explicitly by users. The next open question is
+                  connecting these display specs to the formal proofs of the
+                  contract itself, so that the sentence the user reads is not
+                  just consistent with the spec, but with the verified behavior
+                  of the code.
                 </p>
               </Disclosure>
-              <Disclosure title="Did VeryClear solve the natural-language problem?">
+              <Disclosure title="Can this work in languages other than English?">
                 <p>
-                  No. VeryClear focuses on proving that the implementation
-                  followed the specification. The harder question is whether the
-                  specification expresses the right thing for a human making a
-                  security decision. That is where our hackathon exploration
-                  with ZKNOX becomes relevant, and it remains an open problem.
+                  Yes. The proof validates the template structure, not the
+                  display strings. A French-speaking user could approve a
+                  French translation of the same spec. The ZK circuit is
+                  identical; only the human-readable text changes.
                 </p>
               </Disclosure>
             </div>
