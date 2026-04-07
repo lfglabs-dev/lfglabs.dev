@@ -288,11 +288,12 @@ export default function WhyClearSigningShouldNotRequireTrustPage() {
                 amount.
               </p>
               <p>
-                From that same source of truth, the compiler produces two
-                artifacts: a descriptor that a frontend can use to decode and
-                render the transaction, and a zero-knowledge circuit that proves
-                the rendered explanation is the one required by the
-                specification.
+                From that same source of truth, the compiler can produce both
+                an ERC-7730 clear-signing descriptor and a zero-knowledge
+                circuit. In other words, the ecosystem can keep the familiar
+                wallet display path, but now that path has a formal source of
+                truth and a proof-oriented backend instead of a separate,
+                hand-maintained translation layer.
               </p>
               <p>
                 That shared origin is the key point. The display logic and the
@@ -314,10 +315,13 @@ export default function WhyClearSigningShouldNotRequireTrustPage() {
                 <li>Decode calldata into typed parameters.</li>
                 <li>Evaluate the intent rules in the spec.</li>
                 <li>Resolve useful external labels such as token names.</li>
-                <li>Render the final sentence shown to the user.</li>
                 <li>
-                  Generate a proof that this sentence is the correct
-                  interpretation of the transaction.
+                  Produce a structured interpretation: a template plus the
+                  values that fill it.
+                </li>
+                <li>
+                  Generate a proof that this interpretation is the correct
+                  result of evaluating the spec on that calldata.
                 </li>
               </ol>
               <p>
@@ -341,6 +345,14 @@ export default function WhyClearSigningShouldNotRequireTrustPage() {
                 implementation produce the explanation required by the formal
                 specification? That is already a meaningful shift. A fragile
                 software promise becomes a machine-checkable claim.
+              </p>
+              <p>
+                More precisely, the proof does not need to certify an entire
+                sentence as free-form text. It certifies that the calldata
+                evaluates to a specific display template and a specific set of
+                formatted values under the public spec. That is a better fit
+                for constrained devices, because the hardware wallet can verify
+                the proof and render the final human-readable message locally.
               </p>
               <p>
                 That distinction matters because transaction explanation sits
@@ -395,6 +407,29 @@ export default function WhyClearSigningShouldNotRequireTrustPage() {
                 direction clearly: clear signing should not mean &ldquo;the
                 wallet showed me something readable.&rdquo; It should mean
                 &ldquo;the claim I am reading is justified.&rdquo;
+              </p>
+            </div>
+          </section>
+
+          <section className="mb-16">
+            <h2 className="font-serif text-lg font-semibold tracking-tight mb-4">
+              Why this is better than static descriptors
+            </h2>
+            <div className="leading-relaxed space-y-4">
+              <p>
+                Standards such as ERC-7730 are useful because they push wallets
+                toward structured transaction display. The problem is that a
+                static descriptor is still just an artifact you are asked to
+                trust. It can be incomplete, wrong, or maliciously misleading,
+                and by itself it cannot express much conditional logic.
+              </p>
+              <p>
+                The intent DSL in Verity is contract-specific and expressive
+                enough to cover cases like &ldquo;if the amount is max uint,
+                display unlimited approval.&rdquo; The important improvement is
+                not only expressiveness. It is that the same spec can also be
+                compiled into something a verifier can check, including on a
+                hardware wallet.
               </p>
             </div>
           </section>
@@ -461,6 +496,11 @@ export default function WhyClearSigningShouldNotRequireTrustPage() {
               <p>
                 <ExternalLink href="https://github.com/lfglabs-dev/verity/pull/1677">
                   Verity PR: Provable Intent DSL for clear signing
+                </ExternalLink>
+              </p>
+              <p>
+                <ExternalLink href="https://github.com/lfglabs-dev/verity/blob/main/docs/PROVABLE_INTENT_DSL.md">
+                  Provable Intent DSL documentation
                 </ExternalLink>
               </p>
               <p>
