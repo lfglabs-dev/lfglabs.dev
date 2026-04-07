@@ -7,7 +7,7 @@ export const research = [
     description:
       'How VeryClear uses Verity specs and zero-knowledge proofs to turn clear signing from a UI promise into a verifiable claim.',
     date: '2026-04-07',
-    tag: 'Case study'
+    tag: 'Experimentation'
   },
   {
     slug: 'verity',
