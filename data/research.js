@@ -1,5 +1,15 @@
 export const research = [
   {
+    slug: 'why-clear-signing-should-not-require-trust',
+    title: 'Why Clear Signing Should Not Require Trust',
+    subtitle:
+      'VeryClear reframes transaction explanation as a verification problem.',
+    description:
+      'How VeryClear uses Verity specs and zero-knowledge proofs to justify the sentence a wallet shows for a transaction.',
+    date: '2026-04-07',
+    tag: 'Case study'
+  },
+  {
     slug: 'verity',
     title: 'Verity Verified Compiler',
     subtitle:
