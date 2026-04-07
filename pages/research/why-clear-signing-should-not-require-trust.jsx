@@ -3,6 +3,7 @@ import Link from 'next/link'
 import PageLayout from '../../components/PageLayout'
 import ResearchCard from '../../components/ResearchCard'
 import CodeBlock from '../../components/research/CodeBlock'
+import Disclosure from '../../components/research/Disclosure'
 import ExternalLink from '../../components/research/ExternalLink'
 import { research } from '../../data/research'
 
@@ -45,10 +46,11 @@ export default function WhyClearSigningShouldNotRequireTrustPage() {
 
           <section className="mb-16 leading-relaxed space-y-4">
             <p>
-              In crypto, we like to say that code is law. The problem is that
-              code is hard to read, and transaction calldata is even worse. For
-              most users, a transaction request still looks like an opaque blob
-              of hex.
+              In crypto, we like to say that code is law. In practice, that is
+              a hard thing to rely on, because almost nobody reads code at the
+              moment they need to make a security decision. What they see
+              instead is usually worse: raw transaction calldata, rendered as
+              an opaque blob of hex.
             </p>
             <p>
               Verity exists to reduce what people need to trust. Instead of
@@ -64,6 +66,20 @@ export default function WhyClearSigningShouldNotRequireTrustPage() {
               enough. If a wallet translates calldata into a sentence, the user
               still has to trust the translator.
             </p>
+          </section>
+
+          <section className="mb-16">
+            <div className="rounded-lg border border-gray-200 bg-[#f8f8f8] px-6 py-5">
+              <p className="font-sans text-[11px] uppercase tracking-[0.18em] text-muted">
+                Thesis
+              </p>
+              <p className="mt-3 text-[17px] leading-relaxed">
+                Clear signing only really helps if the sentence on screen is
+                not just readable, but justified. Our goal is to move trust
+                away from opaque wallet code and toward small public
+                specifications that can be audited independently.
+              </p>
+            </div>
           </section>
 
           <section className="mb-16">
@@ -380,6 +396,45 @@ export default function WhyClearSigningShouldNotRequireTrustPage() {
                 wallet showed me something readable.&rdquo; It should mean
                 &ldquo;the claim I am reading is justified.&rdquo;
               </p>
+            </div>
+          </section>
+
+          <section className="mb-16">
+            <h2 className="font-serif text-lg font-semibold tracking-tight mb-4">
+              Likely objections
+            </h2>
+            <div className="space-y-4">
+              <Disclosure
+                title="Isn’t this still trust, just moved somewhere else?"
+                defaultOpen
+              >
+                <p>
+                  Yes, but that is the point. We are not claiming to remove
+                  trust completely. We are trying to move it from a large,
+                  opaque, fast-moving software stack to a much smaller object:
+                  a public specification. That object can be reviewed,
+                  versioned, compared across implementations, and audited by
+                  people other than the wallet vendor.
+                </p>
+              </Disclosure>
+              <Disclosure title="Why not just standardize better wallet metadata?">
+                <p>
+                  Better metadata helps, and standards work is valuable. But
+                  metadata alone still leaves the user trusting that the host
+                  software interpreted and rendered everything correctly. The
+                  extra step here is proving that the displayed claim actually
+                  follows from the calldata and the published rules.
+                </p>
+              </Disclosure>
+              <Disclosure title="Did VeryClear solve the natural-language problem?">
+                <p>
+                  No. VeryClear focuses on proving that the implementation
+                  followed the specification. The harder question is whether the
+                  specification expresses the right thing for a human making a
+                  security decision. That is where our hackathon exploration
+                  with ZKNOX becomes relevant, and it remains an open problem.
+                </p>
+              </Disclosure>
             </div>
           </section>
 
