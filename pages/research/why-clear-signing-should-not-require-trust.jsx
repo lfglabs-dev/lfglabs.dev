@@ -39,8 +39,8 @@ export default function WhyClearSigningShouldNotRequireTrustPage() {
               Why Clear Signing Should Not Require Trust
             </h1>
             <p className="mt-3 text-muted text-base">
-              If code is law, users need a better way to trust what a wallet
-              says code will do.
+              VeryClear reframes wallet transaction explanation as a verifiable
+              claim, not a UI promise.
             </p>
           </header>
 
@@ -104,6 +104,57 @@ export default function WhyClearSigningShouldNotRequireTrustPage() {
                 justified cryptographically.
               </p>
             </div>
+          </section>
+
+          <section className="mb-16">
+            <h2 className="font-serif text-lg font-semibold tracking-tight mb-4">
+              What is actually being proved
+            </h2>
+            <div className="leading-relaxed space-y-4">
+              <p>
+                The most useful way to read VeryClear is not as
+                &ldquo;zk for wallet UX,&rdquo; but as a precise claim about
+                what the wallet is allowed to say. The proof does not try to
+                certify free-form prose in the abstract. It certifies a much
+                narrower object that a device can verify reliably.
+              </p>
+            </div>
+            <div className="mt-6 grid gap-4 md:grid-cols-3 text-sm leading-relaxed">
+              <div className="rounded-lg border border-gray-200 bg-white p-5">
+                <p className="font-sans text-[11px] uppercase tracking-[0.18em] text-muted">
+                  1. Spec match
+                </p>
+                <p className="mt-3">
+                  The calldata matches a public intent specification for the
+                  target contract and function selector.
+                </p>
+              </div>
+              <div className="rounded-lg border border-gray-200 bg-white p-5">
+                <p className="font-sans text-[11px] uppercase tracking-[0.18em] text-muted">
+                  2. Correct interpretation
+                </p>
+                <p className="mt-3">
+                  Decoding and rule evaluation produce one specific display
+                  template and one specific set of values.
+                </p>
+              </div>
+              <div className="rounded-lg border border-gray-200 bg-white p-5">
+                <p className="font-sans text-[11px] uppercase tracking-[0.18em] text-muted">
+                  3. Verifiable display
+                </p>
+                <p className="mt-3">
+                  A verifier, including on hardware, can check that the final
+                  message shown to the user is exactly the one permitted by the
+                  spec for that calldata.
+                </p>
+              </div>
+            </div>
+            <p className="mt-4 text-sm text-muted leading-relaxed">
+              This is deliberately narrower than proving that the explanation
+              is the best possible English description for every user. It
+              proves that the wallet faithfully followed an auditable public
+              spec.
+            </p>
           </section>
 
           <section className="mb-16">
@@ -189,8 +240,9 @@ export default function WhyClearSigningShouldNotRequireTrustPage() {
                   Wallet software decodes calldata and displays a sentence.
                 </div>
                 <div className="leading-relaxed text-primary">
-                  A public spec defines the sentence, and the wallet proves that
-                  the displayed interpretation follows from that spec.
+                  A public spec defines a structured display claim, and the
+                  wallet proves that the displayed interpretation follows from
+                  that spec.
                 </div>
               </div>
               <div className="grid grid-cols-2 gap-4 px-5 py-4 border-t border-gray-200">
@@ -421,19 +473,11 @@ export default function WhyClearSigningShouldNotRequireTrustPage() {
                 software promise becomes a machine-checkable claim.
               </p>
               <p>
-                More precisely, the proof does not need to certify an entire
-                sentence as free-form text. It certifies that the calldata
-                evaluates to a specific display template and a specific set of
-                formatted values under the public spec. That is a better fit
-                for constrained devices, because the hardware wallet can verify
-                the proof and render the final human-readable message locally.
-              </p>
-              <p>
-                That distinction matters because transaction explanation sits
-                on a security boundary. If the host machine, browser extension,
-                or wallet integration is compromised, a friendly sentence is
-                not enough. The sentence has to be justified by something
-                smaller and more stable than the UI stack that produced it.
+                More precisely, the proof certifies that the calldata evaluates
+                to a specific display template and a specific set of formatted
+                values under the public spec. That is a better fit for
+                constrained devices, because the hardware wallet can verify the
+                proof and render the final human-readable message locally.
               </p>
               <p>
                 The harder question is above that layer: is the specification
