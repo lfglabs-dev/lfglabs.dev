@@ -293,44 +293,35 @@ amount:  0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff`}</C
               <code className="font-mono text-[13px]">approve</code> intent
               checks whether the amount
               equals <code className="font-mono text-[13px]">maxUint256</code>,
-              picks the unlimited template, and fills in the spender. The
-              pipeline then runs in four steps:
+              picks the unlimited template, and fills in the spender:
             </p>
 
-            <div className="mt-6 grid gap-4 md:grid-cols-4 text-sm leading-relaxed">
+            <div className="mt-6 grid gap-4 md:grid-cols-3 text-sm leading-relaxed">
               <div className="rounded-lg border border-gray-200 bg-white p-4">
                 <p className="font-serif text-sm font-semibold tracking-tight text-heading">
-                  1. Decode
+                  1. Decode &amp; evaluate
                 </p>
                 <p className="mt-3">
-                  Parse the selector and typed arguments from calldata.
+                  Parse calldata, run the spec&apos;s intent rules, and select
+                  the matching template.
                 </p>
               </div>
               <div className="rounded-lg border border-gray-200 bg-white p-4">
                 <p className="font-serif text-sm font-semibold tracking-tight text-heading">
-                  2. Evaluate
+                  2. Prove
                 </p>
                 <p className="mt-3">
-                  Run the public intent rules and select the unlimited-approval
-                  template.
+                  Generate a ZK proof binding the calldata to the structured
+                  display claim the spec produced.
                 </p>
               </div>
               <div className="rounded-lg border border-gray-200 bg-white p-4">
                 <p className="font-serif text-sm font-semibold tracking-tight text-heading">
-                  3. Commit
+                  3. Verify
                 </p>
                 <p className="mt-3">
-                  Bind both the calldata and the structured output claim inside
-                  the circuit.
-                </p>
-              </div>
-              <div className="rounded-lg border border-gray-200 bg-white p-4">
-                <p className="font-serif text-sm font-semibold tracking-tight text-heading">
-                  4. Verify
-                </p>
-                <p className="mt-3">
-                  Check on the browser or hardware wallet that the displayed
-                  claim is the one the spec permits.
+                  Check the proof in the browser or on a hardware wallet
+                  before signing.
                 </p>
               </div>
             </div>
