@@ -399,6 +399,10 @@ end Contracts.USDC`} />
               />
             </div>
             <p className="mt-3 text-sm text-muted leading-relaxed">
+              VeryClear won 1st place in Ledger&apos;s &ldquo;Clear Signing,
+              Integrations &amp; Apps&rdquo; category at ETHGlobal Cannes 2026.
+              We built it in under 36 hours with{' '}
+              <ExternalLink href="https://zknox.com">ZKNOX</ExternalLink>.
               The demo takes a transaction that would normally be shown as raw
               calldata, renders a human-readable interpretation, and binds that
               interpretation to the calldata with a proof.
@@ -962,14 +966,6 @@ amount:  0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff`}</C
                 <ExternalLink href="https://explain.md/clear-signing">
                   Clear-signing demo
                 </ExternalLink>
-              </p>
-              <p>
-                <Link
-                  href="/projects/veryclear"
-                  className="underline underline-offset-3 hover:text-heading transition-colors"
-                >
-                  VeryClear project page
-                </Link>
               </p>
               <p>
                 <ExternalLink href="https://explain.md/clear-signing-hw">

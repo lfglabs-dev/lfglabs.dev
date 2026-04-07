@@ -10,16 +10,6 @@ export const projects = [
     date: '2025-07-01',
   },
   {
-    slug: 'veryclear',
-    name: 'VeryClear',
-    title: 'We killed blind signing with ZK proofs.',
-    subtitle: 'Formally verified clear signing for Ethereum transactions, built at ETHGlobal Cannes 2026.',
-    description: 'ZK-proven transaction interpretation that won 1st place in Ledger\'s Clear Signing category at ETHGlobal Cannes.',
-    image: '/images/veryclear-thumb.webp',
-    date: '2026-04-03',
-    partner: { name: 'ZKNOX', logo: '/images/logos/zknox.png' },
-  },
-  {
     slug: 'safelens',
     name: 'SafeLens',
     title: 'We made Safe transactions verifiable offline.',
