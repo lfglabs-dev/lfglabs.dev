@@ -201,7 +201,7 @@ export default function WhyClearSigningShouldNotRequireTrustPage() {
             </div>
 
             <div className="mt-8 space-y-4">
-              <p className="text-sm font-sans uppercase tracking-[0.14em] text-muted">
+              <p className="font-serif text-sm font-semibold tracking-tight text-heading">
                 Example: the full USDC display spec
               </p>
               <HighlightedDSL source={`import Verity.Intent.DSL
@@ -300,7 +300,7 @@ end Contracts.USDC`} />
             </div>
 
             <div className="mt-8 rounded-lg border border-gray-200 bg-white p-5">
-              <p className="text-sm font-sans uppercase tracking-[0.14em] text-muted">
+              <p className="font-serif text-sm font-semibold tracking-tight text-heading">
                 The raw input
               </p>
               <CodeBlock>{`0x095ea7b3...
@@ -325,7 +325,7 @@ amount:  0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff`}</C
 
             <div className="mt-6 grid gap-4 md:grid-cols-4 text-sm leading-relaxed">
               <div className="rounded-lg border border-gray-200 bg-white p-4">
-                <p className="font-sans text-[11px] uppercase tracking-[0.18em] text-muted">
+                <p className="font-serif text-sm font-semibold tracking-tight text-heading">
                   1. Decode
                 </p>
                 <p className="mt-3">
@@ -333,7 +333,7 @@ amount:  0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff`}</C
                 </p>
               </div>
               <div className="rounded-lg border border-gray-200 bg-white p-4">
-                <p className="font-sans text-[11px] uppercase tracking-[0.18em] text-muted">
+                <p className="font-serif text-sm font-semibold tracking-tight text-heading">
                   2. Evaluate
                 </p>
                 <p className="mt-3">
@@ -342,7 +342,7 @@ amount:  0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff`}</C
                 </p>
               </div>
               <div className="rounded-lg border border-gray-200 bg-white p-4">
-                <p className="font-sans text-[11px] uppercase tracking-[0.18em] text-muted">
+                <p className="font-serif text-sm font-semibold tracking-tight text-heading">
                   3. Commit
                 </p>
                 <p className="mt-3">
@@ -351,7 +351,7 @@ amount:  0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff`}</C
                 </p>
               </div>
               <div className="rounded-lg border border-gray-200 bg-white p-4">
-                <p className="font-sans text-[11px] uppercase tracking-[0.18em] text-muted">
+                <p className="font-serif text-sm font-semibold tracking-tight text-heading">
                   4. Verify
                 </p>
                 <p className="mt-3">
@@ -362,7 +362,7 @@ amount:  0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff`}</C
             </div>
 
             <div className="mt-8 space-y-4">
-              <p className="text-sm font-sans uppercase tracking-[0.14em] text-muted">
+              <p className="font-serif text-sm font-semibold tracking-tight text-heading">
                 The claim the wallet should be able to justify
               </p>
               <CodeBlock>{`{
