@@ -8,6 +8,33 @@ import ExternalLink from '../../components/research/ExternalLink'
 import { research } from '../../data/research'
 
 export default function WhyClearSigningShouldNotRequireTrustPage() {
+  const canonicalUrl =
+    'https://lfglabs.dev/research/why-clear-signing-should-not-require-trust'
+  const publishedDate = '2026-04-07'
+  const articleJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: 'Why Clear Signing Should Not Require Trust',
+    description:
+      'If code is law, the sentence your wallet shows should be justified, not trusted. VeryClear reframes clear signing as a verification problem.',
+    image: ['https://lfglabs.dev/images/veryclear-thumb.webp'],
+    datePublished: `${publishedDate}T00:00:00Z`,
+    dateModified: `${publishedDate}T00:00:00Z`,
+    author: {
+      '@type': 'Organization',
+      name: 'LFG Labs',
+      url: 'https://lfglabs.dev'
+    },
+    publisher: {
+      '@type': 'Organization',
+      name: 'LFG Labs',
+      logo: {
+        '@type': 'ImageObject',
+        url: 'https://lfglabs.dev/images/lfg_logo.webp'
+      }
+    },
+    mainEntityOfPage: canonicalUrl
+  }
   const otherResearch = research.filter(
     (r) => r.slug !== 'why-clear-signing-should-not-require-trust'
   )
@@ -35,8 +62,16 @@ export default function WhyClearSigningShouldNotRequireTrustPage() {
           content="article"
         />
         <meta
+          property="article:published_time"
+          content={`${publishedDate}T00:00:00Z`}
+        />
+        <meta
+          property="article:author"
+          content="LFG Labs"
+        />
+        <meta
           property="og:url"
-          content="https://lfglabs.dev/research/why-clear-signing-should-not-require-trust"
+          content={canonicalUrl}
         />
         <meta
           property="og:image"
@@ -57,6 +92,14 @@ export default function WhyClearSigningShouldNotRequireTrustPage() {
         <meta
           name="twitter:image"
           content="https://lfglabs.dev/images/veryclear-thumb.webp"
+        />
+        <link
+          rel="canonical"
+          href={canonicalUrl}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(articleJsonLd) }}
         />
       </Head>
       <PageLayout>
