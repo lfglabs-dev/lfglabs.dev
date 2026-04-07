@@ -736,6 +736,42 @@ export default function WhyClearSigningShouldNotRequireTrustPage() {
           </section>
 
           <section className="mb-16">
+            <div className="rounded-lg border border-gray-200 bg-[#f8f8f8] px-6 py-6">
+              <p className="font-sans text-[11px] uppercase tracking-[0.18em] text-muted">
+                If you are building in this area
+              </p>
+              <div className="mt-4 space-y-4 leading-relaxed">
+                <p>
+                  VeryClear is most relevant for three groups: wallet teams
+                  that want a stronger clear-signing story, protocol teams that
+                  want their transaction semantics published as auditable
+                  specifications, and hardware-wallet teams that want the final
+                  display claim checked on-device instead of trusted from the
+                  host.
+                </p>
+                <p>
+                  If that describes your stack, the useful next step is not a
+                  generic integration discussion. It is to pick one concrete
+                  transaction family, write the smallest spec that captures it,
+                  and decide what the device should actually verify before the
+                  user signs.
+                </p>
+                <p>
+                  We are interested in collaborating on that path. Reach us at{' '}
+                  <a
+                    href="mailto:ben@lfglabs.dev"
+                    className="underline underline-offset-3 hover:text-heading transition-colors"
+                  >
+                    ben@lfglabs.dev
+                  </a>{' '}
+                  or start by inspecting the demos and implementation links
+                  below.
+                </p>
+              </div>
+            </div>
+          </section>
+
+          <section className="mb-16">
             <h2 className="font-serif text-lg font-semibold tracking-tight mb-4">
               Likely objections
             </h2>
