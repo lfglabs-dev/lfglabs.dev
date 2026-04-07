@@ -204,14 +204,7 @@ export default function WhyClearSigningShouldNotRequireTrustPage() {
               <h3 className="font-serif text-lg font-semibold tracking-tight text-heading">
                 Example: the full USDC display spec
               </h3>
-              <HighlightedDSL source={`import Verity.Intent.DSL
-
-namespace Contracts.USDC
-open Verity.Intent.DSL
-
-private def maxUint256 : Int := (2 ^ 256 : Nat) - 1
-
-intent_spec "USDC" where
+              <HighlightedDSL source={`intent_spec "USDC" where
   const decimals := 6
 
   intent transfer(to : address, amount : uint256) where
@@ -231,8 +224,7 @@ intent_spec "USDC" where
       emit "Transfer all USDC from {from} to {to}"
     otherwise =>
       emit "Transfer {amount:fixed decimals} USDC from {from} to {to}"
-
-end Contracts.USDC`} />
+`} />
               <p className="text-sm text-muted leading-relaxed">
                 This is the entire display specification for USDC. It reads
                 like documentation: for each function, list the cases and what
