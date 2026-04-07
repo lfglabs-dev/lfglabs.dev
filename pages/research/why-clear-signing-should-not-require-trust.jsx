@@ -198,6 +198,47 @@ export default function WhyClearSigningShouldNotRequireTrustPage() {
           </section>
 
           <section className="mb-16">
+            <h2 className="font-serif text-lg font-semibold tracking-tight mb-4">
+              Trust assumptions, explicitly
+            </h2>
+            <div className="grid gap-4 md:grid-cols-3 text-sm leading-relaxed">
+              <div className="rounded-lg border border-gray-200 bg-white p-5">
+                <p className="font-sans text-[11px] uppercase tracking-[0.18em] text-muted">
+                  Reduced
+                </p>
+                <p className="mt-3">
+                  The user no longer has to trust a hidden frontend translator
+                  to decide what a transaction means.
+                </p>
+              </div>
+              <div className="rounded-lg border border-gray-200 bg-white p-5">
+                <p className="font-sans text-[11px] uppercase tracking-[0.18em] text-muted">
+                  Retained
+                </p>
+                <p className="mt-3">
+                  The user still needs to trust the published specification and
+                  the proof system that checks the displayed claim.
+                </p>
+              </div>
+              <div className="rounded-lg border border-gray-200 bg-white p-5">
+                <p className="font-sans text-[11px] uppercase tracking-[0.18em] text-muted">
+                  Open
+                </p>
+                <p className="mt-3">
+                  The ecosystem still needs better answers for who authors the
+                  spec and how the right human-facing explanation should be
+                  expressed.
+                </p>
+              </div>
+            </div>
+            <p className="mt-4 text-sm text-muted leading-relaxed">
+              This is the main claim of the project. VeryClear does not remove
+              trust. It compresses it into smaller objects that can be audited,
+              compared, and eventually standardized.
+            </p>
+          </section>
+
+          <section className="mb-16">
             <div className="grid gap-4 md:grid-cols-3 text-sm leading-relaxed">
               <div className="rounded-lg border border-gray-200 bg-white p-5">
                 <p className="font-sans text-[11px] uppercase tracking-[0.18em] text-muted">
