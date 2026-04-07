@@ -201,9 +201,9 @@ export default function WhyClearSigningShouldNotRequireTrustPage() {
             </div>
 
             <div className="mt-8 space-y-4">
-              <p className="font-serif text-sm font-semibold tracking-tight text-heading">
+              <h3 className="font-serif text-lg font-semibold tracking-tight text-heading">
                 Example: the full USDC display spec
-              </p>
+              </h3>
               <HighlightedDSL source={`import Verity.Intent.DSL
 
 namespace Contracts.USDC
