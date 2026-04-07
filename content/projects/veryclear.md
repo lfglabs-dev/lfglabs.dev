@@ -6,7 +6,13 @@ author: LFG Labs
 date: 2026-04-03
 ---
 
-<Video src="/images/veryclear-demo.mp4" controls autoPlay muted loop playsInline />
+<Video
+  src="/images/veryclear-demo.mp4"
+  controls
+  playsInline
+  preload="metadata"
+  poster="/images/veryclear-thumb.webp"
+/>
 
 VeryClear won **1st place in the Ledger "Clear Signing, Integrations & Apps" category** at ETHGlobal Cannes 2026. We teamed up with [ZKNOX](https://zknox.com) to build it in under 36 hours.
 

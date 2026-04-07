@@ -87,10 +87,9 @@ export default function WhyClearSigningShouldNotRequireTrustPage() {
               <video
                 src="/images/veryclear-demo.mp4"
                 controls
-                autoPlay
-                muted
-                loop
                 playsInline
+                preload="metadata"
+                poster="/images/veryclear-thumb.webp"
                 className="w-full"
               />
             </div>
