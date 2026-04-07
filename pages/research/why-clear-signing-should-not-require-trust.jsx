@@ -170,12 +170,6 @@ export default function WhyClearSigningShouldNotRequireTrustPage() {
               a different question: can the sentence on screen be proved
               correct from the calldata and a public specification?
             </p>
-            <p>
-              VeryClear removes that trust. Instead of asking whether the
-              frontend probably interpreted the calldata correctly, we ask
-              whether the displayed sentence can be derived from a public
-              specification and proved from the calldata itself.
-            </p>
           </section>
 
           <section className="mb-16">
@@ -184,33 +178,21 @@ export default function WhyClearSigningShouldNotRequireTrustPage() {
             </h2>
             <div className="leading-relaxed space-y-4">
               <p>
-                The standard approach to clear signing today
-                is{' '}
-                <ExternalLink href="https://eips.ethereum.org/EIPS/eip-7730">
-                  ERC-7730
-                </ExternalLink>
-                : a JSON file that maps selectors to display templates. It
-                works, but the descriptions are static. They cannot branch on
-                parameter values, compute derived fields, or resolve external
-                labels. A single JSON entry cannot distinguish an unlimited
-                approval from a bounded one.
-              </p>
-              <p>
-                VeryClear replaces that static mapping with a small program
-                written in the Verity DSL, an extension of the Lean 4
+                VeryClear replaces static JSON descriptors with a small
+                program written in the Verity DSL, an extension of the Lean 4
                 framework we built for formal verification of smart contracts.
-                A Verity spec is scriptable: it can pattern-match on decoded
-                arguments, format token amounts with the right number of
-                decimals, and select different human-readable sentences
-                depending on runtime values.
+                A Verity spec can pattern-match on decoded arguments, format
+                token amounts with the right number of decimals, and select
+                different sentences depending on runtime values. A single
+                ERC-7730 entry cannot distinguish an unlimited approval from a
+                bounded one. A Verity spec can.
               </p>
               <p>
-                Because the spec is code, it can live in the same repository
-                as the contract itself. The developer who writes the contract
-                is the person best positioned to describe what each call means.
-                Instead of hoping that a third-party registry eventually adds
-                a JSON entry for your function, you ship the display spec
-                alongside the implementation.
+                Because the spec is code, it lives in the same repository as
+                the contract itself. The developer ships the display spec
+                alongside the implementation. The compiler turns it into both
+                an ERC-7730-compatible JSON descriptor and a ZK circuit that
+                proves any wallet follows it exactly.
               </p>
             </div>
 
@@ -240,11 +222,8 @@ export default function WhyClearSigningShouldNotRequireTrustPage() {
       emit "Transfer {amount:fixed decimals} USDC from {from} to {to}"
 `} />
               <p className="text-sm text-muted leading-relaxed">
-                This is the entire display specification for USDC. It reads
-                like documentation: for each function, list the cases and what
-                the wallet should say. The compiler turns it into both an
-                ERC-7730-compatible JSON descriptor and a ZK circuit that
-                proves any wallet follows it exactly.
+                The entire display specification for USDC. For each function,
+                list the cases and what the wallet should say.
               </p>
             </div>
 
@@ -282,26 +261,9 @@ export default function WhyClearSigningShouldNotRequireTrustPage() {
             <div className="leading-relaxed space-y-4">
               <p>
                 Take a standard ERC-20{' '}
-                <code className="font-mono text-[13px]">approve</code> call.
-                The raw transaction says almost nothing to a human. A good
-                wallet UI might translate it into something like
-                &ldquo;Approve Uniswap to spend unlimited USDC.&rdquo;
-              </p>
-              <p>
-                That is better, but the user still has no direct reason to
-                trust the sentence. Was the spender decoded correctly? Was the
-                token resolved correctly? Did the software correctly detect that{' '}
-                <code className="font-mono text-[13px]">2^256 - 1</code> means
-                an unlimited approval in this context? A normal clear-signing
-                stack asks the user to assume all of that machinery behaved
-                correctly.
-              </p>
-              <p>
-                VeryClear changes that question. Instead of asking whether the
-                frontend probably interpreted the calldata correctly, we ask
-                whether the displayed sentence can be derived from a public
-                specification and proved from the calldata itself. That is a
-                much smaller and more defensible trust boundary.
+                <code className="font-mono text-[13px]">approve</code> call
+                on USDC. Here is what the wallet receives, and how VeryClear
+                turns it into a provable claim.
               </p>
             </div>
 
@@ -413,14 +375,6 @@ amount:  0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff`}</C
                 wallet prompts for re-approval, which also gives spec authors
                 a natural window to publish updates.
               </p>
-              <p>
-                This is a meaningful difference. Instead of silently trusting
-                an on-chain registry forever, the user makes an explicit,
-                time-bounded decision about which specifications they accept.
-                The proof still guarantees that the wallet follows the spec
-                exactly. The approval step guarantees that the user chose the
-                spec knowingly.
-              </p>
             </div>
           </section>
 
@@ -430,11 +384,6 @@ amount:  0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff`}</C
               Verify it yourself
             </h2>
             <div className="leading-relaxed space-y-4">
-              <p>
-                The strongest part of the VeryClear story is that the
-                prototype is inspectable. The easiest way to understand the
-                trust model is to compare the three pieces directly.
-              </p>
               <ol className="list-decimal pl-6 space-y-2 text-primary">
                 <li>
                   Open the{' '}
