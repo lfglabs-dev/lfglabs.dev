@@ -110,8 +110,10 @@ export default function SafeOwnerReachabilityPage() {
               </ul>
               <p className="text-muted">
                 These correspond to invariants from Certora&apos;s{' '}
-                <code className="font-mono text-[12px]">OwnerReach.spec</code>.
-                Threshold management is elided as it does not affect the
+                <ExternalLink href="https://github.com/safe-fndn/safe-smart-account/blob/main/certora/specs/OwnerReach.spec">
+                  OwnerReach.spec
+                </ExternalLink>
+                . Threshold management is elided as it does not affect the
                 owners mapping.
               </p>
             </Disclosure>
@@ -123,18 +125,32 @@ export default function SafeOwnerReachabilityPage() {
               How this was proven
             </h2>
             <p className="leading-relaxed mb-4">
-              Each function mutates the linked list differently:{' '}
-              <code className="font-mono text-[13px]">addOwner</code> performs
-              a head insertion,{' '}
-              <code className="font-mono text-[13px]">removeOwner</code> unlinks
-              a node,{' '}
-              <code className="font-mono text-[13px]">swapOwner</code> atomically
-              replaces one node with another, and{' '}
-              <code className="font-mono text-[13px]">setupOwners</code> constructs
-              the initial list. For each, the proof must show that the
-              invariants are preserved (or established, in the case of{' '}
-              <code className="font-mono text-[13px]">setupOwners</code>).
+              All four functions were modeled in{' '}
+              <ExternalLink href="https://github.com/lfglabs-dev/verity-benchmark/blob/main/Benchmark/Cases/Safe/OwnerManagerReach/Contract.lean">
+                Verity
+              </ExternalLink>
+              . Each function mutates the linked list differently:
             </p>
+            <ul className="mb-6 text-[15px] leading-relaxed list-disc pl-5 space-y-2">
+              <li>
+                <strong>setupOwners</strong> &mdash; constructs the initial
+                linked list from a list of addresses (base case)
+              </li>
+              <li>
+                <strong>addOwner</strong> &mdash; head insertion: the new
+                owner is placed between SENTINEL and the old head
+              </li>
+              <li>
+                <strong>removeOwner</strong> &mdash; chain excision: the
+                previous owner&apos;s pointer is redirected past the
+                removed node
+              </li>
+              <li>
+                <strong>swapOwner</strong> &mdash; atomic replacement: the
+                old owner is unlinked and the new owner spliced into its
+                position
+              </li>
+            </ul>
             <p className="leading-relaxed mb-4">
               Reachability is expressed using <em>witness chains</em>: a
               concrete list of addresses where each consecutive pair follows
@@ -144,86 +160,103 @@ export default function SafeOwnerReachabilityPage() {
               list indices, making the proof mechanically checkable.
             </p>
             <p className="leading-relaxed mb-4">
-              All four functions were modeled in{' '}
-              <ExternalLink href="https://github.com/lfglabs-dev/verity-benchmark/blob/main/Benchmark/Cases/Safe/OwnerManagerReach/Contract.lean">
-                Verity
-              </ExternalLink>
-              . The{' '}
-              <code className="font-mono text-[13px]">addOwner</code>{' '}
-              <code className="font-mono text-[13px]">inListReachable</code>{' '}
-              proof is complete. The remaining 11 theorems are scaffolded
-              as benchmark tasks for AI agents. Reference proofs are in{' '}
+              For{' '}
+              <code className="font-mono text-[13px]">removeOwner</code>{' '}
+              and{' '}
+              <code className="font-mono text-[13px]">swapOwner</code>,
+              the proofs require <em>strong acyclicity</em>{' '}
+              (antisymmetry of the reachability relation) to show that
+              excising or replacing a node does not orphan downstream
+              nodes. This matches Certora&apos;s{' '}
+              <code className="font-mono text-[13px]">reach_invariant</code>{' '}
+              axiom.
+            </p>
+            <p className="leading-relaxed mb-4">
+              Reference proofs are provided in{' '}
               <ExternalLink href="https://github.com/lfglabs-dev/verity-benchmark/blob/main/Benchmark/Cases/Safe/OwnerManagerReach/Proofs.lean">
                 Proofs.lean
               </ExternalLink>
-              .
-            </p>
-            <p className="leading-relaxed mb-4">
-              The proof is checked by Lean 4&apos;s kernel, a small program
-              that accepts or rejects proofs deterministically. If the proof
-              were wrong, it would not compile.
+              . The proof is checked by Lean 4&apos;s kernel, a small
+              program that accepts or rejects proofs deterministically. If
+              the proof were wrong, it would not compile.
             </p>
             <Disclosure title="Verify it yourself" className="mb-4">
               <CodeBlock>{VERIFY_COMMAND}</CodeBlock>
               <p className="mt-3 text-muted">
-                If the build succeeds, the proof is correct.{' '}
+                If the build succeeds, the proofs are correct.{' '}
                 <ExternalLink href="https://github.com/lfglabs-dev/verity-benchmark">
                   Source repository
                 </ExternalLink>
               </p>
             </Disclosure>
+          </section>
 
-            <div className="mt-8">
-              <h3 className="font-serif text-base font-semibold tracking-tight mb-3">
-                Proof status
-              </h3>
-              <div className="overflow-x-auto">
-                <table className="w-full text-[13px] border border-gray-200 rounded overflow-hidden">
-                  <thead>
-                    <tr className="bg-[#f8f8f8] text-left">
-                      <th className="px-4 py-2 font-medium text-muted">Function</th>
-                      <th className="px-4 py-2 font-medium text-muted text-center">inListReachable</th>
-                      <th className="px-4 py-2 font-medium text-muted text-center">ownerListInvariant</th>
-                      <th className="px-4 py-2 font-medium text-muted text-center">acyclicity</th>
-                    </tr>
-                  </thead>
-                  <tbody className="font-mono">
-                    <tr className="border-t border-gray-200/50">
-                      <td className="px-4 py-2">setupOwners</td>
-                      <td className="px-4 py-2 text-center text-muted">open</td>
-                      <td className="px-4 py-2 text-center text-muted">open</td>
-                      <td className="px-4 py-2 text-center text-muted">open</td>
-                    </tr>
-                    <tr className="border-t border-gray-200/50">
-                      <td className="px-4 py-2">addOwner</td>
-                      <td className="px-4 py-2 text-center text-green-700">proven</td>
-                      <td className="px-4 py-2 text-center text-muted">open</td>
-                      <td className="px-4 py-2 text-center text-muted">open</td>
-                    </tr>
-                    <tr className="border-t border-gray-200/50">
-                      <td className="px-4 py-2">removeOwner</td>
-                      <td className="px-4 py-2 text-center text-muted">open</td>
-                      <td className="px-4 py-2 text-center text-muted">open</td>
-                      <td className="px-4 py-2 text-center text-muted">open</td>
-                    </tr>
-                    <tr className="border-t border-gray-200/50">
-                      <td className="px-4 py-2">swapOwner</td>
-                      <td className="px-4 py-2 text-center text-muted">open</td>
-                      <td className="px-4 py-2 text-center text-muted">open</td>
-                      <td className="px-4 py-2 text-center text-muted">open</td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-              <p className="mt-2 text-muted text-[13px]">
-                Open theorems are scaffolded with correct type signatures and
-                available as{' '}
-                <ExternalLink href="https://github.com/lfglabs-dev/verity-benchmark/tree/main/Benchmark/Generated/Safe/OwnerManagerReach/Tasks">
-                  benchmark tasks
-                </ExternalLink>{' '}
-                for AI proof agents.
-              </p>
+          {/* Proof status */}
+          <section className="mb-20">
+            <h2 className="font-serif text-lg font-semibold tracking-tight mb-4">
+              Proof status
+            </h2>
+            <p className="leading-relaxed mb-4 text-muted text-[15px]">
+              Six benchmark tasks are defined, all proven. Additional{' '}
+              <code className="font-mono text-[12px]">ownerListInvariant</code>{' '}
+              theorems remain open in{' '}
+              <ExternalLink href="https://github.com/lfglabs-dev/verity-benchmark/blob/main/Benchmark/Cases/Safe/OwnerManagerReach/OpenProofs.lean">
+                OpenProofs.lean
+              </ExternalLink>
+              .
+            </p>
+            <div className="overflow-x-auto border border-gray-200 rounded">
+              <table className="w-full text-[13px]">
+                <thead>
+                  <tr className="bg-[#f8f8f8] text-left">
+                    <th className="px-4 py-2 font-semibold">Function</th>
+                    <th className="px-4 py-2 font-semibold">Invariant</th>
+                    <th className="px-4 py-2 font-semibold text-center">Status</th>
+                  </tr>
+                </thead>
+                <tbody className="font-mono">
+                  <tr className="border-t border-gray-100">
+                    <td className="px-4 py-1.5">setupOwners</td>
+                    <td className="px-4 py-1.5">inListReachable</td>
+                    <td className="px-4 py-1.5 text-center text-green-600">Proven</td>
+                  </tr>
+                  <tr className="border-t border-gray-100">
+                    <td className="px-4 py-1.5">setupOwners</td>
+                    <td className="px-4 py-1.5">acyclic</td>
+                    <td className="px-4 py-1.5 text-center text-green-600">Proven</td>
+                  </tr>
+                  <tr className="border-t border-gray-100">
+                    <td className="px-4 py-1.5">addOwner</td>
+                    <td className="px-4 py-1.5">inListReachable</td>
+                    <td className="px-4 py-1.5 text-center text-green-600">Proven</td>
+                  </tr>
+                  <tr className="border-t border-gray-100">
+                    <td className="px-4 py-1.5">addOwner</td>
+                    <td className="px-4 py-1.5">acyclic</td>
+                    <td className="px-4 py-1.5 text-center text-green-600">Proven</td>
+                  </tr>
+                  <tr className="border-t border-gray-100">
+                    <td className="px-4 py-1.5">removeOwner</td>
+                    <td className="px-4 py-1.5">inListReachable</td>
+                    <td className="px-4 py-1.5 text-center text-green-600">Proven</td>
+                  </tr>
+                  <tr className="border-t border-gray-100">
+                    <td className="px-4 py-1.5">swapOwner</td>
+                    <td className="px-4 py-1.5">inListReachable</td>
+                    <td className="px-4 py-1.5 text-center text-green-600">Proven</td>
+                  </tr>
+                </tbody>
+              </table>
             </div>
+            <p className="mt-2 text-muted text-[13px]">
+              Open tasks (not yet proven):{' '}
+              <code className="font-mono text-[12px]">ownerListInvariant</code>{' '}
+              for all four functions, plus{' '}
+              <code className="font-mono text-[12px]">removeOwner</code>{' '}
+              and{' '}
+              <code className="font-mono text-[12px]">swapOwner</code>{' '}
+              acyclicity.
+            </p>
           </section>
 
           {/* Hypotheses */}
@@ -282,33 +315,52 @@ export default function SafeOwnerReachabilityPage() {
               <Hypothesis
                 name="hAcyclic"
                 constraint="no internal cycles in the list"
-                source="Provable structural property"
+                source="Proven for setupOwners and addOwner"
               >
                 The linked list does not cycle back to SENTINEL before
-                reaching its natural end. Defined as a theorem target
-                (
-                <code className="font-mono text-[12px]">acyclic</code>)
-                in{' '}
-                <code className="font-mono text-[12px]">Specs.lean</code>,
-                paving the way to eliminate it as an assumption once the
-                acyclicity proofs are complete.
+                reaching its natural end. Proven as a theorem for{' '}
+                <code className="font-mono text-[12px]">setupOwners</code>{' '}
+                and{' '}
+                <code className="font-mono text-[12px]">addOwner</code>.
+                Used as a hypothesis for{' '}
+                <code className="font-mono text-[12px]">removeOwner</code>{' '}
+                and{' '}
+                <code className="font-mono text-[12px]">swapOwner</code>.
               </Hypothesis>
               <Hypothesis
-                name="hFreshInList"
-                constraint="new address absent from all chains"
-                source="Provable structural property"
+                name="hStrongAcyclic"
+                constraint="reachable(a, b) and reachable(b, a) implies a = b"
+                source="Certora reach_invariant antisymmetry"
+              >
+                Strong acyclicity: the reachability relation is
+                antisymmetric. Required by{' '}
+                <code className="font-mono text-[12px]">removeOwner</code>{' '}
+                and{' '}
+                <code className="font-mono text-[12px]">swapOwner</code>{' '}
+                to ensure that excising or replacing a node doesn&apos;t
+                orphan downstream nodes through non-SENTINEL cycles.
+              </Hypothesis>
+              <Hypothesis
+                name="hOwnerInList"
+                constraint="next(owner) != 0x0"
+                source="Solidity implicit precondition"
+              >
+                The owner being removed must actually be in the list (has a
+                non-zero successor). Removing a node that isn&apos;t in the
+                list would zero SENTINEL&apos;s pointer. Used by{' '}
+                <code className="font-mono text-[12px]">removeOwner</code>.
+              </Hypothesis>
+              <Hypothesis
+                name="hOldNePrev"
+                constraint="oldOwner != prevOwner"
+                source="Solidity implicit precondition"
                 border={false}
               >
-                Strengthens{' '}
-                <code className="font-mono text-[12px]">hFresh</code>: the
-                new address must not appear anywhere in existing chains.
-                Defined as{' '}
-                <code className="font-mono text-[12px]">freshInList</code>{' '}
-                in{' '}
-                <code className="font-mono text-[12px]">Specs.lean</code> and
-                intended to be derived from{' '}
-                <code className="font-mono text-[12px]">acyclic</code> plus
-                the zero mapping value.
+                In{' '}
+                <code className="font-mono text-[12px]">swapOwner</code>,
+                the old owner cannot be its own predecessor. A self-loop
+                would cause the if-chain in the storage map to zero out the
+                previous owner&apos;s pointer, orphaning the new owner.
               </Hypothesis>
             </ul>
             <p className="mt-2 text-muted text-[13px] leading-relaxed">
@@ -336,6 +388,12 @@ export default function SafeOwnerReachabilityPage() {
             <h2 className="font-serif text-lg font-semibold tracking-tight mb-4">
               Learn more
             </h2>
+            <p className="leading-relaxed mb-2">
+              <ExternalLink href="https://github.com/safe-fndn/safe-smart-account/blob/main/certora/specs/OwnerReach.spec">
+                Certora OwnerReach.spec
+              </ExternalLink>{' '}
+              &mdash; the original specification this work is based on.
+            </p>
             <p className="leading-relaxed">
               <Link
                 href="/research/what-is-a-formal-proof"
