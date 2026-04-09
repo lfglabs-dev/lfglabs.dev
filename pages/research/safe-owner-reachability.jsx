@@ -87,7 +87,7 @@ export default function SafeOwnerReachabilityPage() {
             </p>
             <Disclosure title="What these invariants cover">
               <p className="mb-3 text-muted">
-                Three families of invariants are specified across all four
+                Four families of invariants are specified across all four
                 ownership-mutating functions:
               </p>
               <ul className="mb-3 text-muted list-disc pl-5 space-y-1">
@@ -105,7 +105,11 @@ export default function SafeOwnerReachabilityPage() {
                 </li>
                 <li>
                   <code className="font-mono text-[12px]">acyclic</code>{' '}
-                  &mdash; the linked list has no internal cycles
+                  &mdash; the linked list has no SENTINEL cycles
+                </li>
+                <li>
+                  <code className="font-mono text-[12px]">stronglyAcyclic</code>{' '}
+                  &mdash; reachability is antisymmetric (no cycles at all)
                 </li>
               </ul>
               <p className="text-muted">

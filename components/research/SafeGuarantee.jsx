@@ -21,6 +21,13 @@ const INVARIANTS = [
       '\u2200 key \u2260 SENTINEL, \u2200 chain, isChain(chain) \u2227 noDups(chain) \u2192 SENTINEL \u2209 chain',
     link: 'https://github.com/lfglabs-dev/verity-benchmark/blob/main/Benchmark/Cases/Safe/OwnerManagerReach/Specs.lean#L118-L124',
     label: 'acyclic'
+  },
+  {
+    english: 'If A reaches B and B reaches A, then A equals B.',
+    formal:
+      '\u2200 a b, reachable(a, b) \u2227 reachable(b, a) \u2192 a = b',
+    link: 'https://github.com/lfglabs-dev/verity-benchmark/blob/main/Benchmark/Cases/Safe/OwnerManagerReach/Specs.lean#L138-L139',
+    label: 'stronglyAcyclic'
   }
 ]
 
