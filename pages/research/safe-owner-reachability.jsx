@@ -201,9 +201,9 @@ export default function SafeOwnerReachabilityPage() {
               Proof status
             </h2>
             <p className="leading-relaxed mb-4 text-muted text-[15px]">
-              Six benchmark tasks are defined, all proven. Additional{' '}
+              9 of 12 theorems are proven. The remaining three{' '}
               <code className="font-mono text-[12px]">ownerListInvariant</code>{' '}
-              theorems remain open in{' '}
+              preservation theorems remain open in{' '}
               <ExternalLink href="https://github.com/lfglabs-dev/verity-benchmark/blob/main/Benchmark/Cases/Safe/OwnerManagerReach/OpenProofs.lean">
                 OpenProofs.lean
               </ExternalLink>
@@ -213,54 +213,40 @@ export default function SafeOwnerReachabilityPage() {
               <table className="w-full text-[13px]">
                 <thead>
                   <tr className="bg-[#f8f8f8] text-left">
-                    <th className="px-4 py-2 font-semibold">Function</th>
-                    <th className="px-4 py-2 font-semibold">Invariant</th>
-                    <th className="px-4 py-2 font-semibold text-center">Status</th>
+                    <th className="px-4 py-2 font-medium text-muted">Function</th>
+                    <th className="px-4 py-2 font-medium text-muted text-center">inListReachable</th>
+                    <th className="px-4 py-2 font-medium text-muted text-center">ownerListInvariant</th>
+                    <th className="px-4 py-2 font-medium text-muted text-center">acyclicity</th>
                   </tr>
                 </thead>
                 <tbody className="font-mono">
                   <tr className="border-t border-gray-100">
                     <td className="px-4 py-1.5">setupOwners</td>
-                    <td className="px-4 py-1.5">inListReachable</td>
-                    <td className="px-4 py-1.5 text-center text-green-600">Proven</td>
-                  </tr>
-                  <tr className="border-t border-gray-100">
-                    <td className="px-4 py-1.5">setupOwners</td>
-                    <td className="px-4 py-1.5">acyclic</td>
-                    <td className="px-4 py-1.5 text-center text-green-600">Proven</td>
+                    <td className="px-4 py-1.5 text-center text-green-600">proven</td>
+                    <td className="px-4 py-1.5 text-center text-green-600">proven</td>
+                    <td className="px-4 py-1.5 text-center text-green-600">proven</td>
                   </tr>
                   <tr className="border-t border-gray-100">
                     <td className="px-4 py-1.5">addOwner</td>
-                    <td className="px-4 py-1.5">inListReachable</td>
-                    <td className="px-4 py-1.5 text-center text-green-600">Proven</td>
-                  </tr>
-                  <tr className="border-t border-gray-100">
-                    <td className="px-4 py-1.5">addOwner</td>
-                    <td className="px-4 py-1.5">acyclic</td>
-                    <td className="px-4 py-1.5 text-center text-green-600">Proven</td>
+                    <td className="px-4 py-1.5 text-center text-green-600">proven</td>
+                    <td className="px-4 py-1.5 text-center text-muted">open</td>
+                    <td className="px-4 py-1.5 text-center text-green-600">proven</td>
                   </tr>
                   <tr className="border-t border-gray-100">
                     <td className="px-4 py-1.5">removeOwner</td>
-                    <td className="px-4 py-1.5">inListReachable</td>
-                    <td className="px-4 py-1.5 text-center text-green-600">Proven</td>
+                    <td className="px-4 py-1.5 text-center text-green-600">proven</td>
+                    <td className="px-4 py-1.5 text-center text-muted">open</td>
+                    <td className="px-4 py-1.5 text-center text-green-600">proven</td>
                   </tr>
                   <tr className="border-t border-gray-100">
                     <td className="px-4 py-1.5">swapOwner</td>
-                    <td className="px-4 py-1.5">inListReachable</td>
-                    <td className="px-4 py-1.5 text-center text-green-600">Proven</td>
+                    <td className="px-4 py-1.5 text-center text-green-600">proven</td>
+                    <td className="px-4 py-1.5 text-center text-muted">open</td>
+                    <td className="px-4 py-1.5 text-center text-green-600">proven</td>
                   </tr>
                 </tbody>
               </table>
             </div>
-            <p className="mt-2 text-muted text-[13px]">
-              Open tasks (not yet proven):{' '}
-              <code className="font-mono text-[12px]">ownerListInvariant</code>{' '}
-              for all four functions, plus{' '}
-              <code className="font-mono text-[12px]">removeOwner</code>{' '}
-              and{' '}
-              <code className="font-mono text-[12px]">swapOwner</code>{' '}
-              acyclicity.
-            </p>
           </section>
 
           {/* Hypotheses */}
