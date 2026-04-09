@@ -39,6 +39,16 @@ export const research = [
     tag: 'Explainer'
   },
   {
+    slug: 'safe-owner-reachability',
+    title: 'Safe Owner List Reachability Invariant',
+    subtitle:
+      'A formally verified linked list invariant of the Safe smart account.',
+    description:
+      'How we proved that addOwner preserves reachability in the Safe OwnerManager linked list using Verity and Lean 4.',
+    date: '2026-04-09',
+    tag: 'Case study'
+  },
+  {
     slug: 'lido-vault-solvency',
     title: 'Lido V3 Vault Solvency Guarantee',
     subtitle:
