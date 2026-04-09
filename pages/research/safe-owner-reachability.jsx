@@ -22,11 +22,11 @@ export default function SafeOwnerReachabilityPage() {
     <>
       <Head>
         <title>
-          Safe Owner List Reachability Invariant | Research | LFG Labs
+          Safe Owner List Invariants | Research | LFG Labs
         </title>
         <meta
           name="description"
-          content="A formally verified reachability invariant for the Safe smart account owner linked list, proven using Verity and Lean 4."
+          content="Formally verified linked list invariants for the Safe smart account OwnerManager, covering all four ownership-mutating functions in Verity and Lean 4."
         />
       </Head>
       <PageLayout>
@@ -42,7 +42,7 @@ export default function SafeOwnerReachabilityPage() {
 
           <header className="mb-6">
             <h1 className="text-3xl md:text-4xl font-semibold tracking-tight leading-tight">
-              Safe Owner List Reachability Invariant
+              Safe Owner List Invariants
             </h1>
           </header>
 
@@ -61,11 +61,13 @@ export default function SafeOwnerReachabilityPage() {
               </code>
               . A sentinel node at address{' '}
               <code className="font-mono text-[13px]">0x1</code> anchors
-              the list. When an owner is added, it is inserted at the head:
+              the list. All four ownership-mutating functions are modeled:
             </p>
             <pre className="mt-4 bg-[#f8f8f8] border border-gray-200 rounded px-5 py-4 text-sm font-mono leading-relaxed overflow-x-auto text-muted">
-              {'SENTINEL \u2192 ownerA \u2192 ownerB \u2192 SENTINEL\n'}
-              {'SENTINEL \u2192 NEW \u2192 ownerA \u2192 ownerB \u2192 SENTINEL'}
+              {'setupOwners  \u2192 build initial list\n'}
+              {'addOwner     \u2192 insert at head\n'}
+              {'removeOwner  \u2192 unlink node\n'}
+              {'swapOwner    \u2192 atomic replacement'}
             </pre>
           </section>
 
@@ -78,32 +80,39 @@ export default function SafeOwnerReachabilityPage() {
               The Safe is the most widely used multi-signature wallet on
               Ethereum, securing billions of dollars. Its{' '}
               <code className="font-mono text-[13px]">OwnerManager</code>{' '}
-              contract maintains the set of signers as a linked list. If{' '}
-              <code className="font-mono text-[13px]">addOwnerWithThreshold</code>{' '}
-              could leave a node unreachable from the sentinel, the owner
-              would exist in storage but be invisible to the signing logic,
-              breaking the integrity of the multisig.
+              contract maintains the set of signers as a linked list. If any
+              ownership operation could leave a node unreachable from the
+              sentinel, the owner would exist in storage but be invisible to
+              the signing logic, breaking the integrity of the multisig.
             </p>
-            <Disclosure title="What this invariant covers">
+            <Disclosure title="What these invariants cover">
               <p className="mb-3 text-muted">
-                This proof covers the{' '}
-                <code className="font-mono text-[12px]">inListReachable</code>{' '}
-                invariant from Certora&apos;s{' '}
-                <code className="font-mono text-[12px]">OwnerReach.spec</code>:
-                after{' '}
-                <code className="font-mono text-[12px]">addOwner</code>{' '}
-                executes, every node with a non-zero successor in the{' '}
-                <code className="font-mono text-[12px]">owners</code> mapping
-                is reachable from SENTINEL by following next-pointers.
+                Three families of invariants are specified across all four
+                ownership-mutating functions:
               </p>
+              <ul className="mb-3 text-muted list-disc pl-5 space-y-1">
+                <li>
+                  <code className="font-mono text-[12px]">inListReachable</code>{' '}
+                  &mdash; every node with a non-zero successor is reachable from
+                  SENTINEL
+                </li>
+                <li>
+                  <code className="font-mono text-[12px]">ownerListInvariant</code>{' '}
+                  &mdash; membership (non-zero successor) is equivalent to
+                  reachability from SENTINEL (combines{' '}
+                  <code className="font-mono text-[12px]">inListReachable</code> and{' '}
+                  <code className="font-mono text-[12px]">reachableInList</code>)
+                </li>
+                <li>
+                  <code className="font-mono text-[12px]">acyclic</code>{' '}
+                  &mdash; the linked list has no internal cycles
+                </li>
+              </ul>
               <p className="text-muted">
-                It does not cover{' '}
-                <code className="font-mono text-[12px]">removeOwner</code>,{' '}
-                <code className="font-mono text-[12px]">swapOwner</code>, or the
-                initial{' '}
-                <code className="font-mono text-[12px]">setupOwners</code>{' '}
-                call. Threshold management is also elided as it does not
-                affect the owners mapping.
+                These correspond to invariants from Certora&apos;s{' '}
+                <code className="font-mono text-[12px]">OwnerReach.spec</code>.
+                Threshold management is elided as it does not affect the
+                owners mapping.
               </p>
             </Disclosure>
           </section>
@@ -114,20 +123,17 @@ export default function SafeOwnerReachabilityPage() {
               How this was proven
             </h2>
             <p className="leading-relaxed mb-4">
-              The{' '}
-              <code className="font-mono text-[13px]">addOwnerWithThreshold</code>{' '}
-              function performs a head insertion into the linked list. Proving
-              reachability is preserved requires showing that: the new
-              owner is reachable (via{' '}
-              <code className="font-mono text-[13px]">
-                SENTINEL &rarr; owner
-              </code>
-              ), and all previously reachable nodes remain reachable through
-              the updated path (
-              <code className="font-mono text-[13px]">
-                SENTINEL &rarr; owner &rarr; old head &rarr; ...
-              </code>
-              ).
+              Each function mutates the linked list differently:{' '}
+              <code className="font-mono text-[13px]">addOwner</code> performs
+              a head insertion,{' '}
+              <code className="font-mono text-[13px]">removeOwner</code> unlinks
+              a node,{' '}
+              <code className="font-mono text-[13px]">swapOwner</code> atomically
+              replaces one node with another, and{' '}
+              <code className="font-mono text-[13px]">setupOwners</code> constructs
+              the initial list. For each, the proof must show that the
+              invariants are preserved (or established, in the case of{' '}
+              <code className="font-mono text-[13px]">setupOwners</code>).
             </p>
             <p className="leading-relaxed mb-4">
               Reachability is expressed using <em>witness chains</em>: a
@@ -138,14 +144,15 @@ export default function SafeOwnerReachabilityPage() {
               list indices, making the proof mechanically checkable.
             </p>
             <p className="leading-relaxed mb-4">
-              The contract logic was modeled in{' '}
+              All four functions were modeled in{' '}
               <ExternalLink href="https://github.com/lfglabs-dev/verity-benchmark/blob/main/Benchmark/Cases/Safe/OwnerManagerReach/Contract.lean">
                 Verity
               </ExternalLink>
-              . The proof first characterizes the post-state (which
-              next-pointers changed), then lifts pre-state chains to the
-              post-state and prepends the new path. A reference proof is
-              provided in{' '}
+              . The{' '}
+              <code className="font-mono text-[13px]">addOwner</code>{' '}
+              <code className="font-mono text-[13px]">inListReachable</code>{' '}
+              proof is complete. The remaining 11 theorems are scaffolded
+              as benchmark tasks for AI agents. Reference proofs are in{' '}
               <ExternalLink href="https://github.com/lfglabs-dev/verity-benchmark/blob/main/Benchmark/Cases/Safe/OwnerManagerReach/Proofs.lean">
                 Proofs.lean
               </ExternalLink>
@@ -165,6 +172,58 @@ export default function SafeOwnerReachabilityPage() {
                 </ExternalLink>
               </p>
             </Disclosure>
+
+            <div className="mt-8">
+              <h3 className="font-serif text-base font-semibold tracking-tight mb-3">
+                Proof status
+              </h3>
+              <div className="overflow-x-auto">
+                <table className="w-full text-[13px] border border-gray-200 rounded overflow-hidden">
+                  <thead>
+                    <tr className="bg-[#f8f8f8] text-left">
+                      <th className="px-4 py-2 font-medium text-muted">Function</th>
+                      <th className="px-4 py-2 font-medium text-muted text-center">inListReachable</th>
+                      <th className="px-4 py-2 font-medium text-muted text-center">ownerListInvariant</th>
+                      <th className="px-4 py-2 font-medium text-muted text-center">acyclicity</th>
+                    </tr>
+                  </thead>
+                  <tbody className="font-mono">
+                    <tr className="border-t border-gray-200/50">
+                      <td className="px-4 py-2">setupOwners</td>
+                      <td className="px-4 py-2 text-center text-muted">open</td>
+                      <td className="px-4 py-2 text-center text-muted">open</td>
+                      <td className="px-4 py-2 text-center text-muted">open</td>
+                    </tr>
+                    <tr className="border-t border-gray-200/50">
+                      <td className="px-4 py-2">addOwner</td>
+                      <td className="px-4 py-2 text-center text-green-700">proven</td>
+                      <td className="px-4 py-2 text-center text-muted">open</td>
+                      <td className="px-4 py-2 text-center text-muted">open</td>
+                    </tr>
+                    <tr className="border-t border-gray-200/50">
+                      <td className="px-4 py-2">removeOwner</td>
+                      <td className="px-4 py-2 text-center text-muted">open</td>
+                      <td className="px-4 py-2 text-center text-muted">open</td>
+                      <td className="px-4 py-2 text-center text-muted">open</td>
+                    </tr>
+                    <tr className="border-t border-gray-200/50">
+                      <td className="px-4 py-2">swapOwner</td>
+                      <td className="px-4 py-2 text-center text-muted">open</td>
+                      <td className="px-4 py-2 text-center text-muted">open</td>
+                      <td className="px-4 py-2 text-center text-muted">open</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <p className="mt-2 text-muted text-[13px]">
+                Open theorems are scaffolded with correct type signatures and
+                available as{' '}
+                <ExternalLink href="https://github.com/lfglabs-dev/verity-benchmark/tree/main/Benchmark/Generated/Safe/OwnerManagerReach/Tasks">
+                  benchmark tasks
+                </ExternalLink>{' '}
+                for AI proof agents.
+              </p>
+            </div>
           </section>
 
           {/* Hypotheses */}
@@ -173,32 +232,20 @@ export default function SafeOwnerReachabilityPage() {
               Hypotheses
             </h2>
             <p className="leading-relaxed mb-4 text-muted text-[15px]">
-              The proof uses zero axioms. The theorem requires these
-              hypotheses, which encode the function&apos;s preconditions and
-              structural assumptions about the linked list:
+              The proofs use zero axioms. Each theorem requires hypotheses
+              drawn from the function&apos;s preconditions and structural
+              properties of the linked list. The hypotheses vary by function:
             </p>
             <ul className="space-y-0 border border-gray-200 rounded overflow-hidden text-[14px]">
               <Hypothesis
-                name="hNotZero"
-                constraint="owner != 0x0"
+                name="hNotZero / hNotSentinel"
+                constraint="owner != 0x0, owner != SENTINEL"
                 source="Solidity require (GS203)"
               >
-                The new owner cannot be the zero address. Enforced by the{' '}
-                <code className="font-mono text-[12px]">require</code> guard
-                in{' '}
-                <code className="font-mono text-[12px]">
-                  addOwnerWithThreshold
-                </code>
-                .
-              </Hypothesis>
-              <Hypothesis
-                name="hNotSentinel"
-                constraint="owner != SENTINEL (0x1)"
-                source="Solidity require (GS203)"
-              >
-                The sentinel address is reserved as the list anchor and
-                cannot be used as an owner. Adding it would corrupt the list
-                structure.
+                The owner cannot be the zero address or the sentinel. These
+                are enforced by{' '}
+                <code className="font-mono text-[12px]">require</code> guards
+                in every ownership-mutating function.
               </Hypothesis>
               <Hypothesis
                 name="hFresh"
@@ -206,51 +253,80 @@ export default function SafeOwnerReachabilityPage() {
                 source="Solidity require (GS204)"
               >
                 The owner must not already be in the list. A zero mapping
-                value means the address is not yet a node. This prevents
-                duplicate insertion which would create cycles.
+                value means the address is not yet a node. Used by{' '}
+                <code className="font-mono text-[12px]">addOwner</code> and{' '}
+                <code className="font-mono text-[12px]">swapOwner</code>.
               </Hypothesis>
               <Hypothesis
-                name="hPreReach"
+                name="hPrevLink"
+                constraint="owners[prevOwner] == owner"
+                source="Solidity require (GS205)"
+              >
+                The predecessor must correctly point to the target owner.
+                Used by{' '}
+                <code className="font-mono text-[12px]">removeOwner</code>{' '}
+                and{' '}
+                <code className="font-mono text-[12px]">swapOwner</code> to
+                verify the caller supplied the right predecessor.
+              </Hypothesis>
+              <Hypothesis
+                name="hPreInv"
                 constraint="pre-state invariant holds"
                 source="Inductive hypothesis"
               >
-                The proof is inductive: it assumes the reachability invariant
-                holds before{' '}
-                <code className="font-mono text-[12px]">addOwner</code> and
-                shows it holds after. The base case (initial setup via{' '}
-                <code className="font-mono text-[12px]">setupOwners</code>)
-                is not covered.
+                The proof is inductive: it assumes the invariant holds before
+                the function executes and shows it holds after.{' '}
+                <code className="font-mono text-[12px]">setupOwners</code>{' '}
+                is the base case and does not require this hypothesis.
               </Hypothesis>
               <Hypothesis
                 name="hAcyclic"
-                constraint="SENTINEL does not appear in chains past the head"
-                source="Structural assumption"
+                constraint="no internal cycles in the list"
+                source="Provable structural property"
               >
                 The linked list does not cycle back to SENTINEL before
-                reaching its natural end. Without this, lifting pre-state
-                chains to the post-state would be unsound, because
-                SENTINEL&apos;s next-pointer changes during insertion.
+                reaching its natural end. Defined as a theorem target
+                (
+                <code className="font-mono text-[12px]">acyclic</code>)
+                in{' '}
+                <code className="font-mono text-[12px]">Specs.lean</code>,
+                paving the way to eliminate it as an assumption once the
+                acyclicity proofs are complete.
               </Hypothesis>
               <Hypothesis
-                name="hOwnerFresh"
-                constraint="owner does not appear in existing chains"
-                source="Structural assumption"
+                name="hFreshInList"
+                constraint="new address absent from all chains"
+                source="Provable structural property"
                 border={false}
               >
                 Strengthens{' '}
                 <code className="font-mono text-[12px]">hFresh</code>: the
-                new owner address must not appear anywhere in the existing
-                chain, not just have a zero mapping value. This ensures that
-                the owner&apos;s next-pointer (which changes during
-                insertion) does not affect any existing chain.
+                new address must not appear anywhere in existing chains.
+                Defined as{' '}
+                <code className="font-mono text-[12px]">freshInList</code>{' '}
+                in{' '}
+                <code className="font-mono text-[12px]">Specs.lean</code> and
+                intended to be derived from{' '}
+                <code className="font-mono text-[12px]">acyclic</code> plus
+                the zero mapping value.
               </Hypothesis>
             </ul>
+            <p className="mt-2 text-muted text-[13px] leading-relaxed">
+              <code className="font-mono text-[12px]">setupOwners</code>{' '}
+              additionally requires a{' '}
+              <code className="font-mono text-[12px]">hClean</code>{' '}
+              hypothesis (all storage slots are zero) to ensure no stale
+              mappings from a prior state.
+            </p>
             <p className="mt-3 text-muted text-sm space-x-4">
               <ExternalLink href="https://github.com/lfglabs-dev/verity-benchmark/blob/main/Benchmark/Cases/Safe/OwnerManagerReach/Specs.lean">
                 View specs in Lean
               </ExternalLink>
               <ExternalLink href="https://github.com/lfglabs-dev/verity-benchmark/blob/main/Benchmark/Cases/Safe/OwnerManagerReach/Proofs.lean">
-                View proof in Lean
+                View proofs in Lean
+              </ExternalLink>
+              <ExternalLink href="https://github.com/lfglabs-dev/verity-benchmark/blob/main/Benchmark/Cases/Safe/OwnerManagerReach/OpenProofs.lean">
+                View open theorems
               </ExternalLink>
             </p>
           </section>

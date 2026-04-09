@@ -40,11 +40,11 @@ export const research = [
   },
   {
     slug: 'safe-owner-reachability',
-    title: 'Safe Owner List Reachability Invariant',
+    title: 'Safe Owner List Invariants',
     subtitle:
-      'A formally verified linked list invariant of the Safe smart account.',
+      'Formally verified linked list invariants of the Safe smart account.',
     description:
-      'How we proved that addOwner preserves reachability in the Safe OwnerManager linked list using Verity and Lean 4.',
+      'Reachability, biconditional membership, and acyclicity invariants for all four ownership-mutating functions of the Safe OwnerManager, modeled in Verity and Lean 4.',
     date: '2026-04-09',
     tag: 'Case study'
   },

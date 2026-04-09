@@ -53,12 +53,12 @@ export default function SafeGuarantee() {
           aria-hidden={showEnglish}
         >
           <pre className="text-sm md:text-base font-mono leading-relaxed text-left inline-block">
-            <span className="text-muted">{'-- for every address in the list'}</span>
+            <span className="text-muted">{'-- membership \u2261 reachability'}</span>
             {'\n'}
             <span className="text-primary">{'next(SENTINEL) \u2260 0  \u2227'}</span>
             {'\n'}
             <span className="text-primary">
-              {'\u2200 key, next(key) \u2260 0 \u2192 reachable(SENTINEL, key)'}
+              {'\u2200 key \u2260 0, next(key) \u2260 0 \u2194 reachable(SENTINEL, key)'}
             </span>
           </pre>
         </div>
@@ -78,7 +78,7 @@ export default function SafeGuarantee() {
 
       <div className="text-right mt-4">
         <a
-          href="https://github.com/lfglabs-dev/verity-benchmark/blob/main/Benchmark/Cases/Safe/OwnerManagerReach/Specs.lean#L49-L52"
+          href="https://github.com/lfglabs-dev/verity-benchmark/blob/main/Benchmark/Cases/Safe/OwnerManagerReach/Specs.lean#L87-L90"
           target="_blank"
           rel="noopener noreferrer"
           className="inline-flex items-center gap-1.5 text-[12px] font-semibold text-accent hover:text-heading transition-colors cursor-pointer"
