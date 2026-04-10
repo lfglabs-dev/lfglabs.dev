@@ -87,13 +87,21 @@ export default function NexusMutualBookValuePage() {
           <section className="mb-16">
             <NexusMutualGuarantee />
             <p className="text-muted text-[15px] leading-relaxed">
-              Nexus Mutual&apos;s RAMM (Risk-Adjusted Market Maker) prices NXM
-              token trades against a book value anchor: the protocol&apos;s
-              total capital divided by NXM supply. Buy and sell prices are
-              derived from virtual reserves that converge toward book value
-              ±1% via a time-based ratchet. During convergence the spread can
-              be wider than 1%, but the invariant always holds: sell price
-              never exceeds book value, and buy price never drops below it.
+              Nexus Mutual is a decentralized insurance protocol. Members pool
+              ETH into a shared capital pool, and that pool pays out claims
+              when covered smart contracts are exploited. The NXM token
+              represents membership and a share of the pool&apos;s value.
+            </p>
+            <p className="mt-4 text-muted text-[15px] leading-relaxed">
+              The RAMM (Risk-Adjusted Market Maker) is a separate on-chain
+              pool that handles NXM trading. It holds its own ETH reserve
+              (target: 5,000 ETH), distinct from the capital pool, and prices
+              trades against book value: the capital pool&apos;s total
+              capital divided by NXM supply. Buy and sell prices are derived
+              from virtual reserves that converge toward book value ±1% via a
+              time-based ratchet. During convergence the spread can be wider
+              than 1%, but the invariant always holds: sell price never exceeds
+              book value, and buy price never drops below it.
             </p>
             <p className="mt-2 text-muted text-[15px]">
               <ExternalLink href="https://github.com/NexusMutual/smart-contracts/blob/release-candidate/contracts/modules/capital/Ramm.sol">
@@ -109,17 +117,17 @@ export default function NexusMutualBookValuePage() {
             </h2>
             <p className="leading-relaxed mb-4">
               If the sell price exceeded book value, anyone could buy NXM
-              cheap and sell it back to the RAMM at a profit, draining the
-              RAMM&apos;s ETH reserve.
+              cheap and sell it back at a profit, draining the RAMM&apos;s own
+              ETH reserve (the trading pool).
             </p>
             <p className="leading-relaxed mb-6">
-              The damage wouldn&apos;t stop there. When the RAMM&apos;s
-              reserve drops below its 5,000 ETH target,{' '}
+              The damage wouldn&apos;t stop at the trading pool. When the
+              RAMM&apos;s reserve drops below its 5,000 ETH target,{' '}
               <code className="font-mono text-[13px]">adjustEth</code>{' '}
-              automatically refills it from the capital pool at up to 100 ETH
-              per day. A sustained arbitrage would therefore drain not just the
-              RAMM, but the capital pool that backs every insurance claim on
-              the protocol.
+              automatically refills it from the capital pool (the insurance
+              pool) at up to 100 ETH per day. A sustained arbitrage would
+              therefore drain not just the RAMM, but the capital pool that
+              pays out members&apos; insurance claims.
             </p>
             <Disclosure title="What this invariant covers">
               <p className="mb-3 text-muted">

@@ -115,8 +115,8 @@ export default function NexusMutualGuarantee() {
           aria-hidden={!showEnglish}
         >
           <p className="text-xl md:text-2xl leading-snug font-serif">
-            The RAMM never sells NXM below book value, and never buys it back
-            above book value.
+            The Nexus Mutual liquidity pool never sells NXM below book value,
+            and never buys it back above book value.
           </p>
         </div>
       </div>
