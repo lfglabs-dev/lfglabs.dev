@@ -123,46 +123,31 @@ export default function NexusMutualBookValuePage() {
             </p>
             <Disclosure title="What this invariant covers">
               <p className="mb-3 text-muted">
-                This proof covers the price band arithmetic in both branches of{' '}
+                The proof covers every code path through{' '}
                 <code className="font-mono text-[12px]">calculateNxm</code>:
-                when the ratchet has converged (BV branch) and when it&apos;s
-                still converging (ratchet branch).
-              </p>
-              <p className="mb-3 text-muted">
-                Several parts of the RAMM are not modeled because they
-                don&apos;t affect price computation.{' '}
-                <strong>TWAP oracle</strong> observes prices but never feeds
-                back into{' '}
-                <code className="font-mono text-[12px]">calculateNxm</code>.{' '}
-                <strong>Circuit breakers</strong> limit trade volume per period
-                but don&apos;t change how prices are calculated.{' '}
-                <strong>Access control</strong> (
-                <code className="font-mono text-[12px]">whenNotPaused</code>,{' '}
-                <code className="font-mono text-[12px]">nonReentrant</code>)
-                are on/off guards on a permissionless function, not price
-                logic.
-              </p>
-              <p className="mb-3 text-muted">
-                <strong>
-                  <code className="font-mono text-[12px]">adjustEth</code>
-                </strong>{' '}
-                and <strong>swap execution</strong> are already covered: the
-                proof takes{' '}
-                <code className="font-mono text-[12px]">eth</code>,{' '}
-                <code className="font-mono text-[12px]">oldEth</code>, and old
-                NXM reserves as free parameters, so any post-swap or
-                post-adjustment state is included.
+                both the BV branch (ratchet has converged, prices snap to book
+                value ±1%) and the ratchet branch (still converging, prices
+                move gradually). It holds for any value of the reserve and
+                timing inputs, which means any sequence of swaps, ETH
+                adjustments, or elapsed time is included.
               </p>
               <p className="text-muted">
-                <strong>Oracle correctness</strong>, whether{' '}
+                The guarantee depends on{' '}
+                <code className="font-mono text-[12px]">capital</code> and{' '}
+                <code className="font-mono text-[12px]">supply</code> being
+                correct. These come from{' '}
                 <code className="font-mono text-[12px]">
                   pool.getPoolValueInEth()
                 </code>{' '}
-                returns the true pool value, is the main thing not covered. It
-                requires modeling{' '}
-                <code className="font-mono text-[12px]">Pool.sol</code>,
-                Chainlink feeds, and multi-asset conversion: a different proof
-                scope entirely.
+                and{' '}
+                <code className="font-mono text-[12px]">
+                  tokenController.totalSupply()
+                </code>
+                , which the proof takes as trusted inputs. If those values were
+                wrong (e.g. a Chainlink oracle returning a stale price), the
+                book value itself would be wrong, and the price band would
+                anchor to the wrong number. Oracle correctness is a separate
+                verification scope.
               </p>
             </Disclosure>
           </section>
@@ -221,8 +206,15 @@ export default function NexusMutualBookValuePage() {
               Hypotheses
             </h2>
             <p className="leading-relaxed mb-4 text-muted text-[15px]">
-              The proof uses zero axioms. The theorem requires these
-              hypotheses, which encode assumptions about valid protocol states:
+              <strong>Trust assumption:</strong>{' '}
+              <code className="font-mono text-[12px]">capital</code> and{' '}
+              <code className="font-mono text-[12px]">supply</code> are correct.
+              These come from onchain oracles and token accounting. The proof
+              takes them as given inputs and does not verify oracle
+              correctness.
+            </p>
+            <p className="leading-relaxed mb-4 text-muted text-[15px]">
+              Given that, the theorem requires these hypotheses:
             </p>
             <ul className="space-y-0 border border-gray-200 rounded overflow-hidden text-[14px]">
               <Hypothesis
