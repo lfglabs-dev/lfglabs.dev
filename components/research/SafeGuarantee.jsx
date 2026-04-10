@@ -1,34 +1,9 @@
 import { useState, useEffect, useRef } from 'react'
 
-const INVARIANTS = [
-  {
-    english: 'Every owner in the list is reachable from the sentinel.',
-    formal: '\u2200 key, next(key) \u2260 0 \u2192 reachable(SENTINEL, key)',
-    link: 'https://github.com/lfglabs-dev/verity-benchmark/blob/main/Benchmark/Cases/Safe/OwnerManagerReach/Specs.lean#L63-L65',
-    label: 'inListReachable'
-  },
-  {
-    english:
-      'Being in the list is equivalent to being reachable from the sentinel.',
-    formal:
-      '\u2200 key \u2260 0, next(key) \u2260 0 \u2194 reachable(SENTINEL, key)',
-    link: 'https://github.com/lfglabs-dev/verity-benchmark/blob/main/Benchmark/Cases/Safe/OwnerManagerReach/Specs.lean#L87-L90',
-    label: 'ownerListInvariant'
-  },
-  {
-    english: 'The owner list has no internal cycles.',
-    formal:
-      '\u2200 key \u2260 SENTINEL, \u2200 chain, isChain(chain) \u2227 noDups(chain) \u2192 SENTINEL \u2209 chain',
-    link: 'https://github.com/lfglabs-dev/verity-benchmark/blob/main/Benchmark/Cases/Safe/OwnerManagerReach/Specs.lean#L118-L124',
-    label: 'acyclic'
-  },
-  {
-    english: 'If A reaches B and B reaches A, then A equals B.',
-    formal:
-      '\u2200 a b, reachable(a, b) \u2227 reachable(b, a) \u2192 a = b',
-    link: 'https://github.com/lfglabs-dev/verity-benchmark/blob/main/Benchmark/Cases/Safe/OwnerManagerReach/Specs.lean#L138-L139',
-    label: 'stronglyAcyclic'
-  }
+const FORMAL_INVARIANTS = [
+  '\u2200 key, next(key) \u2260 0 \u2192 reachable(SENTINEL, key)',
+  '\u2200 key \u2260 0, next(key) \u2260 0 \u2194 reachable(SENTINEL, key)',
+  '\u2200 a b, reachable(a, b) \u2227 reachable(b, a) \u2192 a = b'
 ]
 
 export default function SafeGuarantee() {
@@ -73,50 +48,41 @@ export default function SafeGuarantee() {
         {showEnglish ? 'Switch to formal' : 'Switch to English'}
       </button>
 
-      <div className="space-y-4">
-        {INVARIANTS.map((inv) => (
-          <div key={inv.label} className="grid [&>*]:col-start-1 [&>*]:row-start-1">
-            <div
-              className="transition-opacity duration-200"
-              style={{
-                opacity: showEnglish ? 0 : 1,
-                pointerEvents: showEnglish ? 'none' : 'auto'
-              }}
-              aria-hidden={showEnglish}
+      <div className="grid text-center [&>*]:col-start-1 [&>*]:row-start-1">
+        <div
+          className="flex flex-col items-center justify-center gap-4 md:gap-5 transition-opacity duration-200 text-[0.945rem] md:text-[1.18125rem] font-mono text-primary leading-snug"
+          style={{
+            opacity: showEnglish ? 0 : 1,
+            pointerEvents: showEnglish ? 'none' : 'auto'
+          }}
+          aria-hidden={showEnglish}
+        >
+          {FORMAL_INVARIANTS.map((formal, i) => (
+            <code
+              key={i}
+              className="block w-full max-w-full overflow-x-auto px-1"
             >
-              <div className="flex items-baseline gap-3">
-                <a
-                  href={inv.link}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-[11px] font-mono text-accent hover:text-heading transition-colors shrink-0"
-                >
-                  {inv.label}
-                </a>
-                <code className="text-sm font-mono text-primary leading-relaxed">
-                  {inv.formal}
-                </code>
-              </div>
-            </div>
-            <div
-              className="transition-opacity duration-200"
-              style={{
-                opacity: showEnglish ? 1 : 0,
-                pointerEvents: showEnglish ? 'auto' : 'none'
-              }}
-              aria-hidden={!showEnglish}
-            >
-              <div className="flex items-baseline gap-3">
-                <span className="text-[11px] font-mono text-muted/60 shrink-0">
-                  {inv.label}
-                </span>
-                <p className="text-lg md:text-xl leading-snug font-serif">
-                  {inv.english}
-                </p>
-              </div>
-            </div>
-          </div>
-        ))}
+              {formal}
+            </code>
+          ))}
+        </div>
+        <div
+          className="flex items-center justify-center transition-opacity duration-200"
+          style={{
+            opacity: showEnglish ? 1 : 0,
+            pointerEvents: showEnglish ? 'auto' : 'none'
+          }}
+          aria-hidden={!showEnglish}
+        >
+          <p className="text-xl md:text-2xl leading-snug font-serif max-w-prose mx-auto px-1">
+            The owners mapping forms a proper loop-free linked list starting at
+            a special node called{' '}
+            <code className="font-mono text-[0.92em] text-primary">
+              SENTINEL
+            </code>
+            , and the owners are exactly the addresses on that list.
+          </p>
+        </div>
       </div>
     </div>
   )

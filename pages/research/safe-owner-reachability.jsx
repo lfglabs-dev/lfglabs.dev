@@ -13,6 +13,12 @@ const VERIFY_COMMAND = `git clone https://github.com/lfglabs-dev/verity-benchmar
 cd verity-benchmark
 lake build Benchmark.Cases.Safe.OwnerManagerReach.Compile`
 
+const OWNER_MANAGER_SOL =
+  'https://github.com/safe-fndn/safe-smart-account/blob/a2e19c6aa42a45ceec68057f3fa387f169c5b321/contracts/base/OwnerManager.sol'
+
+const VERITY_OWNER_MANAGER_CONTRACT =
+  'https://github.com/lfglabs-dev/verity-benchmark/blob/main/Benchmark/Cases/Safe/OwnerManagerReach/Contract.lean'
+
 export default function SafeOwnerReachabilityPage() {
   const otherResearch = getSortedResearch().filter(
     (r) => r.slug !== 'safe-owner-reachability'
@@ -78,38 +84,46 @@ export default function SafeOwnerReachabilityPage() {
             </h2>
             <p className="leading-relaxed mb-6">
               The Safe is the most widely used multi-signature wallet on
-              Ethereum, securing billions of dollars. Its{' '}
-              <code className="font-mono text-[13px]">OwnerManager</code>{' '}
-              contract maintains the set of signers as a linked list. If any
-              ownership operation could leave a node unreachable from the
-              sentinel, the owner would exist in storage but be invisible to
-              the signing logic, breaking the integrity of the multisig.
+              Ethereum, securing billions of dollars. If the owners list in{' '}
+              <ExternalLink
+                href={OWNER_MANAGER_SOL}
+                className="font-mono text-[13px]"
+              >
+                OwnerManager
+              </ExternalLink>{' '}
+              were malformed, approval checks could skip a real owner or treat
+              the signer set differently than what is expected.
             </p>
             <Disclosure title="What these invariants cover">
-              <p className="mb-3 text-muted">
-                Four families of invariants are specified across all four
-                ownership-mutating functions:
+              <p className="mb-4 leading-relaxed text-muted">
+                The owners mapping forms a proper loop-free linked list
+                starting at a special node called{' '}
+                <code className="font-mono text-[12px]">SENTINEL</code>, and
+                the owners are exactly the addresses on that list.
+              </p>
+              <p className="mb-3 text-muted text-[15px]">
+                In Lean, that goal is split into four named properties:
               </p>
               <ul className="mb-3 text-muted list-disc pl-5 space-y-1">
                 <li>
-                  <code className="font-mono text-[12px]">inListReachable</code>{' '}
-                  &mdash; every node with a non-zero successor is reachable from
+                  <code className="font-mono text-[12px]">inListReachable</code>
+                  : every node with a non-zero successor is reachable from
                   SENTINEL
                 </li>
                 <li>
-                  <code className="font-mono text-[12px]">ownerListInvariant</code>{' '}
-                  &mdash; membership (non-zero successor) is equivalent to
+                  <code className="font-mono text-[12px]">ownerListInvariant</code>
+                  : membership (non-zero successor) is equivalent to
                   reachability from SENTINEL (combines{' '}
                   <code className="font-mono text-[12px]">inListReachable</code> and{' '}
                   <code className="font-mono text-[12px]">reachableInList</code>)
                 </li>
                 <li>
-                  <code className="font-mono text-[12px]">acyclic</code>{' '}
-                  &mdash; the linked list has no SENTINEL cycles
+                  <code className="font-mono text-[12px]">acyclic</code>: the
+                  linked list has no SENTINEL cycles
                 </li>
                 <li>
-                  <code className="font-mono text-[12px]">stronglyAcyclic</code>{' '}
-                  &mdash; reachability is antisymmetric (no cycles at all)
+                  <code className="font-mono text-[12px]">stronglyAcyclic</code>
+                  : reachability is antisymmetric (no cycles at all)
                 </li>
               </ul>
               <p className="text-muted">
@@ -129,30 +143,31 @@ export default function SafeOwnerReachabilityPage() {
               How this was proven
             </h2>
             <p className="leading-relaxed mb-4">
-              All four functions were modeled in{' '}
-              <ExternalLink href="https://github.com/lfglabs-dev/verity-benchmark/blob/main/Benchmark/Cases/Safe/OwnerManagerReach/Contract.lean">
-                Verity
+              The ownership operations are modeled in Verity from the Solidity{' '}
+              <ExternalLink href={OWNER_MANAGER_SOL}>OwnerManager.sol</ExternalLink>{' '}
+              implementation in safe-smart-account; the Verity contract slice is
+              in{' '}
+              <ExternalLink href={VERITY_OWNER_MANAGER_CONTRACT}>
+                Contract.lean
               </ExternalLink>
               . Each function mutates the linked list differently:
             </p>
             <ul className="mb-6 text-[15px] leading-relaxed list-disc pl-5 space-y-2">
               <li>
-                <strong>setupOwners</strong> &mdash; constructs the initial
-                linked list from a list of addresses (base case)
+                <strong>setupOwners</strong>: constructs the initial linked
+                list from a list of addresses (base case)
               </li>
               <li>
-                <strong>addOwner</strong> &mdash; head insertion: the new
-                owner is placed between SENTINEL and the old head
+                <strong>addOwner</strong>: head insertion. The new owner is
+                placed between SENTINEL and the old head
               </li>
               <li>
-                <strong>removeOwner</strong> &mdash; chain excision: the
-                previous owner&apos;s pointer is redirected past the
-                removed node
+                <strong>removeOwner</strong>: chain excision. The previous
+                owner&apos;s pointer is redirected past the removed node
               </li>
               <li>
-                <strong>swapOwner</strong> &mdash; atomic replacement: the
-                old owner is unlinked and the new owner spliced into its
-                position
+                <strong>swapOwner</strong>: atomic replacement. The old owner
+                is unlinked and the new owner spliced into its position
               </li>
             </ul>
             <p className="leading-relaxed mb-4">
@@ -381,8 +396,8 @@ export default function SafeOwnerReachabilityPage() {
             <p className="leading-relaxed mb-2">
               <ExternalLink href="https://github.com/safe-fndn/safe-smart-account/blob/main/certora/specs/OwnerReach.spec">
                 Certora OwnerReach.spec
-              </ExternalLink>{' '}
-              &mdash; the original specification this work is based on.
+              </ExternalLink>
+              {', the original specification this work is based on.'}
             </p>
             <p className="leading-relaxed">
               <Link
