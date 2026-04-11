@@ -6,7 +6,7 @@ import CodeBlock from '../../components/research/CodeBlock'
 import Disclosure from '../../components/research/Disclosure'
 import ExternalLink from '../../components/research/ExternalLink'
 import HighlightedDSL from '../../components/research/HighlightedDSL'
-import { research } from '../../data/research'
+import { getSortedResearch } from '../../lib/getSortedResearch'
 
 export default function WhyClearSigningShouldNotRequireTrustPage() {
   const canonicalUrl =
@@ -36,7 +36,7 @@ export default function WhyClearSigningShouldNotRequireTrustPage() {
     },
     mainEntityOfPage: canonicalUrl
   }
-  const otherResearch = research.filter(
+  const otherResearch = getSortedResearch().filter(
     (r) => r.slug !== 'formalizing-transaction-interpretation'
   )
 

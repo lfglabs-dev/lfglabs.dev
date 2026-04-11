@@ -1,5 +1,15 @@
 export const research = [
   {
+    slug: 'safe-owner-reachability',
+    title: 'Safe Owner List Invariants',
+    subtitle:
+      'Formally verified linked list invariants of the Safe smart account.',
+    description:
+      'How we proved reachability and acyclicity across all four ownership-mutating functions in the Safe OwnerManager using Verity and Lean 4.',
+    date: '2026-04-09',
+    tag: 'Case study'
+  },
+  {
     slug: 'nexus-mutual-book-value',
     title: 'Nexus Mutual Book Value Invariant',
     subtitle: 'A formally verified price band property of the RAMM.',
@@ -39,15 +49,6 @@ export const research = [
     tag: 'Publication'
   },
   {
-    slug: 'what-is-a-formal-proof',
-    title: 'What is a formal proof?',
-    subtitle: 'A short explanation for non-specialists.',
-    description:
-      'An introduction to formal verification for smart contracts — what it means to prove a contract correct.',
-    date: '2025-06-01',
-    tag: 'Explainer'
-  },
-  {
     slug: 'lido-vault-solvency',
     title: 'Lido V3 Vault Solvency Guarantee',
     subtitle:
@@ -56,5 +57,14 @@ export const research = [
       'How we proved the solvency invariant of Lido V3 StakingVaults using Verity and Lean 4.',
     date: '2025-06-15',
     tag: 'Case study'
+  },
+  {
+    slug: 'what-is-a-formal-proof',
+    title: 'What is a formal proof?',
+    subtitle: 'A short explanation for non-specialists.',
+    description:
+      'An introduction to formal verification for smart contracts — what it means to prove a contract correct.',
+    date: '2025-06-01',
+    tag: 'Explainer'
   }
 ]

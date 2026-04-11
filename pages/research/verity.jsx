@@ -3,10 +3,10 @@ import Link from 'next/link'
 import PageLayout from '../../components/PageLayout'
 import ResearchCard from '../../components/ResearchCard'
 import ExternalLink from '../../components/research/ExternalLink'
-import { research } from '../../data/research'
+import { getSortedResearch } from '../../lib/getSortedResearch'
 
 export default function VerityPage() {
-  const otherResearch = research.filter((r) => r.slug !== 'verity')
+  const otherResearch = getSortedResearch().filter((r) => r.slug !== 'verity')
 
   return (
     <>

@@ -2,9 +2,11 @@ import Head from 'next/head'
 import PageLayout from '../../components/PageLayout'
 import ResearchCard from '../../components/ResearchCard'
 import SectionHeader from '../../components/ui/SectionHeader'
-import { research } from '../../data/research'
+import { getSortedResearch } from '../../lib/getSortedResearch'
 
 export default function ResearchPage() {
+  const research = getSortedResearch()
+
   return (
     <>
       <Head>

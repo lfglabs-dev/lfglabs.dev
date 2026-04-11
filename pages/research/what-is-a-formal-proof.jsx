@@ -2,10 +2,10 @@ import Head from 'next/head'
 import Link from 'next/link'
 import PageLayout from '../../components/PageLayout'
 import ResearchCard from '../../components/ResearchCard'
-import { research } from '../../data/research'
+import { getSortedResearch } from '../../lib/getSortedResearch'
 
 export default function WhatIsAFormalProofPage() {
-  const otherResearch = research.filter(
+  const otherResearch = getSortedResearch().filter(
     (r) => r.slug !== 'what-is-a-formal-proof'
   )
 
