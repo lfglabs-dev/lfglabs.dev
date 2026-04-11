@@ -1,5 +1,14 @@
 export const research = [
   {
+    slug: 'nexus-mutual-book-value',
+    title: 'Nexus Mutual Book Value Invariant',
+    subtitle: 'A formally verified price band property of the RAMM.',
+    description:
+      'How we proved the book value invariant of Nexus Mutual\'s RAMM pricing mechanism using Verity and Lean 4.',
+    date: '2026-04-09',
+    tag: 'Case study'
+  },
+  {
     slug: 'formalizing-transaction-interpretation',
     title: 'Formalizing Transaction Interpretation',
     subtitle:
