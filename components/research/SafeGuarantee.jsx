@@ -75,12 +75,7 @@ export default function SafeGuarantee() {
           aria-hidden={!showEnglish}
         >
           <p className="text-xl md:text-2xl leading-snug font-serif max-w-prose mx-auto px-1">
-            The owners mapping forms a proper loop-free linked list starting at
-            a special node called{' '}
-            <code className="font-mono text-[0.92em] text-primary">
-              SENTINEL
-            </code>
-            , and the owners are exactly the addresses on that list.
+            The owners mapping forms a proper loop-free circular linked list.
           </p>
         </div>
       </div>

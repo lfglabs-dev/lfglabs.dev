@@ -7,6 +7,7 @@ import Disclosure from '../../components/research/Disclosure'
 import CodeBlock from '../../components/research/CodeBlock'
 import ExternalLink from '../../components/research/ExternalLink'
 import Hypothesis from '../../components/research/Hypothesis'
+import TikZDiagram from '../../components/research/TikZDiagram'
 import { getSortedResearch } from '../../lib/getSortedResearch'
 
 const VERIFY_COMMAND = `git clone https://github.com/lfglabs-dev/verity-benchmark
@@ -18,6 +19,27 @@ const OWNER_MANAGER_SOL =
 
 const VERITY_OWNER_MANAGER_CONTRACT =
   'https://github.com/lfglabs-dev/verity-benchmark/blob/main/Benchmark/Cases/Safe/OwnerManagerReach/Contract.lean'
+
+const OWNERS_LINKED_LIST_TIKZ = String.raw`
+\begin{tikzpicture}[scale=1.4, every node/.style={transform shape},
+  box/.style={draw, rounded corners=2pt, minimum width=1.6cm, minimum height=0.75cm, font=\footnotesize, inner sep=4pt},
+  sentinel/.style={box, fill=black!7, draw=black!40},
+  ptr/.style={-stealth, thick, shorten >=2pt, shorten <=2pt},
+  lbl/.style={font=\tiny, above=1pt, midway}
+]
+  \node[sentinel] (s) at (0,0) {\texttt{0x1}};
+  \node[box] (a) at (3,0) {\textsf{Owner A}};
+  \node[box] (b) at (6,0) {\textsf{Owner B}};
+  \node[box] (c) at (9,0) {\textsf{Owner C}};
+
+  \draw[ptr] (s) -- node[lbl] {\texttt{owners[0x1]}} (a);
+  \draw[ptr] (a) -- node[lbl] {\texttt{owners[A]}} (b);
+  \draw[ptr] (b) -- node[lbl] {\texttt{owners[B]}} (c);
+  \draw[ptr] (c.south) .. controls +(0,-1.2) and +(0,-1.2) .. node[lbl, below=1pt] {\texttt{owners[C]}} (s.south);
+
+  \node[font=\scriptsize, text=black!50] at (0, 0.75) {sentinel};
+\end{tikzpicture}
+`
 
 export default function SafeOwnerReachabilityPage() {
   const otherResearch = getSortedResearch().filter(
@@ -32,7 +54,7 @@ export default function SafeOwnerReachabilityPage() {
         </title>
         <meta
           name="description"
-          content="Formally verified linked list invariants for the Safe smart account OwnerManager, covering all four ownership-mutating functions in Verity and Lean 4."
+          content="Formally verified linked list invariants for Safe smart account OwnerManager, covering all four ownership-mutating functions in Verity and Lean 4."
         />
       </Head>
       <PageLayout>
@@ -56,25 +78,36 @@ export default function SafeOwnerReachabilityPage() {
           <section className="mb-16">
             <SafeGuarantee />
             <p className="text-muted text-[15px] leading-relaxed">
-              The{' '}
               <ExternalLink href="https://github.com/safe-global/safe-smart-account">
                 Safe smart account
               </ExternalLink>{' '}
-              manages its owners using a singly-linked list stored in a
-              mapping{' '}
+              manages its owners using a{' '}
+              <ExternalLink href="https://en.wikipedia.org/wiki/Linked_list">
+                singly-linked list
+              </ExternalLink>{' '}
+              stored in a mapping{' '}
               <code className="font-mono text-[13px]">
                 owners: address &rarr; address
               </code>
               . A sentinel node at address{' '}
               <code className="font-mono text-[13px]">0x1</code> anchors
-              the list. All four ownership-mutating functions are modeled:
+              the list.
             </p>
-            <pre className="mt-4 bg-[#f8f8f8] border border-gray-200 rounded px-5 py-4 text-sm font-mono leading-relaxed overflow-x-auto text-muted">
-              {'setupOwners  \u2192 build initial list\n'}
-              {'addOwner     \u2192 insert at head\n'}
-              {'removeOwner  \u2192 unlink node\n'}
-              {'swapOwner    \u2192 atomic replacement'}
-            </pre>
+            <TikZDiagram
+              tikz={OWNERS_LINKED_LIST_TIKZ}
+              className="my-8 flex justify-center overflow-x-auto"
+            />
+            <p className="text-muted text-[15px] leading-relaxed">
+              The list is updated by four operations:{' '}
+              <code className="font-mono text-[13px]">setupOwners</code>{' '}
+              builds it from an address array,{' '}
+              <code className="font-mono text-[13px]">addOwner</code>{' '}
+              inserts at the head,{' '}
+              <code className="font-mono text-[13px]">removeOwner</code>{' '}
+              unlinks a node, and{' '}
+              <code className="font-mono text-[13px]">swapOwner</code>{' '}
+              replaces one owner with another in a single step.
+            </p>
           </section>
 
           {/* Why this matters */}
@@ -83,8 +116,8 @@ export default function SafeOwnerReachabilityPage() {
               Why this matters
             </h2>
             <p className="leading-relaxed mb-6">
-              The Safe is the most widely used multi-signature wallet on
-              Ethereum, securing billions of dollars. If the owners list in{' '}
+              Safe is the most widely used multi-signature wallet on Ethereum,
+              securing billions of dollars. If the owners list in{' '}
               <ExternalLink
                 href={OWNER_MANAGER_SOL}
                 className="font-mono text-[13px]"
@@ -96,10 +129,8 @@ export default function SafeOwnerReachabilityPage() {
             </p>
             <Disclosure title="What these invariants cover">
               <p className="mb-4 leading-relaxed text-muted">
-                The owners mapping forms a proper loop-free linked list
-                starting at a special node called{' '}
-                <code className="font-mono text-[12px]">SENTINEL</code>, and
-                the owners are exactly the addresses on that list.
+                The owners mapping forms a proper loop-free circular linked
+                list.
               </p>
               <p className="mb-3 text-muted text-[15px]">
                 In Lean, that goal is split into four named properties:
