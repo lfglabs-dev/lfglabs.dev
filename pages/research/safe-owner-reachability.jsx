@@ -133,7 +133,7 @@ export default function SafeOwnerReachabilityPage() {
                 list.
               </p>
               <p className="mb-3 text-muted text-[15px]">
-                In Lean, that goal is split into four named properties:
+                In Lean, that goal is split into three named properties:
               </p>
               <ul className="mb-3 text-muted list-disc pl-5 space-y-1">
                 <li>
@@ -150,11 +150,7 @@ export default function SafeOwnerReachabilityPage() {
                 </li>
                 <li>
                   <code className="font-mono text-[12px]">acyclic</code>: the
-                  linked list has no SENTINEL cycles
-                </li>
-                <li>
-                  <code className="font-mono text-[12px]">stronglyAcyclic</code>
-                  : reachability is antisymmetric (no cycles at all)
+                  linked list has no internal SENTINEL cycles
                 </li>
               </ul>
               <p className="text-muted">
@@ -210,16 +206,20 @@ export default function SafeOwnerReachabilityPage() {
               list indices, making the proof mechanically checkable.
             </p>
             <p className="leading-relaxed mb-4">
-              For{' '}
+              The structural property doing the heavy lifting for{' '}
               <code className="font-mono text-[13px]">removeOwner</code>{' '}
               and{' '}
-              <code className="font-mono text-[13px]">swapOwner</code>,
-              the proofs require <em>strong acyclicity</em>{' '}
-              (antisymmetry of the reachability relation) to show that
-              excising or replacing a node does not orphan downstream
-              nodes. This matches Certora&apos;s{' '}
+              <code className="font-mono text-[13px]">swapOwner</code>{' '}
+              is{' '}
+              <em>unique predecessor</em>: each non-zero node in the list
+              has at most one non-zero predecessor. An earlier draft used
+              antisymmetry of reachability (matching Certora&apos;s{' '}
               <code className="font-mono text-[13px]">reach_invariant</code>{' '}
-              axiom.
+              axiom), but antisymmetry is false on Safe&apos;s circular list{' '}
+              (<code className="font-mono text-[13px]">SENTINEL &rarr; o &rarr; SENTINEL</code>{' '}
+              makes both directions reachable). Unique-predecessor captures
+              the same &ldquo;simple path, no branching&rdquo; truth and is
+              preserved by every mutation.
             </p>
             <p className="leading-relaxed mb-4">
               Reference proofs are provided in{' '}
@@ -247,13 +247,11 @@ export default function SafeOwnerReachabilityPage() {
               Proof status
             </h2>
             <p className="leading-relaxed mb-4 text-muted text-[15px]">
-              9 of 12 theorems are proven. The remaining three{' '}
-              <code className="font-mono text-[12px]">ownerListInvariant</code>{' '}
-              preservation theorems remain open in{' '}
-              <ExternalLink href="https://github.com/lfglabs-dev/verity-benchmark/blob/main/Benchmark/Cases/Safe/OwnerManagerReach/OpenProofs.lean">
-                OpenProofs.lean
-              </ExternalLink>
-              .
+              All 12 theorems are proven.{' '}
+              <ExternalLink href="https://github.com/lfglabs-dev/verity-benchmark/blob/main/Benchmark/Cases/Safe/OwnerManagerReach/Proofs.lean">
+                Proofs.lean
+              </ExternalLink>{' '}
+              is <code className="font-mono text-[12px]">sorry</code>-free.
             </p>
             <div className="overflow-x-auto border border-gray-200 rounded">
               <table className="w-full text-[13px]">
@@ -275,19 +273,19 @@ export default function SafeOwnerReachabilityPage() {
                   <tr className="border-t border-gray-100">
                     <td className="px-4 py-1.5">addOwner</td>
                     <td className="px-4 py-1.5 text-center text-green-600">proven</td>
-                    <td className="px-4 py-1.5 text-center text-muted">open</td>
+                    <td className="px-4 py-1.5 text-center text-green-600">proven</td>
                     <td className="px-4 py-1.5 text-center text-green-600">proven</td>
                   </tr>
                   <tr className="border-t border-gray-100">
                     <td className="px-4 py-1.5">removeOwner</td>
                     <td className="px-4 py-1.5 text-center text-green-600">proven</td>
-                    <td className="px-4 py-1.5 text-center text-muted">open</td>
+                    <td className="px-4 py-1.5 text-center text-green-600">proven</td>
                     <td className="px-4 py-1.5 text-center text-green-600">proven</td>
                   </tr>
                   <tr className="border-t border-gray-100">
                     <td className="px-4 py-1.5">swapOwner</td>
                     <td className="px-4 py-1.5 text-center text-green-600">proven</td>
-                    <td className="px-4 py-1.5 text-center text-muted">open</td>
+                    <td className="px-4 py-1.5 text-center text-green-600">proven</td>
                     <td className="px-4 py-1.5 text-center text-green-600">proven</td>
                   </tr>
                 </tbody>
@@ -301,120 +299,70 @@ export default function SafeOwnerReachabilityPage() {
               Hypotheses
             </h2>
             <p className="leading-relaxed mb-4 text-muted text-[15px]">
-              The proofs use zero axioms. Each theorem requires hypotheses
-              drawn from the function&apos;s preconditions and structural
-              properties of the linked list. The hypotheses vary by function:
+              The proofs use zero axioms. Every hypothesis is either a
+              Solidity <code className="font-mono text-[12px]">require</code>{' '}
+              guard the contract already enforces, or a structural fact
+              about the linked list that holds inductively.
             </p>
             <ul className="space-y-0 border border-gray-200 rounded overflow-hidden text-[14px]">
               <Hypothesis
-                name="hNotZero / hNotSentinel"
-                constraint="owner != 0x0, owner != SENTINEL"
-                source="Solidity require (GS203)"
+                name="Solidity require guards"
+                constraint="owner != 0, owner != SENTINEL, owners[owner] == 0, owners[prevOwner] == owner"
+                source="OwnerManager.sol (GS203–GS205)"
               >
-                The owner cannot be the zero address or the sentinel. These
-                are enforced by{' '}
-                <code className="font-mono text-[12px]">require</code> guards
-                in every ownership-mutating function.
-              </Hypothesis>
-              <Hypothesis
-                name="hFresh"
-                constraint="owners[owner] == 0x0"
-                source="Solidity require (GS204)"
-              >
-                The owner must not already be in the list. A zero mapping
-                value means the address is not yet a node. Used by{' '}
-                <code className="font-mono text-[12px]">addOwner</code> and{' '}
-                <code className="font-mono text-[12px]">swapOwner</code>.
-              </Hypothesis>
-              <Hypothesis
-                name="hPrevLink"
-                constraint="owners[prevOwner] == owner"
-                source="Solidity require (GS205)"
-              >
-                The predecessor must correctly point to the target owner.
-                Used by{' '}
-                <code className="font-mono text-[12px]">removeOwner</code>{' '}
-                and{' '}
-                <code className="font-mono text-[12px]">swapOwner</code> to
-                verify the caller supplied the right predecessor.
+                Every ownership-mutating function begins with{' '}
+                <code className="font-mono text-[12px]">require</code>{' '}
+                checks on its arguments. The proofs consume these as
+                hypotheses in exactly the form the contract enforces, so no
+                additional trust is needed.
               </Hypothesis>
               <Hypothesis
                 name="hPreInv"
                 constraint="pre-state invariant holds"
                 source="Inductive hypothesis"
               >
-                The proof is inductive: it assumes the invariant holds before
-                the function executes and shows it holds after.{' '}
+                The proof is inductive: it assumes the invariant holds
+                before the function executes and shows it holds after.{' '}
                 <code className="font-mono text-[12px]">setupOwners</code>{' '}
-                is the base case and does not require this hypothesis.
+                is the base case and needs{' '}
+                <code className="font-mono text-[12px]">hClean</code>{' '}
+                (all storage slots start zero) instead.
               </Hypothesis>
               <Hypothesis
-                name="hAcyclic"
-                constraint="no internal cycles in the list"
-                source="Proven for setupOwners and addOwner"
+                name="uniquePredecessor"
+                constraint="each non-zero node has at most one non-zero predecessor"
+                source="Preserved by every mutation"
               >
-                The linked list does not cycle back to SENTINEL before
-                reaching its natural end. Proven as a theorem for{' '}
-                <code className="font-mono text-[12px]">setupOwners</code>{' '}
-                and{' '}
-                <code className="font-mono text-[12px]">addOwner</code>.
-                Used as a hypothesis for{' '}
-                <code className="font-mono text-[12px]">removeOwner</code>{' '}
-                and{' '}
-                <code className="font-mono text-[12px]">swapOwner</code>.
-              </Hypothesis>
-              <Hypothesis
-                name="hStrongAcyclic"
-                constraint="reachable(a, b) and reachable(b, a) implies a = b"
-                source="Certora reach_invariant antisymmetry"
-              >
-                Strong acyclicity: the reachability relation is
-                antisymmetric. Required by{' '}
+                The linked list is a simple path with no branching. This is
+                the structural fact that lets{' '}
                 <code className="font-mono text-[12px]">removeOwner</code>{' '}
                 and{' '}
                 <code className="font-mono text-[12px]">swapOwner</code>{' '}
-                to ensure that excising or replacing a node doesn&apos;t
-                orphan downstream nodes through non-SENTINEL cycles.
+                re-route chains through the new node without orphaning
+                anything downstream. It replaces the antisymmetry axiom
+                from Certora&apos;s spec, which is false on Safe&apos;s
+                circular list.
               </Hypothesis>
               <Hypothesis
-                name="hOwnerInList"
-                constraint="next(owner) != 0x0"
-                source="Solidity implicit precondition"
-              >
-                The owner being removed must actually be in the list (has a
-                non-zero successor). Removing a node that isn&apos;t in the
-                list would zero SENTINEL&apos;s pointer. Used by{' '}
-                <code className="font-mono text-[12px]">removeOwner</code>.
-              </Hypothesis>
-              <Hypothesis
-                name="hOldNePrev"
-                constraint="oldOwner != prevOwner"
-                source="Solidity implicit precondition"
+                name="hOwnerInList / hOldNePrev"
+                constraint="the target owner is actually in the list; in swapOwner, oldOwner ≠ prevOwner"
+                source="Implicit Solidity preconditions"
                 border={false}
               >
-                In{' '}
+                Removing or replacing an owner that isn&apos;t in the list
+                would zero SENTINEL&apos;s pointer. In{' '}
                 <code className="font-mono text-[12px]">swapOwner</code>,
-                the old owner cannot be its own predecessor. A self-loop
-                would cause the if-chain in the storage map to zero out the
-                previous owner&apos;s pointer, orphaning the new owner.
+                the old owner cannot be its own predecessor — a self-loop
+                would zero the previous owner&apos;s pointer and orphan the
+                new node.
               </Hypothesis>
             </ul>
-            <p className="mt-2 text-muted text-[13px] leading-relaxed">
-              <code className="font-mono text-[12px]">setupOwners</code>{' '}
-              additionally requires a{' '}
-              <code className="font-mono text-[12px]">hClean</code>{' '}
-              hypothesis (all storage slots are zero) to ensure no stale
-              mappings from a prior state.
-            </p>
             <p className="mt-3 text-muted text-sm space-x-4">
               <ExternalLink href="https://github.com/lfglabs-dev/verity-benchmark/blob/main/Benchmark/Cases/Safe/OwnerManagerReach/Specs.lean">
                 View specs in Lean
               </ExternalLink>
               <ExternalLink href="https://github.com/lfglabs-dev/verity-benchmark/blob/main/Benchmark/Cases/Safe/OwnerManagerReach/Proofs.lean">
                 View proofs in Lean
-              </ExternalLink>
-              <ExternalLink href="https://github.com/lfglabs-dev/verity-benchmark/blob/main/Benchmark/Cases/Safe/OwnerManagerReach/OpenProofs.lean">
-                View open theorems
               </ExternalLink>
             </p>
           </section>
