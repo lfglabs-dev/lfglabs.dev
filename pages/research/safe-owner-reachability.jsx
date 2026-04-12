@@ -251,7 +251,7 @@ export default function SafeOwnerReachabilityPage() {
               Proof status
             </h2>
             <p className="leading-relaxed mb-4 text-muted text-[15px]">
-              All 15 theorems are proven.{' '}
+              All 16 theorems are proven.{' '}
               <ExternalLink href="https://github.com/lfglabs-dev/verity-benchmark/blob/main/Benchmark/Cases/Safe/OwnerManagerReach/Proofs.lean">
                 Proofs.lean
               </ExternalLink>{' '}
@@ -274,7 +274,7 @@ export default function SafeOwnerReachabilityPage() {
                     <td className="px-4 py-1.5 text-center text-green-600">proven</td>
                     <td className="px-4 py-1.5 text-center text-green-600">proven</td>
                     <td className="px-4 py-1.5 text-center text-green-600">proven</td>
-                    <td className="px-4 py-1.5 text-center text-muted">&mdash;</td>
+                    <td className="px-4 py-1.5 text-center text-green-600">proven</td>
                   </tr>
                   <tr className="border-t border-gray-100">
                     <td className="px-4 py-1.5">addOwner</td>
