@@ -262,7 +262,7 @@ export default function SafeOwnerReachabilityPage() {
                 <thead>
                   <tr className="bg-[#f8f8f8] text-left">
                     <th className="px-4 py-2 font-medium text-muted">Function</th>
-                    <th className="px-4 py-2 font-medium text-muted text-center">inListReachable</th>
+                    <th className="px-4 py-2 font-medium text-muted text-center">uniquePredecessor</th>
                     <th className="px-4 py-2 font-medium text-muted text-center">ownerListInvariant</th>
                     <th className="px-4 py-2 font-medium text-muted text-center">acyclicity</th>
                     <th className="px-4 py-2 font-medium text-muted text-center">isOwner</th>
