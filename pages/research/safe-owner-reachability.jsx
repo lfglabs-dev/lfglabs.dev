@@ -133,33 +133,37 @@ export default function SafeOwnerReachabilityPage() {
                 list.
               </p>
               <p className="mb-3 text-muted text-[15px]">
-                In Lean, that goal is split into three named properties:
+                In Lean, that goal is split into four families of properties:
               </p>
               <ul className="mb-3 text-muted list-disc pl-5 space-y-1">
                 <li>
-                  <code className="font-mono text-[12px]">inListReachable</code>
-                  : every node with a non-zero successor is reachable from
-                  SENTINEL
-                </li>
-                <li>
                   <code className="font-mono text-[12px]">ownerListInvariant</code>
                   : membership (non-zero successor) is equivalent to
-                  reachability from SENTINEL (combines{' '}
-                  <code className="font-mono text-[12px]">inListReachable</code> and{' '}
-                  <code className="font-mono text-[12px]">reachableInList</code>)
+                  reachability from SENTINEL
+                </li>
+                <li>
+                  <code className="font-mono text-[12px]">uniquePredecessor</code>
+                  : each non-zero node has at most one non-zero predecessor
+                  (the list is a simple path with no branching)
                 </li>
                 <li>
                   <code className="font-mono text-[12px]">acyclic</code>: the
                   linked list has no internal SENTINEL cycles
                 </li>
+                <li>
+                  <code className="font-mono text-[12px]">isOwner correctness</code>
+                  : each operation changes exactly the intended owners and
+                  leaves all others unchanged
+                </li>
               </ul>
               <p className="text-muted">
-                These correspond to invariants from Certora&apos;s{' '}
+                The invariant properties correspond to Certora&apos;s{' '}
                 <ExternalLink href="https://github.com/safe-fndn/safe-smart-account/blob/main/certora/specs/OwnerReach.spec">
                   OwnerReach.spec
                 </ExternalLink>
-                . Threshold management is elided as it does not affect the
-                owners mapping.
+                . The functional correctness proofs go beyond what Certora
+                specifies. Threshold management is elided as it does not
+                affect the owners mapping.
               </p>
             </Disclosure>
           </section>
@@ -247,7 +251,7 @@ export default function SafeOwnerReachabilityPage() {
               Proof status
             </h2>
             <p className="leading-relaxed mb-4 text-muted text-[15px]">
-              All 12 theorems are proven.{' '}
+              All 15 theorems are proven.{' '}
               <ExternalLink href="https://github.com/lfglabs-dev/verity-benchmark/blob/main/Benchmark/Cases/Safe/OwnerManagerReach/Proofs.lean">
                 Proofs.lean
               </ExternalLink>{' '}
@@ -258,9 +262,10 @@ export default function SafeOwnerReachabilityPage() {
                 <thead>
                   <tr className="bg-[#f8f8f8] text-left">
                     <th className="px-4 py-2 font-medium text-muted">Function</th>
-                    <th className="px-4 py-2 font-medium text-muted text-center">inListReachable</th>
+                    <th className="px-4 py-2 font-medium text-muted text-center">uniquePredecessor</th>
                     <th className="px-4 py-2 font-medium text-muted text-center">ownerListInvariant</th>
                     <th className="px-4 py-2 font-medium text-muted text-center">acyclicity</th>
+                    <th className="px-4 py-2 font-medium text-muted text-center">isOwner</th>
                   </tr>
                 </thead>
                 <tbody className="font-mono">
@@ -269,9 +274,11 @@ export default function SafeOwnerReachabilityPage() {
                     <td className="px-4 py-1.5 text-center text-green-600">proven</td>
                     <td className="px-4 py-1.5 text-center text-green-600">proven</td>
                     <td className="px-4 py-1.5 text-center text-green-600">proven</td>
+                    <td className="px-4 py-1.5 text-center text-muted">&mdash;</td>
                   </tr>
                   <tr className="border-t border-gray-100">
                     <td className="px-4 py-1.5">addOwner</td>
+                    <td className="px-4 py-1.5 text-center text-green-600">proven</td>
                     <td className="px-4 py-1.5 text-center text-green-600">proven</td>
                     <td className="px-4 py-1.5 text-center text-green-600">proven</td>
                     <td className="px-4 py-1.5 text-center text-green-600">proven</td>
@@ -281,9 +288,11 @@ export default function SafeOwnerReachabilityPage() {
                     <td className="px-4 py-1.5 text-center text-green-600">proven</td>
                     <td className="px-4 py-1.5 text-center text-green-600">proven</td>
                     <td className="px-4 py-1.5 text-center text-green-600">proven</td>
+                    <td className="px-4 py-1.5 text-center text-green-600">proven</td>
                   </tr>
                   <tr className="border-t border-gray-100">
                     <td className="px-4 py-1.5">swapOwner</td>
+                    <td className="px-4 py-1.5 text-center text-green-600">proven</td>
                     <td className="px-4 py-1.5 text-center text-green-600">proven</td>
                     <td className="px-4 py-1.5 text-center text-green-600">proven</td>
                     <td className="px-4 py-1.5 text-center text-green-600">proven</td>
@@ -302,7 +311,11 @@ export default function SafeOwnerReachabilityPage() {
               The proofs use zero axioms. Every hypothesis is either a
               Solidity <code className="font-mono text-[12px]">require</code>{' '}
               guard the contract already enforces, or a structural fact
-              about the linked list that holds inductively.
+              about the linked list that holds inductively. Properties like{' '}
+              <code className="font-mono text-[12px]">noSelfLoops</code>,{' '}
+              <code className="font-mono text-[12px]">freshInList</code>, and{' '}
+              <code className="font-mono text-[12px]">acyclic</code> are derived
+              inside the proofs rather than assumed.
             </p>
             <ul className="space-y-0 border border-gray-200 rounded overflow-hidden text-[14px]">
               <Hypothesis
@@ -317,16 +330,21 @@ export default function SafeOwnerReachabilityPage() {
                 additional trust is needed.
               </Hypothesis>
               <Hypothesis
-                name="hPreInv"
-                constraint="pre-state invariant holds"
-                source="Inductive hypothesis"
+                name="SafeOwnerInvariant"
+                constraint="ownerListInvariant + uniquePredecessor + zeroInert"
+                source="Inductive hypothesis (3 fields)"
               >
-                The proof is inductive: it assumes the invariant holds
-                before the function executes and shows it holds after.{' '}
+                The proof is inductive: it assumes the bundled invariant holds
+                before the function executes and shows it holds after. The
+                bundle contains just three fields: the owner-list biconditional,
+                unique predecessors, and zero-address inertness.{' '}
                 <code className="font-mono text-[12px]">setupOwners</code>{' '}
-                is the base case and needs{' '}
-                <code className="font-mono text-[12px]">hClean</code>{' '}
-                (all storage slots start zero) instead.
+                is the base case (needs clean storage instead).
+                Properties like{' '}
+                <code className="font-mono text-[12px]">noSelfLoops</code>{' '}
+                and{' '}
+                <code className="font-mono text-[12px]">freshInList</code>{' '}
+                are derived from these three, not assumed.
               </Hypothesis>
               <Hypothesis
                 name="uniquePredecessor"
@@ -344,17 +362,20 @@ export default function SafeOwnerReachabilityPage() {
                 circular list.
               </Hypothesis>
               <Hypothesis
-                name="hOwnerInList / hOldNePrev"
-                constraint="the target owner is actually in the list; in swapOwner, oldOwner ≠ prevOwner"
-                source="Implicit Solidity preconditions"
+                name="hOwnerInList"
+                constraint="next(owner) != 0 (the target is actually in the list)"
+                source="Implied by require guards + invariant"
                 border={false}
               >
-                Removing or replacing an owner that isn&apos;t in the list
-                would zero SENTINEL&apos;s pointer. In{' '}
-                <code className="font-mono text-[12px]">swapOwner</code>,
-                the old owner cannot be its own predecessor — a self-loop
-                would zero the previous owner&apos;s pointer and orphan the
-                new node.
+                For{' '}
+                <code className="font-mono text-[12px]">removeOwner</code>{' '}
+                and{' '}
+                <code className="font-mono text-[12px]">swapOwner</code>{' '}
+                functional correctness, we need the target owner to actually
+                be in the list. This is implied by{' '}
+                <code className="font-mono text-[12px]">owners[prevOwner] == owner</code>{' '}
+                plus the invariant, but is stated explicitly to keep the
+                correctness proofs self-contained.
               </Hypothesis>
             </ul>
             <p className="mt-3 text-muted text-sm space-x-4">
