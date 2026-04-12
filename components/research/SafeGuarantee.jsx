@@ -3,7 +3,7 @@ import { useState, useEffect, useRef } from 'react'
 const FORMAL_INVARIANTS = [
   '\u2200 key, next(key) \u2260 0 \u2192 reachable(SENTINEL, key)',
   '\u2200 key \u2260 0, next(key) \u2260 0 \u2194 reachable(SENTINEL, key)',
-  '\u2200 a b, reachable(a, b) \u2227 reachable(b, a) \u2192 a = b'
+  '\u2200 x y c \u2260 0, next(x) = c \u2227 next(y) = c \u2192 x = y'
 ]
 
 export default function SafeGuarantee() {
