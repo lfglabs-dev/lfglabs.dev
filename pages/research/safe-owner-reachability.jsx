@@ -7,7 +7,6 @@ import Disclosure from '../../components/research/Disclosure'
 import CodeBlock from '../../components/research/CodeBlock'
 import ExternalLink from '../../components/research/ExternalLink'
 import Hypothesis from '../../components/research/Hypothesis'
-import TikZDiagram from '../../components/research/TikZDiagram'
 import { getSortedResearch } from '../../lib/getSortedResearch'
 
 const VERIFY_COMMAND = `git clone https://github.com/lfglabs-dev/verity-benchmark
@@ -27,7 +26,7 @@ const OWNERS_LINKED_LIST_TIKZ = String.raw`
   ptr/.style={-stealth, thick, shorten >=2pt, shorten <=2pt},
   lbl/.style={font=\tiny, above=1pt, midway}
 ]
-  \node[sentinel] (s) at (0,0) {\texttt{0x1}};
+  \node[sentinel] (s) at (0,0) {\textsf{SENTINEL}};
   \node[box] (a) at (3,0) {\textsf{Owner A}};
   \node[box] (b) at (6,0) {\textsf{Owner B}};
   \node[box] (c) at (9,0) {\textsf{Owner C}};
@@ -37,11 +36,17 @@ const OWNERS_LINKED_LIST_TIKZ = String.raw`
   \draw[ptr] (b) -- node[lbl] {\texttt{owners[B]}} (c);
   \draw[ptr] (c.south) .. controls +(0,-1.2) and +(0,-1.2) .. node[lbl, below=1pt] {\texttt{owners[C]}} (s.south);
 
-  \node[font=\scriptsize, text=black!50] at (0, 0.75) {sentinel};
+  \node[font=\scriptsize, text=black!50] at (0, 0.75) {\texttt{0x1}};
 \end{tikzpicture}
 `
 
-export default function SafeOwnerReachabilityPage() {
+export async function getStaticProps() {
+  const { renderTikz } = require('../../lib/renderTikz')
+  const ownersSvg = await renderTikz(OWNERS_LINKED_LIST_TIKZ)
+  return { props: { ownersSvg } }
+}
+
+export default function SafeOwnerReachabilityPage({ ownersSvg }) {
   const otherResearch = getSortedResearch().filter(
     (r) => r.slug !== 'safe-owner-reachability'
   )
@@ -54,7 +59,7 @@ export default function SafeOwnerReachabilityPage() {
         </title>
         <meta
           name="description"
-          content="Formally verified linked list invariants for Safe smart account OwnerManager, covering all four ownership-mutating functions in Verity and Lean 4."
+          content="Formally verified linked list invariants for the Safe smart account OwnerManager, covering all four ownership-mutating functions in Verity and Lean 4."
         />
       </Head>
       <PageLayout>
@@ -78,6 +83,7 @@ export default function SafeOwnerReachabilityPage() {
           <section className="mb-16">
             <SafeGuarantee />
             <p className="text-muted text-[15px] leading-relaxed">
+              The{' '}
               <ExternalLink href="https://github.com/safe-global/safe-smart-account">
                 Safe smart account
               </ExternalLink>{' '}
@@ -89,13 +95,13 @@ export default function SafeOwnerReachabilityPage() {
               <code className="font-mono text-[13px]">
                 owners: address &rarr; address
               </code>
-              . A sentinel node at address{' '}
-              <code className="font-mono text-[13px]">0x1</code> anchors
-              the list.
+              . The first node of the list is called SENTINEL and anchors
+              the list at address key{' '}
+              <code className="font-mono text-[13px]">0x1</code>.
             </p>
-            <TikZDiagram
-              tikz={OWNERS_LINKED_LIST_TIKZ}
+            <div
               className="my-8 flex justify-center overflow-x-auto"
+              dangerouslySetInnerHTML={{ __html: ownersSvg }}
             />
             <p className="text-muted text-[15px] leading-relaxed">
               The list is updated by four operations:{' '}
@@ -202,37 +208,38 @@ export default function SafeOwnerReachabilityPage() {
               </li>
             </ul>
             <p className="leading-relaxed mb-4">
-              Reachability is expressed using <em>witness chains</em>: a
-              concrete list of addresses where each consecutive pair follows
-              the{' '}
+              How do you prove an owner is in the list? You show a concrete
+              path: start at SENTINEL, follow the{' '}
               <code className="font-mono text-[13px]">owners</code>{' '}
-              mapping. This turns the transitive closure into induction on
-              list indices, making the proof mechanically checkable.
+              mapping one hop at a time, and arrive at that owner. If such a
+              path exists, the owner is reachable. If no path exists, the
+              owner is not in the list.
             </p>
             <p className="leading-relaxed mb-4">
-              The structural property doing the heavy lifting for{' '}
+              Beyond reachability, each function must preserve the full
+              structural invariant: every node has exactly one incoming edge
+              (unique predecessor), the list has no internal cycles, and{' '}
+              <code className="font-mono text-[13px]">isOwner</code>{' '}
+              changes exactly the intended addresses. The unique predecessor
+              property is what makes{' '}
               <code className="font-mono text-[13px]">removeOwner</code>{' '}
               and{' '}
               <code className="font-mono text-[13px]">swapOwner</code>{' '}
-              is{' '}
-              <em>unique predecessor</em>: each non-zero node in the list
-              has at most one non-zero predecessor. An earlier draft used
-              antisymmetry of reachability (matching Certora&apos;s{' '}
-              <code className="font-mono text-[13px]">reach_invariant</code>{' '}
-              axiom), but antisymmetry is false on Safe&apos;s circular list{' '}
-              (<code className="font-mono text-[13px]">SENTINEL &rarr; o &rarr; SENTINEL</code>{' '}
-              makes both directions reachable). Unique-predecessor captures
-              the same &ldquo;simple path, no branching&rdquo; truth and is
-              preserved by every mutation.
+              work: if you re-route a pointer, you need to know that nothing
+              else was pointing to the old target. Because each node has
+              exactly one incoming edge, that guarantee holds. An earlier
+              draft assumed antisymmetry of reachability (matching
+              Certora&apos;s spec), but that property is false on circular
+              lists. Unique predecessor captures the same &ldquo;no
+              branching&rdquo; truth without breaking on the cycle.
             </p>
             <p className="leading-relaxed mb-4">
-              Reference proofs are provided in{' '}
+              All proofs are verified by Lean 4&apos;s kernel and are
+              provided in{' '}
               <ExternalLink href="https://github.com/lfglabs-dev/verity-benchmark/blob/main/Benchmark/Cases/Safe/OwnerManagerReach/Proofs.lean">
                 Proofs.lean
               </ExternalLink>
-              . The proof is checked by Lean 4&apos;s kernel, a small
-              program that accepts or rejects proofs deterministically. If
-              the proof were wrong, it would not compile.
+              . If any step were wrong, the code would not compile.
             </p>
             <Disclosure title="Verify it yourself" className="mb-4">
               <CodeBlock>{VERIFY_COMMAND}</CodeBlock>
@@ -251,7 +258,7 @@ export default function SafeOwnerReachabilityPage() {
               Proof status
             </h2>
             <p className="leading-relaxed mb-4 text-muted text-[15px]">
-              All 15 theorems are proven.{' '}
+              All 16 theorems are proven.{' '}
               <ExternalLink href="https://github.com/lfglabs-dev/verity-benchmark/blob/main/Benchmark/Cases/Safe/OwnerManagerReach/Proofs.lean">
                 Proofs.lean
               </ExternalLink>{' '}
@@ -274,7 +281,7 @@ export default function SafeOwnerReachabilityPage() {
                     <td className="px-4 py-1.5 text-center text-green-600">proven</td>
                     <td className="px-4 py-1.5 text-center text-green-600">proven</td>
                     <td className="px-4 py-1.5 text-center text-green-600">proven</td>
-                    <td className="px-4 py-1.5 text-center text-muted">&mdash;</td>
+                    <td className="px-4 py-1.5 text-center text-green-600">proven</td>
                   </tr>
                   <tr className="border-t border-gray-100">
                     <td className="px-4 py-1.5">addOwner</td>
@@ -302,20 +309,23 @@ export default function SafeOwnerReachabilityPage() {
             </div>
           </section>
 
-          {/* Hypotheses */}
+          {/* Assumptions */}
           <section className="mb-20">
             <h2 className="font-serif text-lg font-semibold tracking-tight mb-4">
-              Hypotheses
+              Assumptions
             </h2>
             <p className="leading-relaxed mb-4 text-muted text-[15px]">
-              The proofs use zero axioms. Every hypothesis is either a
-              Solidity <code className="font-mono text-[12px]">require</code>{' '}
-              guard the contract already enforces, or a structural fact
-              about the linked list that holds inductively. Properties like{' '}
+              The proofs use zero axioms. The only assumptions are the
+              Solidity{' '}
+              <code className="font-mono text-[12px]">require</code>{' '}
+              guards the contract already enforces, and a three-field
+              inductive invariant that is proven preserved by every
+              mutation. Properties like{' '}
               <code className="font-mono text-[12px]">noSelfLoops</code>,{' '}
-              <code className="font-mono text-[12px]">freshInList</code>, and{' '}
-              <code className="font-mono text-[12px]">acyclic</code> are derived
-              inside the proofs rather than assumed.
+              <code className="font-mono text-[12px]">freshInList</code>,{' '}
+              and{' '}
+              <code className="font-mono text-[12px]">acyclic</code>{' '}
+              are derived inside the proofs, not assumed.
             </p>
             <ul className="space-y-0 border border-gray-200 rounded overflow-hidden text-[14px]">
               <Hypothesis
@@ -325,57 +335,29 @@ export default function SafeOwnerReachabilityPage() {
               >
                 Every ownership-mutating function begins with{' '}
                 <code className="font-mono text-[12px]">require</code>{' '}
-                checks on its arguments. The proofs consume these as
-                hypotheses in exactly the form the contract enforces, so no
-                additional trust is needed.
+                checks on its arguments. The proofs consume these in
+                exactly the form the contract enforces, so no additional
+                trust is needed.
               </Hypothesis>
               <Hypothesis
-                name="SafeOwnerInvariant"
+                name="SafeOwnerInvariant (inductive)"
                 constraint="ownerListInvariant + uniquePredecessor + zeroInert"
-                source="Inductive hypothesis (3 fields)"
-              >
-                The proof is inductive: it assumes the bundled invariant holds
-                before the function executes and shows it holds after. The
-                bundle contains just three fields: the owner-list biconditional,
-                unique predecessors, and zero-address inertness.{' '}
-                <code className="font-mono text-[12px]">setupOwners</code>{' '}
-                is the base case (needs clean storage instead).
-                Properties like{' '}
-                <code className="font-mono text-[12px]">noSelfLoops</code>{' '}
-                and{' '}
-                <code className="font-mono text-[12px]">freshInList</code>{' '}
-                are derived from these three, not assumed.
-              </Hypothesis>
-              <Hypothesis
-                name="uniquePredecessor"
-                constraint="each non-zero node has at most one non-zero predecessor"
-                source="Preserved by every mutation"
-              >
-                The linked list is a simple path with no branching. This is
-                the structural fact that lets{' '}
-                <code className="font-mono text-[12px]">removeOwner</code>{' '}
-                and{' '}
-                <code className="font-mono text-[12px]">swapOwner</code>{' '}
-                re-route chains through the new node without orphaning
-                anything downstream. It replaces the antisymmetry axiom
-                from Certora&apos;s spec, which is false on Safe&apos;s
-                circular list.
-              </Hypothesis>
-              <Hypothesis
-                name="hOwnerInList"
-                constraint="next(owner) != 0 (the target is actually in the list)"
-                source="Implied by require guards + invariant"
+                source="Proven preserved by every mutation"
                 border={false}
               >
-                For{' '}
-                <code className="font-mono text-[12px]">removeOwner</code>{' '}
+                The proof is inductive: it assumes this bundled invariant
+                holds before a function executes and proves it still holds
+                after. The bundle contains three fields: the owner-list
+                biconditional (membership equals reachability), unique
+                predecessors (no branching), and zero-address inertness.{' '}
+                <code className="font-mono text-[12px]">setupOwners</code>{' '}
+                establishes it from clean storage (base case);{' '}
+                <code className="font-mono text-[12px]">addOwner</code>,{' '}
+                <code className="font-mono text-[12px]">removeOwner</code>,
                 and{' '}
                 <code className="font-mono text-[12px]">swapOwner</code>{' '}
-                functional correctness, we need the target owner to actually
-                be in the list. This is implied by{' '}
-                <code className="font-mono text-[12px]">owners[prevOwner] == owner</code>{' '}
-                plus the invariant, but is stated explicitly to keep the
-                correctness proofs self-contained.
+                each preserve it (inductive step). Because preservation is
+                proven, the invariant is a theorem, not a blind assumption.
               </Hypothesis>
             </ul>
             <p className="mt-3 text-muted text-sm space-x-4">
