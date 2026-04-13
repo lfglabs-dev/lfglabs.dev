@@ -6,6 +6,7 @@ import NexusMutualGuarantee from '../../components/research/NexusMutualGuarantee
 import Disclosure from '../../components/research/Disclosure'
 import CodeBlock from '../../components/research/CodeBlock'
 import ExternalLink from '../../components/research/ExternalLink'
+import PriceBandDiagram from '../../components/research/PriceBandDiagram'
 import { research } from '../../data/research'
 
 function Hypothesis({ name, constraint, source, children, border = true }) {
@@ -103,6 +104,7 @@ export default function NexusMutualBookValuePage() {
               than 1%, but the invariant always holds: sell price never exceeds
               book value, and buy price never drops below it.
             </p>
+            <PriceBandDiagram className="my-8" />
             <p className="mt-2 text-muted text-[15px]">
               <ExternalLink href="https://github.com/NexusMutual/smart-contracts/blob/release-candidate/contracts/modules/capital/Ramm.sol">
                 View source contract
