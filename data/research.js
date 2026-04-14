@@ -1,5 +1,15 @@
 export const research = [
   {
+    slug: 'stream-recovery-claim',
+    title: 'StreamRecoveryClaim Accounting Invariants',
+    subtitle:
+      'Formally verified claim accounting for the Sonic Earn Recovery System.',
+    description:
+      'How we proved payout correctness, solvency, and cross-token independence across all claim functions in StreamRecoveryClaim using Verity and Lean 4.',
+    date: '2026-04-14',
+    tag: 'Case study'
+  },
+  {
     slug: 'safe-owner-reachability',
     title: 'Safe Owner List Invariants',
     subtitle:
