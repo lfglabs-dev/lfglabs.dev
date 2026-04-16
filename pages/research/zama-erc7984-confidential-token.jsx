@@ -23,6 +23,8 @@ const UPSTREAM_CONTRACTS =
 const VERITY_CONTRACT =
   'https://github.com/lfglabs-dev/verity-benchmark/blob/main/Benchmark/Cases/Zama/ERC7984ConfidentialToken/Contract.lean'
 
+const PR_22 = 'https://github.com/lfglabs-dev/verity-benchmark/pull/22'
+
 export default function ZamaERC7984Page() {
   const otherResearch = getSortedResearch().filter(
     (r) => r.slug !== 'zama-erc7984-confidential-token'
@@ -71,7 +73,7 @@ export default function ZamaERC7984Page() {
             </p>
             <ConfidentialTransferDiagram className="my-8" />
             <p className="mt-4 text-muted text-[15px] leading-relaxed">
-              The key semantic difference from ERC-20: because the contract
+              The main difference from ERC-20: because the contract
               cannot branch on encrypted values, transfers with insufficient
               balance <em>silently transfer zero</em> instead of reverting.{' '}
               <code className="font-mono text-[13px]">FHE.select</code> picks
@@ -112,11 +114,11 @@ export default function ZamaERC7984Page() {
               signal that anything went wrong.
             </p>
             <p className="leading-relaxed mb-6">
-              The confidentiality guarantee cuts both ways: it protects user
-              privacy, but it also hides accounting errors. Formal verification
-              is the way to close this gap. If the invariants hold for all
-              possible inputs, the accounting is correct regardless of what the
-              ciphertexts contain.
+              The confidentiality that protects users also hides accounting
+              errors. If a bug caused tokens to silently vanish, there would be
+              no on-chain signal. Formal verification closes that gap: if the
+              invariants hold for all inputs, the accounting is correct
+              regardless of what the ciphertexts contain.
             </p>
             <Disclosure title="What these invariants cover">
               <p className="mb-3 text-muted text-[15px]">
@@ -135,8 +137,8 @@ export default function ZamaERC7984Page() {
               <p className="text-muted">
                 Out of scope: the FHE encryption layer (handled by
                 Zama&apos;s TFHE library), the ACL system (
-                <code className="font-mono text-[12px]">FHE.allow</code>
-                &mdash; controls ciphertext access, not balances),
+                <code className="font-mono text-[12px]">FHE.allow</code>,
+                which controls ciphertext access, not balances),
                 cryptographic proof verification (
                 <code className="font-mono text-[12px]">fromExternal</code>{' '}
                 + <code className="font-mono text-[12px]">inputProof</code>
@@ -154,70 +156,23 @@ export default function ZamaERC7984Page() {
               How this was proven
             </h2>
             <p className="leading-relaxed mb-4">
-              ERC-7984 operates on encrypted values, but FHE is{' '}
-              <em>homomorphic</em>: if{' '}
-              <code className="font-mono text-[13px]">f(a, b) = c</code> on
-              plaintext, then{' '}
-              <code className="font-mono text-[13px]">
-                f(enc(a), enc(b)) = enc(c)
-              </code>{' '}
-              on ciphertexts. This means proving a property on plaintext values
-              is equivalent to proving it on ciphertexts. Zama&apos;s TFHE
-              library provides the cryptographic guarantee; we verify the
-              logic.
-            </p>
-            <Disclosure title="FHE-to-plaintext substitutions">
-              <ul className="text-[15px] leading-relaxed list-disc pl-5 space-y-2">
-                <li>
-                  <code className="font-mono text-[13px]">euint64</code>{' '}
-                  &rarr;{' '}
-                  <code className="font-mono text-[13px]">Uint256</code> with
-                  explicit{' '}
-                  <code className="font-mono text-[13px]">mod 2^64</code>{' '}
-                  wrapping
-                </li>
-                <li>
-                  <code className="font-mono text-[13px]">
-                    FHE.select(cond, a, b)
-                  </code>{' '}
-                  &rarr;{' '}
-                  <code className="font-mono text-[13px]">
-                    if cond then a else b
-                  </code>
-                </li>
-                <li>
-                  <code className="font-mono text-[13px]">
-                    FHE.add / FHE.sub
-                  </code>{' '}
-                  &rarr; wrapping arithmetic at{' '}
-                  <code className="font-mono text-[13px]">2^64</code>
-                </li>
-              </ul>
-            </Disclosure>
-            <p className="leading-relaxed mb-4 mt-4">
-              The contract was modeled in{' '}
-              <ExternalLink href={VERITY_CONTRACT}>Verity</ExternalLink> from
-              OpenZeppelin&apos;s{' '}
-              <ExternalLink href={UPSTREAM_CONTRACTS}>
-                confidential-contracts
-              </ExternalLink>{' '}
-              implementation. The model captures the three paths through{' '}
+              The{' '}
+              <ExternalLink href={VERITY_CONTRACT}>contract model</ExternalLink>{' '}
+              captures the three paths through{' '}
               <code className="font-mono text-[13px]">_update</code>:
-              transfer (from and to are non-zero), mint (from is zero), and
-              burn (to is zero). Each path uses{' '}
+              transfer, mint, and burn, using{' '}
               <code className="font-mono text-[13px]">tryIncrease64</code> /{' '}
               <code className="font-mono text-[13px]">tryDecrease64</code>{' '}
-              for overflow-safe arithmetic, matching the Solidity exactly.
-              {' '}The only structural simplification is the operator mapping:
-              Verity does not support nested mappings, so operator expiry
-              is passed as a function parameter instead of read from{' '}
+              for overflow-safe arithmetic, matching the Solidity exactly. The
+              only structural simplification: Verity does not support nested
+              mappings, so operator expiry is passed as a function parameter
+              instead of read from{' '}
               <code className="font-mono text-[13px]">
                 _operators[holder][spender]
               </code>.
             </p>
             <p className="leading-relaxed mb-4">
-              How do you prove tokens are conserved across a confidential
-              transfer? You show that{' '}
+              Token conservation is straightforward to state: show that{' '}
               <code className="font-mono text-[13px]">
                 balances[from] + balances[to]
               </code>{' '}
@@ -230,8 +185,14 @@ export default function ZamaERC7984Page() {
               trivially preserved.
             </p>
             <p className="leading-relaxed mb-4">
-              All proofs are verified by Lean 4&apos;s kernel. If any step
-              were wrong, the code would not compile.
+              Outside the FHE layer, there is a subtler thing to prove. In a
+              standard ERC-20, a transfer with insufficient balance reverts.
+              That revert is public: an on-chain observer can tell the sender
+              was short. ERC-7984 does not revert. We{' '}
+              <ExternalLink href={PR_22}>formally proved</ExternalLink> that
+              the transfer path never reverts on insufficient balance. The
+              privacy guarantee holds for every possible execution, not just
+              the cases someone thought to test.
             </p>
             <Disclosure title="Verify it yourself" className="mb-4">
               <CodeBlock>{VERIFY_COMMAND}</CodeBlock>
