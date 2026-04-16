@@ -1,5 +1,15 @@
 export const research = [
   {
+    slug: 'zama-erc7984-confidential-token',
+    title: 'ERC-7984 Confidential Token Invariants',
+    subtitle:
+      'Formally verified accounting properties of the Confidential Token Standard.',
+    description:
+      'How we proved transfer conservation, mint/burn correctness, and overflow protection for ERC-7984 (Zama fhEVM + OpenZeppelin) using Verity and Lean 4.',
+    date: '2026-04-16',
+    tag: 'Case study'
+  },
+  {
     slug: 'stream-recovery-claim',
     title: 'StreamRecoveryClaim Accounting Invariants',
     subtitle:
