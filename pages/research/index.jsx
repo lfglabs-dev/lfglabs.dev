@@ -15,7 +15,8 @@ const caseStudyOrder = [
   'safe-owner-reachability',
   'lido-vault-solvency',
   'nexus-mutual-book-value',
-  'stream-recovery-claim'
+  'stream-recovery-claim',
+  'kleros-sortition-tree'
 ]
 
 export default function ResearchPage() {

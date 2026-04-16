@@ -1,5 +1,15 @@
 export const research = [
   {
+    slug: 'kleros-sortition-tree',
+    title: 'Kleros Sortition Tree Conservation & Draw Invariants',
+    subtitle:
+      'Formally verified stake conservation and fair juror selection for the Kleros dispute resolution protocol.',
+    description:
+      'How we proved total stake conservation and draw fairness across the Kleros sortition tree using Verity and Lean 4.',
+    date: '2026-04-16',
+    tag: 'Case study'
+  },
+  {
     slug: 'stream-recovery-claim',
     title: 'StreamRecoveryClaim Accounting Invariants',
     subtitle:
