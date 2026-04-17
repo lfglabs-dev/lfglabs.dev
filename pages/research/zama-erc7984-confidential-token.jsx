@@ -387,7 +387,7 @@ export default function ZamaERC7984Page() {
                 four derived constraints follow from this bound:
                 <ul className="mt-2 space-y-1.5 border border-gray-200 rounded overflow-hidden">
                   {[
-                    { name: 'hAmount64', constraint: 'amount < 2^64', note: 'Amounts are euint64 ciphertext handles — the FHE layer enforces this.' },
+                    { name: 'hAmount64', constraint: 'amount < 2^64', note: 'Amounts are euint64 ciphertext handles; the FHE layer enforces this.' },
                     { name: 'hFromBal64', constraint: 'balances[from] < 2^64', note: 'No individual balance can exceed total supply.' },
                     { name: 'hToBal64', constraint: 'balances[to] < 2^64', note: 'Same reasoning.' },
                     { name: 'hToNoWrap', constraint: 'balances[to] + amount < 2^64', note: 'Both are bounded by totalSupply, so their sum stays in range. Conservation proof only.' },
@@ -416,7 +416,7 @@ export default function ZamaERC7984Page() {
                 <code className="font-mono text-[12px]">
                   ERC7984ZeroBalance
                 </code>{' '}
-                if not — meaning the transfer is from an account that has
+                if not, meaning the transfer is from an account that has
                 received tokens before.
               </Hypothesis>
               <Hypothesis
