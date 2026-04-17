@@ -165,7 +165,15 @@ export default function ZamaERC7984Page() {
               Arithmetic uses{' '}
               <code className="font-mono text-[13px]">tryIncrease64</code> /{' '}
               <code className="font-mono text-[13px]">tryDecrease64</code>,
-              matching the Solidity exactly.{' '}
+              matching the Solidity exactly. Because{' '}
+              <code className="font-mono text-[13px]">euint64</code> values are
+              modeled as{' '}
+              <code className="font-mono text-[13px]">Uint256</code> rather
+              than a bounded type, some theorem statements carry explicit{' '}
+              <code className="font-mono text-[13px]">{'< 2^64'}</code>{' '}
+              preconditions on inputs and balances; these reflect what the FHE
+              type enforces at the contract level, not additional contract
+              assumptions.{' '}
               <code className="font-mono text-[13px]">_operators</code> is
               modeled as a native nested mapping via{' '}
               <code className="font-mono text-[13px]">storageMap2</code>.{' '}
@@ -367,41 +375,10 @@ export default function ZamaERC7984Page() {
               Assumptions
             </h2>
             <p className="leading-relaxed mb-4 text-muted text-[15px]">
-              The proofs use zero axioms. Everything flows from one root
-              constraint:{' '}
-              <code className="font-mono text-[12px]">totalSupply &lt; 2^64</code>.
-              The two remaining hypotheses encode plaintext preconditions that
-              the contract checks explicitly.
+              The proofs use zero axioms. Two hypotheses encode plaintext
+              preconditions that the contract checks explicitly.
             </p>
             <ul className="space-y-0 border border-gray-200 rounded overflow-hidden text-[14px]">
-              <Hypothesis
-                name="hSupply64"
-                constraint="totalSupply < 2^64"
-                source="self-enforcing"
-              >
-                The root constraint. Self-enforcing: the{' '}
-                <code className="font-mono text-[12px]">mint_overflow_protection</code>{' '}
-                theorem proves that any mint that would push supply past{' '}
-                <code className="font-mono text-[12px]">2^64</code> silently
-                mints nothing, so the supply can never actually reach it. All
-                four derived constraints follow from this bound:
-                <ul className="mt-2 space-y-1.5 border border-gray-200 rounded overflow-hidden">
-                  {[
-                    { name: 'hAmount64', constraint: 'amount < 2^64', note: 'Amounts are euint64 ciphertext handles; the FHE layer enforces this.' },
-                    { name: 'hFromBal64', constraint: 'balances[from] < 2^64', note: 'No individual balance can exceed total supply.' },
-                    { name: 'hToBal64', constraint: 'balances[to] < 2^64', note: 'Same reasoning.' },
-                    { name: 'hToNoWrap', constraint: 'balances[to] + amount < 2^64', note: 'Both are bounded by totalSupply, so their sum stays in range. Conservation proof only.' },
-                  ].map(({ name, constraint, note }) => (
-                    <li key={name} className="list-none px-4 py-2 border-b border-gray-100 last:border-0">
-                      <div className="flex items-baseline gap-3">
-                        <code className="font-mono text-[11px] font-medium text-muted/80 flex-shrink-0">{name}</code>
-                        <span className="text-muted text-[12px]">{constraint}</span>
-                      </div>
-                      <p className="mt-0.5 text-[12px] text-muted/70 pl-0">{note}</p>
-                    </li>
-                  ))}
-                </ul>
-              </Hypothesis>
               <Hypothesis
                 name="hInit"
                 constraint="balanceInitialized[from] != 0"
