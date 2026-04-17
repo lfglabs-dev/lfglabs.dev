@@ -12,7 +12,7 @@ import { getSortedResearch } from '../../lib/getSortedResearch'
 
 const VERIFY_COMMAND = `git clone https://github.com/lfglabs-dev/verity-benchmark
 cd verity-benchmark
-lake build Benchmark.Generated.Zama.ERC7984ConfidentialToken.Tasks.TransferConservation`
+lake build Benchmark.Cases.Zama.ERC7984ConfidentialToken.Proofs`
 
 const UPSTREAM_STANDARD =
   'https://www.zama.org/post/erc-7984-the-confidential-token-standard-explained'
@@ -23,7 +23,6 @@ const UPSTREAM_CONTRACTS =
 const VERITY_CONTRACT =
   'https://github.com/lfglabs-dev/verity-benchmark/blob/main/Benchmark/Cases/Zama/ERC7984ConfidentialToken/Contract.lean'
 
-const PR_22 = 'https://github.com/lfglabs-dev/verity-benchmark/pull/22'
 
 export default function ZamaERC7984Page() {
   const otherResearch = getSortedResearch().filter(
@@ -122,17 +121,17 @@ export default function ZamaERC7984Page() {
             </p>
             <Disclosure title="What these invariants cover">
               <p className="mb-3 text-muted text-[15px]">
-                The proofs cover the core accounting of all four state-mutating
-                functions:{' '}
-                <code className="font-mono text-[12px]">transfer</code>,{' '}
-                <code className="font-mono text-[12px]">transferFrom</code>,{' '}
-                <code className="font-mono text-[12px]">mint</code>, and{' '}
-                <code className="font-mono text-[12px]">burn</code>. Eight
-                theorems verify: balance conservation across transfers,
-                correct behavior for both sufficient and insufficient balances,
-                supply isolation from transfers, mint/burn supply correctness,
-                overflow protection, and non-revertability on insufficient
-                balance (the contract-level non-leakage guarantee).
+                Eleven theorems across five functions:{' '}
+                <code className="font-mono text-[12px]">transfer</code> (conservation,
+                sufficient, insufficient, no-revert, preserves supply),{' '}
+                <code className="font-mono text-[12px]">transferFrom</code>{' '}
+                (conservation),{' '}
+                <code className="font-mono text-[12px]">mint</code>{' '}
+                (increases supply, overflow protection),{' '}
+                <code className="font-mono text-[12px]">burn</code>{' '}
+                (sufficient, insufficient), and{' '}
+                <code className="font-mono text-[12px]">setOperator</code>{' '}
+                (state update correctness).
               </p>
               <p className="text-muted">
                 Out of scope: the FHE encryption layer (handled by
@@ -158,18 +157,22 @@ export default function ZamaERC7984Page() {
             <p className="leading-relaxed mb-4">
               The{' '}
               <ExternalLink href={VERITY_CONTRACT}>contract model</ExternalLink>{' '}
-              captures the three paths through{' '}
-              <code className="font-mono text-[13px]">_update</code>:
-              transfer, mint, and burn, using{' '}
+              covers all five functions: the three{' '}
+              <code className="font-mono text-[13px]">_update</code> paths
+              (transfer, mint, burn), plus{' '}
+              <code className="font-mono text-[13px]">transferFrom</code> and{' '}
+              <code className="font-mono text-[13px]">setOperator</code>.
+              Arithmetic uses{' '}
               <code className="font-mono text-[13px]">tryIncrease64</code> /{' '}
-              <code className="font-mono text-[13px]">tryDecrease64</code>{' '}
-              for overflow-safe arithmetic, matching the Solidity exactly. The
-              only structural simplification: Verity does not support nested
-              mappings, so operator expiry is passed as a function parameter
-              instead of read from{' '}
-              <code className="font-mono text-[13px]">
-                _operators[holder][spender]
-              </code>.
+              <code className="font-mono text-[13px]">tryDecrease64</code>,
+              matching the Solidity exactly.{' '}
+              <code className="font-mono text-[13px]">_operators</code> is
+              modeled as a native nested mapping via{' '}
+              <code className="font-mono text-[13px]">storageMap2</code>.{' '}
+              <code className="font-mono text-[13px]">blockTimestamp</code> is
+              passed as an explicit parameter to{' '}
+              <code className="font-mono text-[13px]">transferFrom</code> for
+              the operator expiry check.
             </p>
             <p className="leading-relaxed mb-4">
               Token conservation is straightforward to state: show that{' '}
@@ -185,14 +188,19 @@ export default function ZamaERC7984Page() {
               trivially preserved.
             </p>
             <p className="leading-relaxed mb-4">
-              Outside the FHE layer, there is a subtler thing to prove. In a
-              standard ERC-20, a transfer with insufficient balance reverts.
-              That revert is public: an on-chain observer can tell the sender
-              was short. ERC-7984 does not revert. We{' '}
-              <ExternalLink href={PR_22}>formally proved</ExternalLink> that
-              the transfer path never reverts on insufficient balance. The
-              privacy guarantee holds for every possible execution, not just
-              the cases someone thought to test.
+              Most theorems handle the two branches of{' '}
+              <code className="font-mono text-[13px]">FHE.select</code>{' '}
+              separately: the sufficient-balance path and the
+              insufficient-balance path. Each branch reduces to a concrete
+              arithmetic statement that the proof checker verifies
+              automatically. The non-revert theorem works differently: instead
+              of branching on balance, it goes through every{' '}
+              <code className="font-mono text-[13px]">require</code> in the
+              function and shows each one is already satisfied by the
+              preconditions. Since no{' '}
+              <code className="font-mono text-[13px]">require</code> checks
+              whether the balance is sufficient, balance never enters the
+              picture.
             </p>
             <Disclosure title="Verify it yourself" className="mb-4">
               <CodeBlock>{VERIFY_COMMAND}</CodeBlock>
@@ -211,7 +219,8 @@ export default function ZamaERC7984Page() {
               Proof status
             </h2>
             <p className="leading-relaxed mb-4 text-muted text-[15px]">
-              All 8 theorems are proven. Every task file is{' '}
+              All 11 theorems are proven across five functions. Every task file
+              is{' '}
               <code className="font-mono text-[12px]">sorry</code>-free.
             </p>
             <div className="overflow-x-auto border border-gray-200 rounded">
@@ -292,8 +301,8 @@ export default function ZamaERC7984Page() {
                     <td className="px-4 py-1.5 text-center text-green-600">
                       proven
                     </td>
-                    <td className="px-4 py-1.5 text-center text-muted">
-                      &mdash;
+                    <td className="px-4 py-1.5 text-center text-green-600">
+                      proven
                     </td>
                     <td className="px-4 py-1.5 text-center text-muted">
                       &mdash;
@@ -305,6 +314,36 @@ export default function ZamaERC7984Page() {
                       &mdash;
                     </td>
                   </tr>
+                  <tr className="border-t border-gray-100">
+                    <td className="px-4 py-1.5">transferFrom</td>
+                    <td className="px-4 py-1.5 text-center text-green-600">
+                      proven
+                    </td>
+                    <td className="px-4 py-1.5 text-center text-muted">
+                      &mdash;
+                    </td>
+                    <td className="px-4 py-1.5 text-center text-muted">
+                      &mdash;
+                    </td>
+                    <td className="px-4 py-1.5 text-center text-muted">
+                      &mdash;
+                    </td>
+                    <td className="px-4 py-1.5 text-center text-muted">
+                      &mdash;
+                    </td>
+                    <td className="px-4 py-1.5 text-center text-muted">
+                      &mdash;
+                    </td>
+                  </tr>
+                  <tr className="border-t border-gray-100">
+                    <td className="px-4 py-1.5">setOperator</td>
+                    <td
+                      colSpan={6}
+                      className="px-4 py-1.5 text-center text-green-600"
+                    >
+                      updates proven
+                    </td>
+                  </tr>
                 </tbody>
               </table>
             </div>
@@ -314,9 +353,11 @@ export default function ZamaERC7984Page() {
               covers it. <strong>Insufficient</strong>: no change when balance
               is too low. <strong>No revert</strong>: transfer does not revert
               on insufficient balance. <strong>Supply</strong>: totalSupply
-              changes correctly
-              (or not at all for transfers). <strong>Overflow</strong>: mint
-              detects uint64 overflow and mints nothing.
+              changes correctly (or not at all for transfers).{' '}
+              <strong>Overflow</strong>: mint detects uint64 overflow and mints
+              nothing. <strong>setOperator</strong> has a separate updates
+              theorem: it writes exactly the caller/operator expiry pair without
+              affecting any other storage.
             </p>
           </section>
 
@@ -326,56 +367,48 @@ export default function ZamaERC7984Page() {
               Assumptions
             </h2>
             <p className="leading-relaxed mb-4 text-muted text-[15px]">
-              The proofs use zero axioms. The theorems require these
-              hypotheses, which encode constraints about valid{' '}
-              <code className="font-mono text-[12px]">euint64</code> state:
+              The proofs use zero axioms. Everything flows from one root
+              constraint:{' '}
+              <code className="font-mono text-[12px]">totalSupply &lt; 2^64</code>.
+              The two remaining hypotheses encode plaintext preconditions that
+              the contract checks explicitly.
             </p>
             <ul className="space-y-0 border border-gray-200 rounded overflow-hidden text-[14px]">
               <Hypothesis
-                name="hAmount64"
-                constraint="amount < 2^64"
-                source="euint64 range"
-              >
-                Transfer, mint, and burn amounts are valid{' '}
-                <code className="font-mono text-[12px]">euint64</code> values.
-                In the real contract, the FHE layer enforces this: ciphertext
-                handles always encrypt values in{' '}
-                <code className="font-mono text-[12px]">[0, 2^64)</code>.
-              </Hypothesis>
-              <Hypothesis
-                name="hFromBal64"
-                constraint="balances[from] < 2^64"
-                source="euint64 range"
-              >
-                Sender balance is a valid{' '}
-                <code className="font-mono text-[12px]">euint64</code>. Same
-                reasoning: all stored ciphertext handles decrypt to values in
-                range.
-              </Hypothesis>
-              <Hypothesis
-                name="hToBal64"
-                constraint="balances[to] < 2^64"
-                source="euint64 range"
-              >
-                Receiver balance is a valid{' '}
-                <code className="font-mono text-[12px]">euint64</code>.
-              </Hypothesis>
-              <Hypothesis
                 name="hSupply64"
                 constraint="totalSupply < 2^64"
-                source="euint64 range"
+                source="self-enforcing"
               >
-                Total supply is a valid{' '}
-                <code className="font-mono text-[12px]">euint64</code>.
-                Required by mint and burn proofs.
+                The root constraint. Self-enforcing: the{' '}
+                <code className="font-mono text-[12px]">mint_overflow_protection</code>{' '}
+                theorem proves that any mint that would push supply past{' '}
+                <code className="font-mono text-[12px]">2^64</code> silently
+                mints nothing, so the supply can never actually reach it. All
+                four derived constraints follow from this bound:
+                <ul className="mt-2 space-y-1.5 border border-gray-200 rounded overflow-hidden">
+                  {[
+                    { name: 'hAmount64', constraint: 'amount < 2^64', note: 'Amounts are euint64 ciphertext handles — the FHE layer enforces this.' },
+                    { name: 'hFromBal64', constraint: 'balances[from] < 2^64', note: 'No individual balance can exceed total supply.' },
+                    { name: 'hToBal64', constraint: 'balances[to] < 2^64', note: 'Same reasoning.' },
+                    { name: 'hToNoWrap', constraint: 'balances[to] + amount < 2^64', note: 'Both are bounded by totalSupply, so their sum stays in range. Conservation proof only.' },
+                  ].map(({ name, constraint, note }) => (
+                    <li key={name} className="list-none px-4 py-2 border-b border-gray-100 last:border-0">
+                      <div className="flex items-baseline gap-3">
+                        <code className="font-mono text-[11px] font-medium text-muted/80 flex-shrink-0">{name}</code>
+                        <span className="text-muted text-[12px]">{constraint}</span>
+                      </div>
+                      <p className="mt-0.5 text-[12px] text-muted/70 pl-0">{note}</p>
+                    </li>
+                  ))}
+                </ul>
               </Hypothesis>
               <Hypothesis
                 name="hInit"
                 constraint="balanceInitialized[from] != 0"
                 source="FHE.isInitialized gate"
               >
-                The sender&apos;s balance has been initialized. The real
-                contract checks{' '}
+                The sender&apos;s balance has been initialized. The contract
+                checks{' '}
                 <code className="font-mono text-[12px]">
                   FHE.isInitialized(fromBalance)
                 </code>{' '}
@@ -383,29 +416,18 @@ export default function ZamaERC7984Page() {
                 <code className="font-mono text-[12px]">
                   ERC7984ZeroBalance
                 </code>{' '}
-                if not. This hypothesis encodes that the transfer is from an
-                account that has received tokens before.
+                if not — meaning the transfer is from an account that has
+                received tokens before.
               </Hypothesis>
               <Hypothesis
                 name="hDistinct"
                 constraint="sender != recipient"
                 source="Storage model"
+                border={false}
               >
                 Sender and receiver are different addresses. Required because
                 the model reads and writes balance slots independently. A
                 self-transfer is a separate (trivial) case.
-              </Hypothesis>
-              <Hypothesis
-                name="hToNoWrap"
-                constraint="balances[to] + amount < 2^64"
-                source="Conservation proof only"
-                border={false}
-              >
-                Receiver balance does not overflow after adding the transfer
-                amount. Only needed for the conservation theorem. In practice,
-                this holds because total supply is bounded by{' '}
-                <code className="font-mono text-[12px]">2^64</code> and no
-                individual balance can exceed supply.
               </Hypothesis>
             </ul>
             <p className="mt-3 text-muted text-sm space-x-4">
