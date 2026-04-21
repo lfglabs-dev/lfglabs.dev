@@ -2,11 +2,11 @@ import { useState, useEffect, useRef } from 'react'
 import { ExternalLinkIcon } from './ExternalLink'
 
 const FORMAL_INVARIANTS = [
-  'balances\u2032[from] + balances\u2032[to] = balances[from] + balances[to]',
-  'balance \u2265 amount \u2192 balances\u2032[from] = balances[from] \u2212 amount \u2227 balances\u2032[to] = balances[to] + amount',
-  'balance < amount \u2192 balances\u2032[from] = balances[from] \u2227 balances\u2032[to] = balances[to]',
-  'balance < amount \u2192 \u00ACreverts',
-  '\u2200 transfer, totalSupply\u2032 = totalSupply'
+  '\u2200 sender recipient amount s s\u2032, balances\u2032[sender] + balances\u2032[recipient] = balances[sender] + balances[recipient]',
+  '\u2200 sender recipient amount s s\u2032, balances[sender] \u2265 amount \u2192 balances\u2032[sender] = balances[sender] \u2212 amount \u2227 balances\u2032[recipient] = balances[recipient] + amount',
+  '\u2200 sender recipient amount s s\u2032, balances[sender] < amount \u2192 balances\u2032[sender] = balances[sender] \u2227 balances\u2032[recipient] = balances[recipient]',
+  '\u2200 sender recipient amount s, \u00ACreverts',
+  '\u2200 sender recipient amount s s\u2032, totalSupply\u2032 = totalSupply'
 ]
 
 export default function ZamaGuarantee() {
@@ -90,6 +90,11 @@ export default function ZamaGuarantee() {
           </div>
         </div>
       </div>
+
+      <p className="mt-4 text-[12px] leading-relaxed text-muted">
+        In the formal view, each statement ranges over all transfer inputs and
+        states satisfying the assumptions listed below.
+      </p>
 
       <div className="text-right mt-4">
         <a
