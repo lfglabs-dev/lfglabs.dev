@@ -46,7 +46,7 @@ export default function ResearchPage() {
       </Head>
       <PageLayout>
         <div className="max-w-3xl mx-auto px-6 py-12">
-          <SectionHeader subtitle="We're working to make formal verification practical and accessible for smart contract developers. Here's what we've published so far.">
+          <SectionHeader subtitle="We are making formal verification practical and accessible to smart contract developers. Here's what we've published so far.">
             Our <span className="text-accent">Research</span>
           </SectionHeader>
 

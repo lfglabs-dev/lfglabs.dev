@@ -17,7 +17,7 @@ export default function Hero() {
       </h1>
       <p className="text-xl text-primary leading-relaxed mb-8 max-w-2xl mx-auto">
         Mathematical proofs that your smart contracts are correct across
-        every possible execution path. Not an audit. A proof.
+        every possible execution path. Not an opinion. A proof.
       </p>
       <ContactButton />
       <div className="mt-16">

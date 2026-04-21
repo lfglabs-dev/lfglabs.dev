@@ -14,7 +14,7 @@ export default function ProjectsPage() {
       <PageLayout>
         <div className="max-w-3xl mx-auto px-6 py-12">
           <SectionHeader
-            subtitle="Projects we've shipped with clients, from developer tools to formal proofs."
+            subtitle="Production work for clients: developer infrastructure, protocols, and machine-checked proofs."
           >
             Our <span className="text-accent">Work</span>
           </SectionHeader>
