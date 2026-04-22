@@ -1,0 +1,104 @@
+import { useEffect, useRef, useState } from 'react'
+import { ExternalLinkIcon } from './ExternalLink'
+
+const FORMAL_GUARANTEES = [
+  '∀ s ts apr now, history(s) ∧ maxDev(s) < 100% → ¬success(safe(0, ts, apr, now, s))',
+  '∀ s x ts apr now, success(safe(x, ts, apr, now, s)) → dev(lastLive(s, now), newLive(x, ts, apr, now)) ≤ maxDev(s)',
+  "∀ s x ts apr now s′, success(safe(x, ts, apr, now, s)) → startedAt′ > startedAt(s) ∧ inBands(answer′, apr′)",
+  '∀ s x ts apr now, success(safe(x, ts, apr, now, s)) ∧ onlyUp(s) → signedDev ≥ 0'
+]
+
+export default function MidasGuarantee({ specsHref }) {
+  const [showEnglish, setShowEnglish] = useState(true)
+  const timerRef = useRef(null)
+
+  useEffect(() => {
+    timerRef.current = setTimeout(() => setShowEnglish(false), 5000)
+    return () => clearTimeout(timerRef.current)
+  }, [])
+
+  const handleToggle = () => {
+    if (timerRef.current) {
+      clearTimeout(timerRef.current)
+      timerRef.current = null
+    }
+    setShowEnglish((prev) => !prev)
+  }
+
+  return (
+    <div className="py-6">
+      <button
+        onClick={handleToggle}
+        className="inline-flex items-center gap-1.5 text-[12px] font-semibold text-muted hover:text-heading transition-colors cursor-pointer mb-4"
+      >
+        <svg
+          viewBox="0 0 24 24"
+          className="w-[13px] h-[13px]"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="1.5"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        >
+          <path d="m5 8 6 6" />
+          <path d="m4 14 6-6 2-3" />
+          <path d="M2 5h12" />
+          <path d="M7 2h1" />
+          <path d="m22 22-5-10-5 10" />
+          <path d="M14 18h6" />
+        </svg>
+        {showEnglish ? 'Switch to formal' : 'Switch to English'}
+      </button>
+
+      <div className="grid text-center [&>*]:col-start-1 [&>*]:row-start-1">
+        <div
+          className="flex flex-col items-center justify-center gap-4 md:gap-5 transition-opacity duration-200 text-[0.84rem] md:text-[1.02rem] font-mono text-primary leading-snug"
+          style={{
+            opacity: showEnglish ? 0 : 1,
+            pointerEvents: showEnglish ? 'none' : 'auto'
+          }}
+          aria-hidden={showEnglish}
+        >
+          {FORMAL_GUARANTEES.map((formal, i) => (
+            <code
+              key={i}
+              className="block w-full max-w-full overflow-x-auto px-1"
+            >
+              {formal}
+            </code>
+          ))}
+        </div>
+        <div
+          className="flex items-center justify-center transition-opacity duration-200"
+          style={{
+            opacity: showEnglish ? 1 : 0,
+            pointerEvents: showEnglish ? 'auto' : 'none'
+          }}
+          aria-hidden={!showEnglish}
+        >
+          <p className="text-xl md:text-2xl leading-snug font-serif max-w-prose mx-auto px-1">
+            The safe path rejects operator submissions that violate the
+            feed&apos;s configured bounds.
+          </p>
+        </div>
+      </div>
+
+      <p className="mt-4 text-[12px] leading-relaxed text-muted">
+        In the formal view, each statement ranges over all submission values
+        and states satisfying the assumptions listed below.
+      </p>
+
+      <div className="text-right mt-4">
+        <a
+          href={specsHref}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-flex items-center gap-1.5 text-[12px] font-semibold text-accent hover:text-heading transition-colors cursor-pointer"
+        >
+          View Lean
+          <ExternalLinkIcon />
+        </a>
+      </div>
+    </div>
+  )
+}
