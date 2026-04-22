@@ -2,10 +2,16 @@ import Head from 'next/head'
 import Link from 'next/link'
 import PageLayout from '../../components/PageLayout'
 import ResearchCard from '../../components/ResearchCard'
+import CodeBlock from '../../components/research/CodeBlock'
 import Disclosure from '../../components/research/Disclosure'
 import ExternalLink from '../../components/research/ExternalLink'
+import Hypothesis from '../../components/research/Hypothesis'
 import MidasGuarantee from '../../components/research/MidasGuarantee'
 import { getSortedResearch } from '../../lib/getSortedResearch'
+
+const VERIFY_COMMAND = `git clone https://github.com/lfglabs-dev/verity-benchmark
+cd verity-benchmark
+lake build Benchmark.Cases.Midas.CustomFeedGrowthSafe.Proofs`
 
 const UPSTREAM_CONTRACT =
   'https://github.com/midas-apps/contracts/blob/main/contracts/feeds/CustomAggregatorV3CompatibleFeedGrowth.sol'
@@ -82,31 +88,38 @@ export default function MidasFeedGrowthSafetyPage() {
               verification helps here by showing exactly what the safe wrapper{' '}
               <code className="font-mono text-[13px]">setRoundDataSafe</code>{' '}
               does and does not prevent. In particular, it highlights that the
-              guardrails on deviation, timing, monotonic timestamps, and
-              non-decreasing updates in{' '}
-              <code className="font-mono text-[13px]">onlyUp</code> mode really
-              do hold on the safe path, including the rejection of zero-price
-              submissions below a 100% deviation cap.
+              safe path really does enforce the configured rejection criteria,
+              including the zero-price case under a strict enough deviation
+              setting.
             </p>
           </section>
 
           <section className="mb-20">
             <h2 className="font-serif text-lg font-semibold tracking-tight mb-4">
-              What this covers
+              Why this matters
             </h2>
             <p className="leading-relaxed mb-4">
-              This case study is about{' '}
-              <code className="font-mono text-[13px]">setRoundDataSafe</code>,
-              the guarded submission path. It also models the underlying write
-              behavior of{' '}
-              <code className="font-mono text-[13px]">setRoundData</code>,
-              because a successful safe call ends by writing a new round through
-              that path.
+              This is a manually updated price feed. That means the main
+              operational risk is not an adversary exploiting arithmetic from
+              nowhere, but an authorized operator submitting a round that should
+              have been rejected by the feed&apos;s own configured rules.
             </p>
-            <Disclosure title="Verified behavior of the safe path">
+            <p className="leading-relaxed mb-6">
+              If the safe path accepted a submission outside those rules, every
+              downstream integration reading the feed would inherit a price the
+              contract itself was supposed to screen out. The point of this case
+              study is to make those guardrails explicit and machine-check that
+              they hold on the guarded entrypoint.
+            </p>
+            <Disclosure title="What this covers">
               <p className="mb-3 text-muted text-[15px]">
-                The guarantees are split into two categories and should be read
-                differently.
+                This case study is about{' '}
+                <code className="font-mono text-[12px]">setRoundDataSafe</code>
+                , the guarded submission path. It also models the underlying
+                write behavior of{' '}
+                <code className="font-mono text-[12px]">setRoundData</code>,
+                because a successful safe call ends by writing a new round
+                through that path.
               </p>
               <ul className="mb-3 text-muted list-disc pl-5 space-y-2">
                 <li>
@@ -134,11 +147,20 @@ export default function MidasFeedGrowthSafetyPage() {
                   APR remain inside the configured min/max bands.
                 </li>
               </ul>
-              <p className="text-muted">
+              <p className="mb-3 text-muted">
                 The comparison is growth-aware on both sides. The previous round
                 is first turned into a live price at the current block time, and
                 the incoming submission is also projected forward to the current
                 block time before deviation is measured.
+              </p>
+              <p className="text-muted">
+                Out of scope: direct calls that bypass{' '}
+                <code className="font-mono text-[12px]">setRoundDataSafe</code>{' '}
+                and invoke{' '}
+                <code className="font-mono text-[12px]">setRoundData</code>{' '}
+                directly, access control plumbing, events, unrelated read-only
+                interface methods, and downstream protocol integrations outside
+                this contract.
               </p>
             </Disclosure>
           </section>
@@ -169,11 +191,15 @@ export default function MidasFeedGrowthSafetyPage() {
               is included as well, along with the underlying band checks from{' '}
               <code className="font-mono text-[13px]">setRoundData</code>.
             </p>
-            <p className="leading-relaxed text-muted text-[15px]">
-              Intentionally out of scope: access control plumbing, events,
-              unrelated read-only interface methods, and downstream protocol
-              integrations outside this contract.
-            </p>
+            <Disclosure title="Verify it yourself" className="mb-4">
+              <CodeBlock>{VERIFY_COMMAND}</CodeBlock>
+              <p className="mt-3 text-muted">
+                If the build succeeds, the proofs are correct.{' '}
+                <ExternalLink href={BENCHMARK_REPO}>
+                  Source repository
+                </ExternalLink>
+              </p>
+            </Disclosure>
           </section>
 
           <section className="mb-20">
@@ -253,35 +279,37 @@ export default function MidasFeedGrowthSafetyPage() {
               Assumptions
             </h2>
             <p className="leading-relaxed mb-4 text-muted text-[15px]">
-              The proofs use zero axioms. The main conditional claim here is
-              the zero-price rejection result: it applies when the feed already
-              has a previous round to compare against and{' '}
-              <code className="font-mono text-[12px]">
-                maxAnswerDeviation
-              </code>{' '}
-              is set below 100% in the contract&apos;s fixed-point units. At
-              exactly 100%, that specific rejection claim no longer follows from
-              the deviation check alone.
+              The proofs use zero axioms. Two hypotheses matter for the
+              zero-price rejection theorem.
             </p>
-          </section>
-
-          <section className="mb-16">
-            <h2 className="font-serif text-lg font-semibold tracking-tight mb-4">
-              Scope limitation
-            </h2>
-            <p className="leading-relaxed mb-4">
-              This case study is deliberately about the safe submission path. It
-              does not claim that the same guarantees hold for callers who
-              bypass{' '}
-              <code className="font-mono text-[13px]">setRoundDataSafe</code>{' '}
-              and invoke{' '}
-              <code className="font-mono text-[13px]">setRoundData</code>{' '}
-              directly, because that path omits the safe wrapper&apos;s
-              deviation and timing checks.
-            </p>
-            <p className="leading-relaxed text-muted text-[15px]">
-              It also does not verify admin authorization, emitted events, or
-              the behavior of protocols that consume this feed downstream.
+            <ul className="space-y-0 border border-gray-200 rounded overflow-hidden text-[14px]">
+              <Hypothesis
+                name="hHistory"
+                constraint="the feed already has a previous round"
+                source="setRoundDataSafe compares against lastAnswer() only when history exists"
+              >
+                The zero-price rejection claim is about states where the safe
+                path actually compares the new submission against an existing
+                live price. If there is no prior round,{' '}
+                <code className="font-mono text-[12px]">setRoundDataSafe</code>{' '}
+                skips the deviation check entirely.
+              </Hypothesis>
+              <Hypothesis
+                name="hStrictDeviation"
+                constraint="maxAnswerDeviation &lt; 100 * 1e8"
+                source="Fixed-point threshold in the contract's percentage units"
+                border={false}
+              >
+                The contract allows a maximum deviation up to and including
+                100%. The zero-price rejection theorem therefore needs the
+                configured deviation cap to be strictly below 100%. At exactly
+                100%, that specific rejection claim no longer follows from the
+                deviation check alone.
+              </Hypothesis>
+            </ul>
+            <p className="mt-3 text-muted text-sm space-x-4">
+              <ExternalLink href={SPECS_LINK}>View specs in Lean</ExternalLink>
+              <ExternalLink href={PROOFS_LINK}>View proofs in Lean</ExternalLink>
             </p>
           </section>
 

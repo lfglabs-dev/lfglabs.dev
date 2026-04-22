@@ -2,8 +2,10 @@ import { useEffect, useRef, useState } from 'react'
 import { ExternalLinkIcon } from './ExternalLink'
 
 const FORMAL_GUARANTEES = [
-  'violatesBounds -> revert',
-  'success -> boundsHold'
+  '∀ s ts apr now, history(s) ∧ maxDev(s) < 100% → ¬success(safe(0, ts, apr, now, s))',
+  '∀ s x ts apr now, success(safe(x, ts, apr, now, s)) → dev(lastLive(s, now), newLive(x, ts, apr, now)) ≤ maxDev(s)',
+  "∀ s x ts apr now s′, success(safe(x, ts, apr, now, s)) → startedAt′ > startedAt(s) ∧ inBands(answer′, apr′)",
+  '∀ s x ts apr now, success(safe(x, ts, apr, now, s)) ∧ onlyUp(s) → signedDev ≥ 0'
 ]
 
 export default function MidasGuarantee({ specsHref }) {
@@ -80,6 +82,11 @@ export default function MidasGuarantee({ specsHref }) {
           </p>
         </div>
       </div>
+
+      <p className="mt-4 text-[12px] leading-relaxed text-muted">
+        In the formal view, each statement ranges over all submission values
+        and states satisfying the assumptions listed below.
+      </p>
 
       <div className="text-right mt-4">
         <a
