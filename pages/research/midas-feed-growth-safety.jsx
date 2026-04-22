@@ -11,9 +11,6 @@ import { getSortedResearch } from '../../lib/getSortedResearch'
 const UPSTREAM_CONTRACT =
   'https://github.com/midas-apps/contracts/blob/main/contracts/feeds/CustomAggregatorV3CompatibleFeedGrowth.sol'
 
-const BENCHMARK_PULL_REQUEST =
-  'https://github.com/lfglabs-dev/verity-benchmark/pull/25'
-
 const BENCHMARK_REPO =
   'https://github.com/lfglabs-dev/verity-benchmark'
 
@@ -186,11 +183,13 @@ export default function MidasFeedGrowthSafetyPage() {
             </h2>
             <p className="leading-relaxed mb-4 text-muted text-[15px]">
               The six guarantee families for this case are machine-checked in
-              Lean 4. The proof file in{' '}
-              <ExternalLink href={BENCHMARK_PULL_REQUEST}>PR #25</ExternalLink>{' '}
+              Lean 4. The corresponding proof file in the{' '}
+              <ExternalLink href={BENCHMARK_REPO}>
+                Verity benchmark repository
+              </ExternalLink>{' '}
               is <code className="font-mono text-[12px]">sorry</code>-free, so
-              the claims below are accepted by Lean&apos;s kernel rather than by
-              informal review.
+              the claims below are accepted by Lean&apos;s kernel rather than
+              by informal review.
             </p>
             <div className="overflow-x-auto border border-gray-200 rounded">
               <table className="w-full text-[13px]">
@@ -342,16 +341,10 @@ export default function MidasFeedGrowthSafetyPage() {
               {', the production source modeled in this case.'}
             </p>
             <p className="leading-relaxed mb-2">
-              <ExternalLink href={BENCHMARK_PULL_REQUEST}>
-                Benchmark pull request
-              </ExternalLink>
-              {', which adds the formal specification and machine-checked proofs.'}
-            </p>
-            <p className="leading-relaxed mb-2">
               <ExternalLink href={BENCHMARK_REPO}>
                 Verity benchmark repository
               </ExternalLink>
-              {', the broader benchmark suite this case belongs to.'}
+              {', which contains the formal specification, machine-checked proofs, and the broader benchmark suite this case belongs to.'}
             </p>
             <p className="leading-relaxed">
               <Link
