@@ -2,12 +2,8 @@ import { useEffect, useRef, useState } from 'react'
 import { ExternalLinkIcon } from './ExternalLink'
 
 const FORMAL_GUARANTEES = [
-  "history && maxDev < 100% -> safe(0, t, apr) reverts",
-  'success && history -> abs(deviation(lastLive, newLive)) <= maxDev',
-  'success -> now - lastUpdated > 1 hour',
-  "success -> startedAt' > startedAt",
-  'success && onlyUp -> signedDeviation >= 0',
-  "success -> answer' and apr' stay within bands"
+  'violatesBounds -> revert',
+  'success -> boundsHold'
 ]
 
 export default function MidasGuarantee({ specsHref }) {
@@ -79,10 +75,8 @@ export default function MidasGuarantee({ specsHref }) {
           aria-hidden={!showEnglish}
         >
           <p className="text-xl md:text-2xl leading-snug font-serif max-w-prose mx-auto px-1">
-            Once the feed has history, the safe submission path rejects zero
-            live prices below a 100% deviation cap, and every accepted round
-            satisfies the contract&apos;s deviation, timing, monotonicity, and
-            band guards.
+            The safe path rejects operator submissions that violate the
+            feed&apos;s configured bounds.
           </p>
         </div>
       </div>
