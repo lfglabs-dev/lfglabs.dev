@@ -1,5 +1,15 @@
 export const research = [
   {
+    slug: 'midas-feed-growth-safety',
+    title: 'Midas Growth-Aware Feed Safety Guarantees',
+    subtitle:
+      'Formally verified safety properties of the safe submission path in Midas\'s growth-aware price feed.',
+    description:
+      'How we proved zero-price rejection and accepted-write safety guarantees for Midas\'s CustomAggregatorV3CompatibleFeedGrowth safe path using Verity and Lean 4.',
+    date: '2026-04-21',
+    tag: 'Case study'
+  },
+  {
     slug: 'zama-erc7984-confidential-token',
     title: 'ERC-7984 Confidential Token Invariants',
     subtitle:

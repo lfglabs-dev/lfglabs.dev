@@ -1,0 +1,103 @@
+import { useEffect, useRef, useState } from 'react'
+import { ExternalLinkIcon } from './ExternalLink'
+
+const FORMAL_GUARANTEES = [
+  "history && maxDev < 100% -> safe(0, t, apr) reverts",
+  'success && history -> abs(deviation(lastLive, newLive)) <= maxDev',
+  'success -> now - lastUpdated > 1 hour',
+  "success -> startedAt' > startedAt",
+  'success && onlyUp -> signedDeviation >= 0',
+  "success -> answer' and apr' stay within bands"
+]
+
+export default function MidasGuarantee({ specsHref }) {
+  const [showEnglish, setShowEnglish] = useState(true)
+  const timerRef = useRef(null)
+
+  useEffect(() => {
+    timerRef.current = setTimeout(() => setShowEnglish(false), 5000)
+    return () => clearTimeout(timerRef.current)
+  }, [])
+
+  const handleToggle = () => {
+    if (timerRef.current) {
+      clearTimeout(timerRef.current)
+      timerRef.current = null
+    }
+    setShowEnglish((prev) => !prev)
+  }
+
+  return (
+    <div className="py-6">
+      <button
+        onClick={handleToggle}
+        className="inline-flex items-center gap-1.5 text-[12px] font-semibold text-muted hover:text-heading transition-colors cursor-pointer mb-4"
+      >
+        <svg
+          viewBox="0 0 24 24"
+          className="w-[13px] h-[13px]"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="1.5"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        >
+          <path d="m5 8 6 6" />
+          <path d="m4 14 6-6 2-3" />
+          <path d="M2 5h12" />
+          <path d="M7 2h1" />
+          <path d="m22 22-5-10-5 10" />
+          <path d="M14 18h6" />
+        </svg>
+        {showEnglish ? 'Switch to formal' : 'Switch to English'}
+      </button>
+
+      <div className="grid text-center [&>*]:col-start-1 [&>*]:row-start-1">
+        <div
+          className="flex flex-col items-center justify-center gap-4 md:gap-5 transition-opacity duration-200 text-[0.84rem] md:text-[1.02rem] font-mono text-primary leading-snug"
+          style={{
+            opacity: showEnglish ? 0 : 1,
+            pointerEvents: showEnglish ? 'none' : 'auto'
+          }}
+          aria-hidden={showEnglish}
+        >
+          {FORMAL_GUARANTEES.map((formal, i) => (
+            <code
+              key={i}
+              className="block w-full max-w-full overflow-x-auto px-1"
+            >
+              {formal}
+            </code>
+          ))}
+        </div>
+        <div
+          className="flex items-center justify-center transition-opacity duration-200"
+          style={{
+            opacity: showEnglish ? 1 : 0,
+            pointerEvents: showEnglish ? 'auto' : 'none'
+          }}
+          aria-hidden={!showEnglish}
+        >
+          <p className="text-xl md:text-2xl leading-snug font-serif max-w-prose mx-auto px-1">
+            Once the feed has history, the safe submission path rejects zero
+            live prices below a 100% deviation cap, and every accepted round
+            satisfies the contract&apos;s deviation, timing, monotonicity, and
+            band guards.
+          </p>
+        </div>
+      </div>
+
+      <div className="text-right mt-4">
+        <a
+          href={specsHref}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-flex items-center gap-1.5 text-[12px] font-semibold text-accent hover:text-heading transition-colors cursor-pointer"
+        >
+          View Lean
+          <ExternalLinkIcon />
+        </a>
+      </div>
+    </div>
+  )
+}
