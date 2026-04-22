@@ -4,7 +4,6 @@ import PageLayout from '../../components/PageLayout'
 import ResearchCard from '../../components/ResearchCard'
 import Disclosure from '../../components/research/Disclosure'
 import ExternalLink from '../../components/research/ExternalLink'
-import Hypothesis from '../../components/research/Hypothesis'
 import MidasGuarantee from '../../components/research/MidasGuarantee'
 import { getSortedResearch } from '../../lib/getSortedResearch'
 
@@ -254,60 +253,16 @@ export default function MidasFeedGrowthSafetyPage() {
               Assumptions
             </h2>
             <p className="leading-relaxed mb-4 text-muted text-[15px]">
-              The proofs use zero axioms. The operative assumptions are the
-              contract&apos;s own guards and a clear scope restriction about
-              which entrypoint is being analyzed.
+              The proofs use zero axioms. The main conditional claim here is
+              the zero-price rejection result: it applies when the feed already
+              has a previous round to compare against and{' '}
+              <code className="font-mono text-[12px]">
+                maxAnswerDeviation
+              </code>{' '}
+              is set below 100% in the contract&apos;s fixed-point units. At
+              exactly 100%, that specific rejection claim no longer follows from
+              the deviation check alone.
             </p>
-            <ul className="space-y-0 border border-gray-200 rounded overflow-hidden text-[14px]">
-              <Hypothesis
-                name="Existing price history"
-                constraint="latest round already exists"
-                source="Contract behavior"
-              >
-                The zero-price rejection and deviation-direction claims are
-                about calls that actually compare against a previous live price.
-                If there is no prior round history,{' '}
-                <code className="font-mono text-[12px]">setRoundDataSafe</code>{' '}
-                skips the deviation comparison entirely.
-              </Hypothesis>
-              <Hypothesis
-                name="Deviation cap below 100%"
-                constraint="maxAnswerDeviation &lt; 100 * 1e8"
-                source="Fixed-point threshold"
-              >
-                The zero-price rejection claim depends on the configured cap
-                being strictly below 100% in the contract&apos;s 8-decimal
-                percentage units. At exactly 100%, a zero-price candidate is no
-                longer excluded by that guard alone.
-              </Hypothesis>
-              <Hypothesis
-                name="Accepted safe writes satisfy guards"
-                constraint="ordered timestamps, >1h gap, in-band data and APR, deviation passes when history exists"
-                source="setRoundDataSafe + setRoundData requires"
-              >
-                The positive guarantees apply to executions that satisfy the
-                contract&apos;s own conditions: timestamps are ordered
-                correctly, more than one hour has elapsed since the previous
-                update, the new{' '}
-                <code className="font-mono text-[12px]">startedAt</code>{' '}
-                advances, the raw answer and APR fall inside configured bands,
-                and when history exists the candidate live price passes the
-                deviation check.
-              </Hypothesis>
-              <Hypothesis
-                name="onlyUp mode"
-                constraint="onlyUp => APR is non-negative and deviation is not negative"
-                source="Safe-path guard"
-                border={false}
-              >
-                When{' '}
-                <code className="font-mono text-[12px]">onlyUp</code>{' '}
-                is enabled, the safe path assumes the contract&apos;s own
-                additional conditions hold: the submitted APR is non-negative,
-                and the signed deviation against the previous live price is not
-                negative.
-              </Hypothesis>
-            </ul>
           </section>
 
           <section className="mb-16">
