@@ -4,7 +4,7 @@ export const projects = [
     slug: 'verity',
     name: 'Verity',
     title: 'We proved smart contracts correct before deployment.',
-    subtitle: 'A formal verification framework for Ethereum.',
+    subtitle: 'A formal verification framework for Ethereum, granted by the Ethereum Foundation.',
     description: 'Lean 4 framework for mathematically proven Ethereum smart contracts.',
     image: '/images/verity.webp',
     date: '2025-07-01',
