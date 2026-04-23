@@ -1,5 +1,15 @@
 export const research = [
   {
+    slug: 'how-a-formal-audit-works-in-detail',
+    title: 'How a Formal Audit Works in Detail',
+    subtitle:
+      'The technical path from repo access to machine-checked security guarantees.',
+    description:
+      'The workflow behind an LFG Labs formal audit: specification, threat modeling, Verity modeling, Lean proofs, reports, and proof maintenance.',
+    date: '2026-04-23',
+    tag: 'Explainer'
+  },
+  {
     slug: 'midas-feed-growth-safety',
     title: 'Midas Growth-Aware Feed Safety Guarantees',
     subtitle:
