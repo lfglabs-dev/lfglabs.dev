@@ -2,10 +2,8 @@ import { useEffect, useRef, useState } from 'react'
 import { ExternalLinkIcon } from './ExternalLink'
 
 const FORMAL_GUARANTEES = [
-  '∀ s ts apr now, history(s) ∧ maxDev(s) < 100% → ¬success(safe(0, ts, apr, now, s))',
-  '∀ s x ts apr now, success(safe(x, ts, apr, now, s)) → dev(lastLive(s, now), newLive(x, ts, apr, now)) ≤ maxDev(s)',
-  "∀ s x ts apr now s′, success(safe(x, ts, apr, now, s)) → startedAt′ > startedAt(s) ∧ inBands(answer′, apr′)",
-  '∀ s x ts apr now, success(safe(x, ts, apr, now, s)) ∧ onlyUp(s) → signedDev ≥ 0'
+  '∀ oldFeed answer start apr now, safeInputsOk(answer, start, apr, now, oldFeed) → safeAccepted(answer, start, apr, now, oldFeed) ∧ writesSubmittedRound(answer, start, apr, now, oldFeed)',
+  '∀ oldFeed answer start apr now, ¬safeInputsOk(answer, start, apr, now, oldFeed) → safeRejected(answer, start, apr, now, oldFeed)'
 ]
 
 export default function MidasGuarantee({ specsHref }) {
@@ -52,7 +50,7 @@ export default function MidasGuarantee({ specsHref }) {
 
       <div className="grid text-center [&>*]:col-start-1 [&>*]:row-start-1">
         <div
-          className="flex flex-col items-center justify-center gap-4 md:gap-5 transition-opacity duration-200 text-[0.84rem] md:text-[1.02rem] font-mono text-primary leading-snug"
+          className="flex flex-col items-center justify-center gap-4 md:gap-5 transition-opacity duration-200 text-[0.84rem] md:text-[1rem] font-mono text-primary leading-snug"
           style={{
             opacity: showEnglish ? 0 : 1,
             pointerEvents: showEnglish ? 'none' : 'auto'
@@ -76,16 +74,41 @@ export default function MidasGuarantee({ specsHref }) {
           }}
           aria-hidden={!showEnglish}
         >
-          <p className="text-xl md:text-2xl leading-snug font-serif max-w-prose mx-auto px-1">
-            The safe path rejects operator submissions that violate the
-            feed&apos;s configured bounds.
-          </p>
+          <div className="flex flex-col items-center gap-3 md:gap-4 max-w-prose mx-auto px-1">
+            <p className="text-xl md:text-2xl leading-snug font-serif">
+              If a submitted round satisfies the safe path&apos;s guardrails,
+              <code className="font-mono text-[0.8em]"> setRoundDataSafe </code>
+              succeeds and writes that round exactly as submitted.
+            </p>
+            <p className="text-xl md:text-2xl leading-snug font-serif">
+              If it does not satisfy those guardrails, the safe path rejects it
+              before it can update the feed.
+            </p>
+          </div>
         </div>
       </div>
 
       <p className="mt-4 text-[12px] leading-relaxed text-muted">
-        In the formal view, each statement ranges over all submission values
-        and states satisfying the assumptions listed below.
+        Names are simplified on purpose:{' '}
+        <code className="font-mono text-[11px]">answer</code>,{' '}
+        <code className="font-mono text-[11px]">start</code>,{' '}
+        <code className="font-mono text-[11px]">apr</code>, and{' '}
+        <code className="font-mono text-[11px]">now</code> are the call
+        inputs.
+        <br />
+        <code className="font-mono text-[11px]">oldFeed</code> is the feed
+        state before the call.
+        <br />
+        <code className="font-mono text-[11px]">safeInputsOk(...)</code>{' '}
+        means the submission satisfies the safe path&apos;s guardrails.
+        <br />
+        <code className="font-mono text-[11px]">safeAccepted(...)</code>{' '}
+        means <code className="font-mono text-[11px]">setRoundDataSafe</code>{' '}
+        succeeds.
+        <br />
+        <code className="font-mono text-[11px]">writesSubmittedRound(...)</code>{' '}
+        means the newly written round stores the submitted answer, timestamp,
+        block time, and APR exactly.
       </p>
 
       <div className="text-right mt-4">

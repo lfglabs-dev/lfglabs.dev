@@ -11,6 +11,7 @@ import { getSortedResearch } from '../../lib/getSortedResearch'
 
 const VERIFY_COMMAND = `git clone https://github.com/lfglabs-dev/verity-benchmark
 cd verity-benchmark
+git checkout 07564a24d6a85eefc0479af3a547381bb7a40a68
 lake build Benchmark.Cases.Midas.CustomFeedGrowthSafe.Proofs`
 
 const UPSTREAM_CONTRACT =
@@ -20,7 +21,7 @@ const BENCHMARK_REPO =
   'https://github.com/lfglabs-dev/verity-benchmark'
 
 const BENCHMARK_COMMIT =
-  'https://github.com/lfglabs-dev/verity-benchmark/blob/5ee8e4dd4e29ea9c3181ac6358d516f954b62d89'
+  'https://github.com/lfglabs-dev/verity-benchmark/blob/07564a24d6a85eefc0479af3a547381bb7a40a68'
 
 const SPECS_LINK = `${BENCHMARK_COMMIT}/Benchmark/Cases/Midas/CustomFeedGrowthSafe/Specs.lean`
 const PROOFS_LINK = `${BENCHMARK_COMMIT}/Benchmark/Cases/Midas/CustomFeedGrowthSafe/Proofs.lean`
@@ -38,7 +39,7 @@ export default function MidasFeedGrowthSafetyPage() {
         </title>
         <meta
           name="description"
-          content="Formally verified safety properties of the safe submission path in Midas's growth-aware price feed, covering zero-price rejection, deviation bounds, timing guards, and configured value bands in Verity and Lean 4."
+          content="Formally verified accept/reject behavior of the safe submission path in Midas's growth-aware price feed, modeled in Verity and proved in Lean 4."
         />
       </Head>
       <PageLayout>
@@ -87,10 +88,10 @@ export default function MidasFeedGrowthSafetyPage() {
               an authorized updater submits the next round by hand. Formal
               verification helps here by showing exactly what the safe wrapper{' '}
               <code className="font-mono text-[13px]">setRoundDataSafe</code>{' '}
-              does and does not prevent. In particular, it highlights that the
-              safe path really does enforce the configured rejection criteria,
-              including the zero-price case under a strict enough deviation
-              setting.
+              does on both sides of the guard. In particular, the benchmark now
+              exposes human-readable theorems saying that guardrail-safe
+              submissions are accepted and written exactly as submitted, while
+              submissions outside those guardrails are rejected.
             </p>
           </section>
 
@@ -123,28 +124,23 @@ export default function MidasFeedGrowthSafetyPage() {
               </p>
               <ul className="mb-3 text-muted list-disc pl-5 space-y-2">
                 <li>
-                  <strong>Rejection guarantee:</strong> once the feed has prior
-                  history, a zero-price submission through the safe path is
-                  rejected whenever{' '}
+                  <strong>Positive-path guarantee:</strong> if a submitted
+                  round satisfies the safe path&apos;s own guardrails, then{' '}
                   <code className="font-mono text-[12px]">
-                    maxAnswerDeviation
+                    setRoundDataSafe
                   </code>{' '}
-                  is set below 100% in the contract&apos;s fixed-point units.
-                  The contract uses 8 decimals for percentages, so 100% is{' '}
-                  <code className="font-mono text-[12px]">100 * 1e8</code>. Any
-                  smaller cap rules out a candidate live price of zero.
+                  succeeds and the next round stores exactly the submitted
+                  answer,{' '}
+                  <code className="font-mono text-[12px]">startedAt</code>,{' '}
+                  current block timestamp, and growth APR.
                 </li>
                 <li>
-                  <strong>Successful-write guarantees:</strong> for executions
-                  that satisfy the contract&apos;s own guards and complete the
-                  safe path, the verified model shows that the candidate live
-                  price is within the configured deviation bound, more than one
-                  hour has passed since the previous update, the new round&apos;s{' '}
-                  <code className="font-mono text-[12px]">startedAt</code>{' '}
-                  strictly increases,{' '}
-                  <code className="font-mono text-[12px]">onlyUp</code>{' '}
-                  excludes negative deviation, and the stored answer and growth
-                  APR remain inside the configured min/max bands.
+                  <strong>Rejection guarantee:</strong> if the submitted round
+                  does not satisfy those guardrails, then{' '}
+                  <code className="font-mono text-[12px]">
+                    setRoundDataSafe
+                  </code>{' '}
+                  rejects before the feed can be updated.
                 </li>
               </ul>
               <p className="mb-3 text-muted">
@@ -153,14 +149,23 @@ export default function MidasFeedGrowthSafetyPage() {
                 the incoming submission is also projected forward to the current
                 block time before deviation is measured.
               </p>
+              <p className="mb-3 text-muted">
+                In the new spec layer, those guardrails are bundled into a
+                readable helper{' '}
+                <code className="font-mono text-[12px]">safeInputsOk</code>.
+                It packages the deviation check, time ordering, one-hour gap,
+                <code className="font-mono text-[12px]"> onlyUp</code>{' '}
+                behavior, and the answer/APR range checks that the safe path
+                relies on.
+              </p>
               <p className="text-muted">
                 Out of scope: direct calls that bypass{' '}
                 <code className="font-mono text-[12px]">setRoundDataSafe</code>{' '}
                 and invoke{' '}
                 <code className="font-mono text-[12px]">setRoundData</code>{' '}
                 directly, access control plumbing, events, unrelated read-only
-                interface methods, and downstream protocol integrations outside
-                this contract.
+                interface methods, downstream protocol integrations outside this
+                contract.
               </p>
             </Disclosure>
           </section>
@@ -175,6 +180,19 @@ export default function MidasFeedGrowthSafetyPage() {
               includes the current configuration fields, the storage for the
               latest round, and the next-round write path that records the new
               answer, timestamps, APR, and round id.
+            </p>
+            <p className="leading-relaxed mb-4">
+              The updated spec layer also introduces human-readable helpers such
+              as{' '}
+              <code className="font-mono text-[13px]">safeAccepted</code>,{' '}
+              <code className="font-mono text-[13px]">safeRejected</code>,{' '}
+              <code className="font-mono text-[13px]">safeInputsOk</code>, and{' '}
+              <code className="font-mono text-[13px]">
+                writesSubmittedRound
+              </code>
+              . Those names let the top-level theorem talk about the user-facing
+              behavior of the safe setter instead of only exposing lower-level
+              arithmetic lemmas.
             </p>
             <p className="leading-relaxed mb-4">
               The model also captures the growth arithmetic used to reconstruct
@@ -207,14 +225,16 @@ export default function MidasFeedGrowthSafetyPage() {
               Proof status
             </h2>
             <p className="leading-relaxed mb-4 text-muted text-[15px]">
-              The six guarantee families for this case are machine-checked in
-              Lean 4. The corresponding proof file in the{' '}
+              This case is now organized around two human-readable headline
+              specs in Lean 4: one theorem for accepted submissions and one
+              theorem for rejected submissions. The corresponding proof file in
+              the{' '}
               <ExternalLink href={BENCHMARK_REPO}>
                 Verity benchmark repository
               </ExternalLink>{' '}
               is <code className="font-mono text-[12px]">sorry</code>-free, so
-              the claims below are accepted by Lean&apos;s kernel rather than
-              by informal review.
+              the proved claims below are accepted by Lean&apos;s kernel rather
+              than by informal review.
             </p>
             <div className="overflow-x-auto border border-gray-200 rounded">
               <table className="w-full text-[13px]">
@@ -230,37 +250,19 @@ export default function MidasFeedGrowthSafetyPage() {
                 </thead>
                 <tbody className="font-mono">
                   <tr className="border-t border-gray-100">
-                    <td className="px-4 py-1.5">Rejects zero price below 100% cap</td>
+                    <td className="px-4 py-1.5">safeInputsOk -&gt; accepts and writes submitted round</td>
                     <td className="px-4 py-1.5 text-center text-green-600">
                       proven
                     </td>
                   </tr>
                   <tr className="border-t border-gray-100">
-                    <td className="px-4 py-1.5">Deviation bound on accepted write</td>
+                    <td className="px-4 py-1.5">not safeInputsOk -&gt; rejected</td>
                     <td className="px-4 py-1.5 text-center text-green-600">
                       proven
                     </td>
                   </tr>
                   <tr className="border-t border-gray-100">
-                    <td className="px-4 py-1.5">More than one hour since last update</td>
-                    <td className="px-4 py-1.5 text-center text-green-600">
-                      proven
-                    </td>
-                  </tr>
-                  <tr className="border-t border-gray-100">
-                    <td className="px-4 py-1.5">startedAt strictly increases</td>
-                    <td className="px-4 py-1.5 text-center text-green-600">
-                      proven
-                    </td>
-                  </tr>
-                  <tr className="border-t border-gray-100">
-                    <td className="px-4 py-1.5">onlyUp forbids negative deviation</td>
-                    <td className="px-4 py-1.5 text-center text-green-600">
-                      proven
-                    </td>
-                  </tr>
-                  <tr className="border-t border-gray-100">
-                    <td className="px-4 py-1.5">Stored answer and APR stay in bands</td>
+                    <td className="px-4 py-1.5">Zero price rejected below 100% cap</td>
                     <td className="px-4 py-1.5 text-center text-green-600">
                       proven
                     </td>
@@ -268,6 +270,17 @@ export default function MidasFeedGrowthSafetyPage() {
                 </tbody>
               </table>
             </div>
+            <p className="mt-3 leading-relaxed text-muted text-[14px]">
+              The rejection theorem is proved by contrapositive: any successful
+              safe call is shown to satisfy{' '}
+              <code className="font-mono text-[12px]">safeInputsOk</code>, so a
+              call that does not satisfy{' '}
+              <code className="font-mono text-[12px]">safeInputsOk</code> must
+              reject. The helper packages the lower-level deviation, timing,
+              monotonicity,{' '}
+              <code className="font-mono text-[12px]">onlyUp</code>, and band
+              checks into a single readable condition.
+            </p>
             <p className="mt-3 text-muted text-sm space-x-4">
               <ExternalLink href={SPECS_LINK}>View specs in Lean</ExternalLink>
               <ExternalLink href={PROOFS_LINK}>View proofs in Lean</ExternalLink>
@@ -279,8 +292,11 @@ export default function MidasFeedGrowthSafetyPage() {
               Assumptions
             </h2>
             <p className="leading-relaxed mb-4 text-muted text-[15px]">
-              The proofs use zero axioms. Two hypotheses matter for the
-              zero-price rejection theorem.
+              The proofs use zero axioms. The accept/reject theorems are
+              phrased through the helper{' '}
+              <code className="font-mono text-[12px]">safeInputsOk</code>. The
+              two assumptions below matter specifically for the separate
+              zero-price rejection corollary.
             </p>
             <ul className="space-y-0 border border-gray-200 rounded overflow-hidden text-[14px]">
               <Hypothesis
@@ -288,7 +304,7 @@ export default function MidasFeedGrowthSafetyPage() {
                 constraint="the feed already has a previous round"
                 source="setRoundDataSafe compares against lastAnswer() only when history exists"
               >
-                The zero-price rejection claim is about states where the safe
+                The zero-price rejection corollary is about states where the safe
                 path actually compares the new submission against an existing
                 live price. If there is no prior round,{' '}
                 <code className="font-mono text-[12px]">setRoundDataSafe</code>{' '}
@@ -301,7 +317,7 @@ export default function MidasFeedGrowthSafetyPage() {
                 border={false}
               >
                 The contract allows a maximum deviation up to and including
-                100%. The zero-price rejection theorem therefore needs the
+                100%. The zero-price rejection corollary therefore needs the
                 configured deviation cap to be strictly below 100%. At exactly
                 100%, that specific rejection claim no longer follows from the
                 deviation check alone.
