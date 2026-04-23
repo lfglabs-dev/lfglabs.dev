@@ -1,6 +1,6 @@
 ---
 title: We proved smart contracts correct before deployment.
-subtitle: A formal verification framework for Ethereum.
+subtitle: A formal verification framework for Ethereum, granted by the Ethereum Foundation.
 description: Lean 4 framework for mathematically proven Ethereum smart contracts.
 author: LFG Labs
 image: /images/verity.webp
@@ -11,6 +11,7 @@ Verity is a Lean 4 framework that enables developers to write Ethereum smart con
 
 ## Facts about Verity
 
+- **Grant:** Ethereum Foundation
 - **Theorems Proven:** 431 across 11 categories, zero `sorry` placeholders
 - **Tests:** 377 Foundry tests across 34 suites
 - **Verified Contracts:** 10 including ERC20, ERC721, SimpleStorage, Counter, and ReentrancyExample
