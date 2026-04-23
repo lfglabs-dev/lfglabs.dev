@@ -4,7 +4,7 @@ function PartnerBadge({ partner }) {
   if (!partner) return null
   return (
     <div className="flex items-center gap-1.5 text-xs text-muted flex-shrink-0">
-      <span>with</span>
+      <span>{partner.relationship || 'with'}</span>
       <img
         src={partner.logo}
         alt={partner.name}
