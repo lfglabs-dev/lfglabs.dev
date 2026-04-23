@@ -54,11 +54,28 @@ function formatDate(dateString) {
   return date.toLocaleDateString('en-US', { month: 'long', year: 'numeric', timeZone: 'UTC' })
 }
 
-export default function ProjectPage({ frontmatter, source, recommendedProjects }) {
+function PartnerAttribution({ partner }) {
+  if (!partner?.relationship) return null
+
+  return (
+    <div className="mt-4 flex items-center gap-2 text-sm text-muted">
+      <span>{partner.relationship}</span>
+      <img
+        src={partner.logo}
+        alt={partner.name}
+        className="h-5 w-auto grayscale opacity-60"
+        loading="lazy"
+        decoding="async"
+      />
+    </div>
+  )
+}
+
+export default function ProjectPage({ frontmatter, source, project, recommendedProjects }) {
   return (
     <>
       <Head>
-        <title>{frontmatter.title} | LFG Labs</title>
+        <title>{`${frontmatter.title} | LFG Labs`}</title>
         <meta name="description" content={frontmatter.description} />
       </Head>
       <PageLayout>
@@ -81,6 +98,8 @@ export default function ProjectPage({ frontmatter, source, recommendedProjects }
               {frontmatter.subtitle}
             </p>
           )}
+
+          <PartnerAttribution partner={project?.partner} />
 
           <p className="text-sm text-muted mt-3 mb-10">
             LFG Labs &middot; {formatDate(frontmatter.date)}
@@ -127,6 +146,7 @@ export async function getStaticPaths() {
 export async function getStaticProps({ params }) {
   const { frontmatter, content } = getProjectBySlug(params.slug)
   const source = await serialize(content)
+  const project = projects.find((p) => p.slug === params.slug) || null
 
   const recommended = projects
     .filter((p) => p.slug !== params.slug)
@@ -136,6 +156,7 @@ export async function getStaticProps({ params }) {
     props: {
       frontmatter,
       source,
+      project,
       recommendedProjects: recommended,
     },
   }
