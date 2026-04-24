@@ -1,9 +1,9 @@
 import { useState, useEffect, useRef } from 'react'
 
 const FORMAL_INVARIANTS = [
-  'attemptExecute(i) -> validated(i)',
-  'validated(i) -> attemptExecute(i)',
-  'handleOps reverts -> no attemptExecute(i)'
+  'attemptExecute(i) → validated(i)',
+  'validated(i) → attemptExecute(i)',
+  'handleOps reverts → no attemptExecute(i)'
 ]
 
 export default function EntryPointGuarantee() {
