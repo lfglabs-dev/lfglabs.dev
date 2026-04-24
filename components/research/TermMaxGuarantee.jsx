@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from 'react'
 import { ExternalLinkIcon } from './ExternalLink'
 
 const FORMAL_GUARANTEE =
-  '∀ s amountIn, virtualXtReserve′ = virtualXtReserve − singleSegmentBuyXtTokenAmtOut(daysToMaturity, virtualXtReserve, amountIn, feeRatio, liqSquare, offset)'
+  'virtualXtReserve′ = virtualXtReserve − curveOutput(daysToMaturity, virtualXtReserve, amountIn, fees, curve)'
 
 export default function TermMaxGuarantee({ specsHref }) {
   const [showEnglish, setShowEnglish] = useState(true)
@@ -68,26 +68,27 @@ export default function TermMaxGuarantee({ specsHref }) {
           aria-hidden={!showEnglish}
         >
           <p className="text-xl md:text-2xl leading-snug font-serif max-w-prose mx-auto px-1">
-            After a single-segment exact-input swap of debt tokens for XT, the
-            on-chain virtual XT reserve decreases by exactly the amount the
-            pricing curve computes.
+            When a user swaps debt tokens for XT, the reserve goes down by
+            exactly what the pricing curve says it should. Not one wei more, not
+            one wei less.
           </p>
         </div>
       </div>
 
       <p className="mt-4 text-[12px] leading-relaxed text-muted">
-        Names are simplified on purpose:{' '}
-        <code className="font-mono text-[11px]">amountIn</code> is the exact
-        debt-token input.
-        <br />
         <code className="font-mono text-[11px]">virtualXtReserve</code> is the
-        on-chain XT reserve before the swap.
+        on-chain XT reserve before the swap.{' '}
+        <code className="font-mono text-[11px]">virtualXtReserve′</code> is its
+        value after.
         <br />
+        <code className="font-mono text-[11px]">curveOutput(...)</code>{' '}
+        is the number of XT tokens the bonding curve says the user should
+        receive. It is a pure function: reserve minus k&nbsp;/&nbsp;(reserve +
+        input), adjusted for time-to-maturity and fees. In Lean it is called{' '}
         <code className="font-mono text-[11px]">
-          singleSegmentBuyXtTokenAmtOut(...)
-        </code>{' '}
-        is the curve-computed XT output, a pure function of the reserve, input,
-        fee ratio, liquidity, and curve offset.
+          singleSegmentBuyXtTokenAmtOut
+        </code>
+        .
       </p>
 
       <div className="text-right mt-4">
