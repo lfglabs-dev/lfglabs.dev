@@ -3,9 +3,9 @@ export const research = [
     slug: 'erc4337-entrypoint-execution',
     title: 'ERC-4337 EntryPoint Execution Invariant',
     subtitle:
-      'Formally verified execution-after-validation guarantees for EntryPoint.',
+      'Formally verified validation-before-execution control-flow slice for EntryPoint.',
     description:
-      'How we proved that ERC-4337 EntryPoint executes each UserOperation exactly once if and only if validation succeeds, using Verity and Lean 4.',
+      'How we proved that the modeled EntryPoint handleOps execution path is reached exactly when validation succeeds, using Verity and Lean 4.',
     date: '2026-04-24',
     tag: 'Case study'
   },

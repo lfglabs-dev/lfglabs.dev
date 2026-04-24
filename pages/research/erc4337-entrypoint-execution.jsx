@@ -35,7 +35,7 @@ export default function ERC4337EntryPointExecutionPage() {
         </title>
         <meta
           name="description"
-          content="Formally verified ERC-4337 EntryPoint execution invariants, proving that each UserOperation execution happens exactly once if and only if validation succeeds."
+          content="Formally verified ERC-4337 EntryPoint validation-before-execution control-flow invariants for the modeled handleOps path."
         />
       </Head>
       <PageLayout>
@@ -71,8 +71,8 @@ export default function ERC4337EntryPointExecutionPage() {
               call paymaster validation, account for gas, execute the account
               call, run post-operation accounting, and compensate the bundler.
               The security-critical question is simple to say and hard to
-              prove: did the exact operation that passed validation get
-              executed exactly once?
+              prove in full: can an operation reach execution unless that same
+              operation passed validation?
             </p>
           </section>
 
@@ -81,48 +81,42 @@ export default function ERC4337EntryPointExecutionPage() {
               Why this matters
             </h2>
             <p className="leading-relaxed mb-6">
-              ERC-4337 accounts and paymasters are arbitrary contracts. A proof
-              cannot assume that they are honest, simple, or even cooperative.
-              The invariant has to hold across reverts, external calls,
-              callbacks, gas-sensitive branches, and malicious return data.
+              ERC-4337 accounts and paymasters are arbitrary contracts. The
+              full theorem engineers want would quantify over all of that EVM
+              behavior. This benchmark proves a narrower, useful slice: the
+              two-loop EntryPoint control flow that gates the operation
+              execution path on successful validation.
             </p>
             <Disclosure title="What these invariants cover">
               <p className="mb-4 leading-relaxed text-muted">
-                The proof tracks validation and execution as trace events for
-                each operation index in a call to{' '}
+                The proof tracks validation outcomes and execution-path
+                attempts for each operation index in a call to{' '}
                 <code className="font-mono text-[12px]">handleOps</code>.
               </p>
               <ul className="mb-3 text-muted list-disc pl-5 space-y-1">
                 <li>
-                  <strong>Safety</strong>: EntryPoint never executes operation{' '}
+                  <strong>Safety</strong>: EntryPoint never attempts the
+                  execution path for operation{' '}
                   <code className="font-mono text-[12px]">i</code> unless
-                  account validation, paymaster validation when present, nonce
-                  checks, and prefund checks for that same operation succeeded.
+                  validation for that same operation succeeded in the model.
                 </li>
                 <li>
-                  <strong>Exactness</strong>: a successfully validated
-                  operation produces exactly one account execution attempt, not
-                  zero and not two.
+                  <strong>Liveness</strong>: when the modeled validation phase
+                  succeeds, every in-bounds operation reaches the execution
+                  path.
                 </li>
                 <li>
-                  <strong>Ordering</strong>: execution for operation{' '}
-                  <code className="font-mono text-[12px]">i</code> occurs only
-                  after validation for operation{' '}
-                  <code className="font-mono text-[12px]">i</code>.
-                </li>
-                <li>
-                  <strong>Isolation</strong>: validation for one operation does
-                  not authorize execution for a different operation.
+                  <strong>Revert behavior</strong>: if validation fails and
+                  <code className="font-mono text-[12px]"> handleOps</code>{' '}
+                  reverts, no execution-path attempt is recorded.
                 </li>
               </ul>
               <p className="text-muted">
-                This is the main invariant engineers usually mean when they say
-                EntryPoint should call the account with{' '}
-                <code className="font-mono text-[12px]">userOp.callData</code>{' '}
-                if and only if{' '}
-                <code className="font-mono text-[12px]">validateUserOp</code>{' '}
-                passed for that same{' '}
-                <code className="font-mono text-[12px]">UserOperation</code>.
+                The model records reaching <code className="font-mono text-[12px]">_executeUserOp</code>,
+                not successful account execution. It intentionally elides the
+                <code className="font-mono text-[12px]"> callData.length &gt; 0</code>{' '}
+                branch, gas accounting, and arbitrary account/paymaster
+                internals.
               </p>
             </Disclosure>
           </section>
@@ -132,41 +126,38 @@ export default function ERC4337EntryPointExecutionPage() {
               How this was proven
             </h2>
             <p className="leading-relaxed mb-4">
-              The Verity model follows the Solidity{' '}
+              The Verity model follows the selected Solidity{' '}
               <ExternalLink href={ENTRYPOINT_SOL}>EntryPoint.sol</ExternalLink>{' '}
-              structure function by function. The model keeps the same major
-              phases as the production implementation: the validation pass over
-              the bundle, the transition to execution, the per-operation
-              execution wrapper, and the post-operation accounting path.
+              control-flow slice. It keeps the validation pass over the bundle
+              and the transition to the per-operation execution wrapper, while
+              abstracting data payloads and most accounting details.
             </p>
             <ul className="mb-6 text-[15px] leading-relaxed list-disc pl-5 space-y-2">
               <li>
-                <strong>Validation phase</strong>: models account creation,
-                account validation, paymaster validation, signature/time-range
-                data, nonce checks, prefund checks, and validation failure.
+                <strong>Validation phase</strong>: models validation as a
+                universally quantified boolean outcome per operation.
               </li>
               <li>
-                <strong>External contracts</strong>: account, factory,
-                aggregator, and paymaster calls are modeled as adversarial
-                oracle-backed calls, so the theorem ranges over all possible
-                external behaviors admitted by the EVM model.
+                <strong>Native Verity shape</strong>: includes a contract model
+                using bounded loops, oracle-backed calls, and low-level
+                try/catch support from Verity PR 1746.
               </li>
               <li>
-                <strong>Execution phase</strong>: records account execution as
-                an indexed trace event tied to the same operation data that was
-                validated.
+                <strong>Execution phase</strong>: records whether the modeled
+                execution path is reached for each operation index.
               </li>
               <li>
-                <strong>Failure paths</strong>: distinguishes validation
-                failure, execution failure, bundle revert, and post-operation
-                behavior instead of collapsing them into a single boolean.
+                <strong>Failure path</strong>: preserves the all-or-nothing
+                validation loop behavior: a validation failure reverts the
+                modeled batch before execution attempts.
               </li>
             </ul>
             <p className="leading-relaxed mb-4">
               The proof is written in Lean 4 over the Verity model. The main
               theorem decomposes the English statement into safety, liveness,
-              exactness, and ordering lemmas, then combines them into the final
-              biconditional over execution trace counts.
+              all-validated-on-success, all-executed-on-success, and
+              no-execution-on-revert lemmas, then combines the first two into
+              the biconditional.
             </p>
             <p className="leading-relaxed mb-4">
               The benchmark case lives in{' '}
@@ -187,8 +178,8 @@ export default function ERC4337EntryPointExecutionPage() {
               >
                 Proofs.lean
               </ExternalLink>
-              . The required Verity features for faithful external-call and
-              control-flow modeling are introduced in{' '}
+              . The required Verity features for this native-loop and low-level
+              call model are introduced in{' '}
               <ExternalLink href={VERITY_PR}>Verity PR 1746</ExternalLink>.
             </p>
             <Disclosure title="Verify it yourself" className="mb-4">
@@ -207,8 +198,8 @@ export default function ERC4337EntryPointExecutionPage() {
               Proof status
             </h2>
             <p className="leading-relaxed mb-4 text-muted text-[15px]">
-              The case proves the main EntryPoint execution invariant and
-              supporting trace properties.{' '}
+              The case proves the selected EntryPoint control-flow invariant
+              and supporting properties.{' '}
               <ExternalLink
                 href={`${BENCHMARK_BRANCH}/Benchmark/Cases/ERC4337/EntryPointInvariant/Proofs.lean`}
               >
@@ -228,27 +219,27 @@ export default function ERC4337EntryPointExecutionPage() {
                 <tbody>
                   <tr className="border-t border-gray-100">
                     <td className="px-4 py-1.5 font-mono">execution_implies_validation</td>
-                    <td className="px-4 py-1.5">no execution without prior validation</td>
+                    <td className="px-4 py-1.5">no execution-path attempt without validation</td>
                     <td className="px-4 py-1.5 text-center text-green-600">proven</td>
                   </tr>
                   <tr className="border-t border-gray-100">
                     <td className="px-4 py-1.5 font-mono">validation_implies_execution</td>
-                    <td className="px-4 py-1.5">validated operations are executed</td>
+                    <td className="px-4 py-1.5">validated operations reach the execution path</td>
                     <td className="px-4 py-1.5 text-center text-green-600">proven</td>
                   </tr>
                   <tr className="border-t border-gray-100">
-                    <td className="px-4 py-1.5 font-mono">exactly_once_execution</td>
-                    <td className="px-4 py-1.5">one indexed execution event per validated op</td>
+                    <td className="px-4 py-1.5 font-mono">all_validated_on_success</td>
+                    <td className="px-4 py-1.5">a successful modeled batch has all validations true</td>
                     <td className="px-4 py-1.5 text-center text-green-600">proven</td>
                   </tr>
                   <tr className="border-t border-gray-100">
-                    <td className="px-4 py-1.5 font-mono">validation_before_execution</td>
-                    <td className="px-4 py-1.5">execution occurs after same-op validation</td>
+                    <td className="px-4 py-1.5 font-mono">all_executed_on_success</td>
+                    <td className="px-4 py-1.5">a successful modeled batch attempts every execution path</td>
                     <td className="px-4 py-1.5 text-center text-green-600">proven</td>
                   </tr>
                   <tr className="border-t border-gray-100">
-                    <td className="px-4 py-1.5 font-mono">operation_isolation</td>
-                    <td className="px-4 py-1.5">one op cannot validate execution for another</td>
+                    <td className="px-4 py-1.5 font-mono">no_execution_on_revert</td>
+                    <td className="px-4 py-1.5">validation failure records no execution attempts</td>
                     <td className="px-4 py-1.5 text-center text-green-600">proven</td>
                   </tr>
                 </tbody>
@@ -261,12 +252,11 @@ export default function ERC4337EntryPointExecutionPage() {
               Assumptions
             </h2>
             <p className="leading-relaxed mb-4 text-muted text-[15px]">
-              The proof does not assume that accounts or paymasters are honest.
-              Their behavior is universally quantified through the external-call
-              model. The remaining assumptions are the same engineering
-              boundary any formal model needs: the audited Solidity source,
-              Verity&apos;s EVM semantics, and the mapping from Solidity events
-              of interest to trace predicates.
+              The proof does not establish full arbitrary account/paymaster EVM
+              correctness. The remaining assumptions are explicit: the selected
+              Solidity control-flow slice, Verity&apos;s semantics for the modeled
+              constructs, and the abstraction from concrete calls and calldata
+              to per-index validation and execution-path outcomes.
             </p>
             <ul className="space-y-0 border border-gray-200 rounded overflow-hidden text-[14px]">
               <Hypothesis
@@ -274,29 +264,28 @@ export default function ERC4337EntryPointExecutionPage() {
                 constraint="EntryPoint.sol v0.9 control flow"
                 source="eth-infinitism/account-abstraction"
               >
-                The Verity model follows the v0.9 EntryPoint control flow. The
-                proof is a statement about that modeled source, not about an
-                unrelated deployed fork.
+                The case is pinned to EntryPoint v0.9.0 and models the
+                `handleOps` validation loop plus execution loop, not every
+                helper branch in the contract.
               </Hypothesis>
               <Hypothesis
                 name="External-call semantics"
-                constraint="all oracle-backed account/paymaster outcomes"
+                constraint="oracle-backed validation and low-level call outcomes"
                 source="Verity PR 1746"
               >
-                Calls to arbitrary contracts are not replaced with trusted
-                booleans. They are modeled through Verity&apos;s adversarial
-                call interface, and the theorem quantifies over those outcomes.
+                The native Verity model uses oracle-backed calls for the
+                validation and execution-attempt stubs, while the pure proof
+                quantifies over all validation result lists.
               </Hypothesis>
               <Hypothesis
                 name="Trace interpretation"
-                constraint="validate and execute events indexed by UserOperation"
+                constraint="validation and execution-path outcomes indexed by UserOperation"
                 source="EntryPointInvariant Specs.lean"
                 border={false}
               >
-                The English guarantee is expressed as a theorem about trace
-                events. The trace records which operation was validated and
-                which operation was executed, making &ldquo;same operation&rdquo;
-                and &ldquo;exactly once&rdquo; explicit.
+                The English guarantee is expressed as a theorem about indexed
+                validation outcomes and execution-path attempts. It does not
+                claim account-call success or calldata equivalence.
               </Hypothesis>
             </ul>
             <p className="mt-3 text-muted text-sm space-x-4">

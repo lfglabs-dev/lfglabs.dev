@@ -1,9 +1,9 @@
 import { useState, useEffect, useRef } from 'react'
 
 const FORMAL_INVARIANTS = [
-  'execute(i) -> validated(i)',
-  'validated(i) -> exactlyOneExecute(i)',
-  'execute(i) occurs after validateUserOp(i)'
+  'attemptExecute(i) -> validated(i)',
+  'validated(i) -> attemptExecute(i)',
+  'handleOps reverts -> no attemptExecute(i)'
 ]
 
 export default function EntryPointGuarantee() {
@@ -75,8 +75,9 @@ export default function EntryPointGuarantee() {
           aria-hidden={!showEnglish}
         >
           <p className="text-xl md:text-2xl leading-snug font-serif max-w-prose mx-auto px-1">
-            EntryPoint executes a user operation exactly once, if and only if
-            that same operation successfully passed validation.
+            In the modeled handleOps control flow, EntryPoint reaches a user
+            operation&apos;s execution path if and only if that same operation
+            successfully passed validation.
           </p>
         </div>
       </div>
