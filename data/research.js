@@ -1,5 +1,15 @@
 export const research = [
   {
+    slug: 'erc4337-entrypoint-execution',
+    title: 'ERC-4337 EntryPoint Execution Invariant',
+    subtitle:
+      'Formally verified execution-after-validation guarantees for EntryPoint.',
+    description:
+      'How we proved that ERC-4337 EntryPoint executes each UserOperation exactly once if and only if validation succeeds, using Verity and Lean 4.',
+    date: '2026-04-24',
+    tag: 'Case study'
+  },
+  {
     slug: 'midas-feed-growth-safety',
     title: 'Midas Growth-Aware Feed Safety Guarantees',
     subtitle:
