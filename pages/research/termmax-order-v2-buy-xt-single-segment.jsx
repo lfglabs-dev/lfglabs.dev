@@ -198,79 +198,49 @@ export default function TermMaxOrderV2BuyXtSingleSegmentPage() {
             </p>
             <Disclosure title="Simplifications" className="mb-4">
               <p className="mb-3 text-muted text-[15px]">
-                Each simplification is a documented Verity DSL gap, verified
-                against the Verity macro source. The full list with line-level
-                references is in{' '}
+                The model faithfully reproduces the Solidity logic, but with a
+                few deliberate simplifications. The full details are documented
+                in{' '}
                 <ExternalLink href={CONTRACT_LINK}>Contract.lean</ExternalLink>.
               </p>
               <ul className="mb-3 text-muted list-disc pl-5 space-y-2 text-[14px]">
                 <li>
-                  <strong>Nested arrays (G1):</strong>{' '}
+                  <strong>Single curve segment only.</strong> The Solidity
+                  contract supports multiple curve segments and iterates over
+                  them. This model covers exactly one segment. Multi-segment
+                  swaps are not covered.
+                </li>
+                <li>
+                  <strong>One swap direction.</strong> Only the{' '}
+                  <code className="font-mono text-[12px]">debtToken → XT</code>{' '}
+                  path is modeled. The other token-pair branches of{' '}
                   <code className="font-mono text-[12px]">
-                    CurveCut[] memory cuts
+                    swapExactTokenToToken
                   </code>{' '}
-                  cannot exist as a Verity parameter or storage field. The single
-                  active cut is passed as scalar parameters, and the single-cut
-                  constraint is made explicit.
+                  are not included.
                 </li>
                 <li>
-                  <strong>Higher-order parameters (G2):</strong> Solidity
-                  function-pointer arguments (
+                  <strong>Access control omitted.</strong> The{' '}
                   <code className="font-mono text-[12px]">
-                    function(...) func
-                  </code>
-                  ) cannot be passed.{' '}
-                  <code className="font-mono text-[12px]">
-                    _swapAndUpdateReserves
+                    onlyBorrowingIsAllowed
                   </code>{' '}
-                  and{' '}
-                  <code className="font-mono text-[12px]">_buyToken</code> are
-                  specialized to their concrete{' '}
-                  <code className="font-mono text-[12px]">_buyXt</code> /{' '}
-                  <code className="font-mono text-[12px]">_buyXtStep</code>{' '}
-                  callees.
+                  modifier does not touch the reserve, so it is left out without
+                  weakening the guarantee.
                 </li>
                 <li>
-                  <strong>Library calls (G3):</strong>{' '}
-                  <code className="font-mono text-[12px]">
-                    TermMaxCurve.buyXt
-                  </code>
-                  ,{' '}
-                  <code className="font-mono text-[12px]">cutsReverseIter</code>,
-                  and{' '}
-                  <code className="font-mono text-[12px]">
-                    calcIntervalProps
-                  </code>{' '}
-                  are inlined as helper functions.
-                </li>
-                <li>
-                  <strong>External Lean defs (G4):</strong>{' '}
-                  <code className="font-mono text-[12px]">
-                    MathLib.plusInt256
-                  </code>{' '}
-                  is inlined as an if-then-else.
-                </li>
-                <li>
-                  <strong>Named structs (G5):</strong>{' '}
-                  <code className="font-mono text-[12px]">OrderConfig</code>,{' '}
-                  <code className="font-mono text-[12px]">CurveCut</code>, and{' '}
-                  <code className="font-mono text-[12px]">FeeConfig</code>{' '}
-                  fields are passed as named scalar parameters.
-                </li>
-                <li>
-                  <strong>Int256 storage (G6):</strong>{' '}
-                  <code className="font-mono text-[12px]">Int256</code> is fully
-                  supported as a parameter type but not as a storage field. The
-                  curve offset enters as a function parameter, so the typing is
-                  faithful.
-                </li>
-                <li>
-                  <strong>Checked arithmetic (G7):</strong> Solidity 0.8 overflow
-                  reverts are not automatic in Verity. Successful-execution
-                  preconditions in the proof play the role of{' '}
-                  <code className="font-mono text-[12px]">Panic(0x11)</code>.
+                  <strong>Post-swap side effects omitted.</strong> Token
+                  transfers, rebalancing, and events all happen after the
+                  reserve write and are guarded by{' '}
+                  <code className="font-mono text-[12px]">nonReentrant</code>,
+                  so they cannot affect the proven property.
                 </li>
               </ul>
+              <p className="text-muted text-[14px]">
+                A few cosmetic differences also exist: struct fields are passed
+                as individual parameters instead of structs, and library
+                functions are inlined as helpers. These change the shape of the
+                code but not its logic.
+              </p>
             </Disclosure>
             <Disclosure title="Verify it yourself" className="mb-4">
               <CodeBlock>{VERIFY_COMMAND}</CodeBlock>
