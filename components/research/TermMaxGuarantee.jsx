@@ -76,16 +76,14 @@ export default function TermMaxGuarantee({ specsHref }) {
 
       <p className="mt-4 text-[12px] leading-relaxed text-muted">
         <code className="font-mono text-[11px]">virtualXtReserve</code> /{' '}
-        <code className="font-mono text-[11px]">virtualXtReserve′</code>: the
-        on-chain XT reserve before / after the swap.
+        <code className="font-mono text-[11px]">virtualXtReserve′</code>: XT
+        reserve before / after.
         <br />
         <code className="font-mono text-[11px]">
           singleSegmentBuyXtTokenAmtOut(...)
         </code>
-        : a pure Lean function modeled from the Solidity source that computes
-        how many XT tokens the bonding curve yields for a given input
-        (reserve&nbsp;&minus;&nbsp;k&nbsp;/&nbsp;(reserve&nbsp;+&nbsp;input),
-        adjusted for time-to-maturity and fees).
+        : how many XT the curve says the user gets. Modeled in Lean from the
+        Solidity source.
       </p>
 
       <div className="text-right mt-4">

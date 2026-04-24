@@ -103,23 +103,15 @@ export default function TermMaxOrderV2BuyXtSingleSegmentPage() {
             <h2 className="font-serif text-lg font-semibold tracking-tight mb-4">
               Why this matters
             </h2>
-            <p className="leading-relaxed mb-4">
+            <p className="leading-relaxed mb-6">
               The{' '}
               <code className="font-mono text-[13px]">virtualXtReserve</code> is
               the accounting variable that tracks how much XT liquidity remains in
               the order. Every subsequent swap prices off this value. If the
-              reserve update diverges from the curve computation — even by one
-              wei — all future swaps on that order will price off an incorrect
+              reserve update diverges from the curve computation, even by one
+              wei, all future swaps on that order will price off an incorrect
               base, and the order&apos;s implied interest rate will drift from its
               configured curve.
-            </p>
-            <p className="leading-relaxed mb-6">
-              The call stack here is deep: eight Solidity functions across three
-              files, with fee deductions, signed-integer arithmetic, and a
-              constant-product-style curve formula. The proof guarantees that the
-              full stack produces a reserve update arithmetically faithful to the
-              curve formula. No intermediate rounding, fee deduction, or storage
-              read silently shifts the reserve away from the expected value.
             </p>
             <Disclosure title="What this covers">
               <p className="mb-3 text-muted text-[15px]">
@@ -193,17 +185,14 @@ export default function TermMaxOrderV2BuyXtSingleSegmentPage() {
               original code.
             </p>
             <p className="leading-relaxed mb-4">
-              The model is specialized to a single curve segment (
-              <code className="font-mono text-[13px]">cuts.length == 1</code>{' '}
+              TermMax&apos;s curve can have multiple segments, each with its own
+              liquidity parameters. This model covers the case where there is
+              exactly one segment. That means the Solidity loop that iterates
+              over segments runs exactly once, and if the swap needs more
+              liquidity than that single segment provides, the contract reverts
               with{' '}
               <code className="font-mono text-[13px]">
-                cuts[0].xtReserve == 0
-              </code>
-              ). This is the base case for the curve iteration: the Solidity
-              reverse-iteration loop executes exactly once, and the cross-cut
-              branch becomes an explicit{' '}
-              <code className="font-mono text-[13px]">
-                revert InsufficientLiquidity()
+                InsufficientLiquidity()
               </code>
               .
             </p>
@@ -344,8 +333,8 @@ export default function TermMaxOrderV2BuyXtSingleSegmentPage() {
             </h2>
             <p className="leading-relaxed mb-4 text-muted text-[15px]">
               The proof uses zero axioms. The five hypotheses below are
-              preconditions for successful execution — each mirrors an explicit
-              check or implicit requirement in the Solidity source.
+              preconditions for successful execution. Each one mirrors an
+              explicit check or implicit requirement in the Solidity source.
             </p>
             <ul className="space-y-0 border border-gray-200 rounded overflow-hidden text-[14px]">
               <Hypothesis
