@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from 'react'
 import { ExternalLinkIcon } from './ExternalLink'
 
 const FORMAL_GUARANTEE =
-  'virtualXtReserve′ = virtualXtReserve − curveOutput(daysToMaturity, virtualXtReserve, amountIn, fees, curve)'
+  '∀ s amountIn, virtualXtReserve′ = virtualXtReserve − singleSegmentBuyXtTokenAmtOut(daysToMaturity, virtualXtReserve, amountIn, feeRatio, liqSquare, offset)'
 
 export default function TermMaxGuarantee({ specsHref }) {
   const [showEnglish, setShowEnglish] = useState(true)
@@ -69,26 +69,23 @@ export default function TermMaxGuarantee({ specsHref }) {
         >
           <p className="text-xl md:text-2xl leading-snug font-serif max-w-prose mx-auto px-1">
             When a user swaps debt tokens for XT, the reserve goes down by
-            exactly what the pricing curve says it should. Not one wei more, not
-            one wei less.
+            exactly what the pricing curve says it should.
           </p>
         </div>
       </div>
 
       <p className="mt-4 text-[12px] leading-relaxed text-muted">
-        <code className="font-mono text-[11px]">virtualXtReserve</code> is the
-        on-chain XT reserve before the swap.{' '}
-        <code className="font-mono text-[11px]">virtualXtReserve′</code> is its
-        value after.
+        <code className="font-mono text-[11px]">virtualXtReserve</code> /{' '}
+        <code className="font-mono text-[11px]">virtualXtReserve′</code>: the
+        on-chain XT reserve before / after the swap.
         <br />
-        <code className="font-mono text-[11px]">curveOutput(...)</code>{' '}
-        is the number of XT tokens the bonding curve says the user should
-        receive. It is a pure function: reserve minus k&nbsp;/&nbsp;(reserve +
-        input), adjusted for time-to-maturity and fees. In Lean it is called{' '}
         <code className="font-mono text-[11px]">
-          singleSegmentBuyXtTokenAmtOut
+          singleSegmentBuyXtTokenAmtOut(...)
         </code>
-        .
+        : a pure Lean function modeled from the Solidity source that computes
+        how many XT tokens the bonding curve yields for a given input
+        (reserve&nbsp;&minus;&nbsp;k&nbsp;/&nbsp;(reserve&nbsp;+&nbsp;input),
+        adjusted for time-to-maturity and fees).
       </p>
 
       <div className="text-right mt-4">
