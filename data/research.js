@@ -1,5 +1,15 @@
 export const research = [
   {
+    slug: 'erc4337-entrypoint-execution',
+    title: 'ERC-4337 EntryPoint Execution Invariant',
+    subtitle:
+      'Formally verified validation-before-execution control-flow slice for EntryPoint.',
+    description:
+      'How we proved that the modeled EntryPoint handleOps execution path is reached exactly when validation succeeds, using Verity and Lean 4.',
+    date: '2026-04-24',
+    tag: 'Case study'
+  },
+  {
     slug: 'midas-feed-growth-safety',
     title: 'Midas Growth-Aware Feed Safety Guarantees',
     subtitle:
