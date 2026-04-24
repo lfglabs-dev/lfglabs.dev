@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from 'react'
 import { ExternalLinkIcon } from './ExternalLink'
 
 const FORMAL_GUARANTEE =
-  '∀ s amountIn, virtualXtReserve′ = virtualXtReserve − singleSegmentBuyXtTokenAmtOut(daysToMaturity, virtualXtReserve, amountIn, feeRatio, liqSquare, offset)'
+  '∀ amountIn, virtualXtReserve′ = virtualXtReserve − singleSegmentBuyXtTokenAmtOut(daysToMaturity, virtualXtReserve, amountIn, feeRatio, liqSquare, offset)'
 
 export default function TermMaxGuarantee({ specsHref }) {
   const [showEnglish, setShowEnglish] = useState(true)
