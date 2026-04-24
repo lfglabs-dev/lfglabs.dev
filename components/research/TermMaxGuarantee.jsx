@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from 'react'
 import { ExternalLinkIcon } from './ExternalLink'
 
 const FORMAL_GUARANTEE =
-  '∀ amountIn, virtualXtReserve′ = virtualXtReserve − singleSegmentBuyXtTokenAmtOut(daysToMaturity, virtualXtReserve, amountIn, feeRatio, liqSquare, offset)'
+  '∀ s amountIn, virtualXtReserve′ = virtualXtReserve − singleSegmentBuyXtTokenAmtOut(daysToMaturity, virtualXtReserve, amountIn, feeRatio, liqSquare, offset)'
 
 export default function TermMaxGuarantee({ specsHref }) {
   const [showEnglish, setShowEnglish] = useState(true)
@@ -75,6 +75,9 @@ export default function TermMaxGuarantee({ specsHref }) {
       </div>
 
       <p className="mt-4 text-[12px] leading-relaxed text-muted">
+        <code className="font-mono text-[11px]">s</code>: the contract state
+        (storage) at the time of the swap.
+        <br />
         <code className="font-mono text-[11px]">virtualXtReserve</code> /{' '}
         <code className="font-mono text-[11px]">virtualXtReserve′</code>: XT
         reserve before / after.
