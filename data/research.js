@@ -1,5 +1,15 @@
 export const research = [
   {
+    slug: 'termmax-order-v2-buy-xt-single-segment',
+    title: 'TermMax Single-Segment Buy-XT Reserve Integrity',
+    subtitle:
+      'Formally verified reserve-update integrity of the single-segment debtToken-to-XT swap path.',
+    description:
+      'How we proved that the single-segment buy-XT path in TermMax OrderV2 updates the virtual XT reserve by exactly the curve-computed output amount, using Verity and Lean 4.',
+    date: '2026-04-24',
+    tag: 'Case study'
+  },
+  {
     slug: 'midas-feed-growth-safety',
     title: 'Midas Growth-Aware Feed Safety Guarantees',
     subtitle:
