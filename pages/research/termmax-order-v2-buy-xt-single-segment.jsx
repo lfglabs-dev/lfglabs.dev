@@ -9,12 +9,8 @@ import Hypothesis from '../../components/research/Hypothesis'
 import TermMaxGuarantee from '../../components/research/TermMaxGuarantee'
 import { getSortedResearch } from '../../lib/getSortedResearch'
 
-const BENCHMARK_COMMIT_HASH =
-  'f70d95716422175702266c0153e4d063c399a5d8'
-
 const VERIFY_COMMAND = `git clone https://github.com/lfglabs-dev/verity-benchmark
 cd verity-benchmark
-git checkout ${BENCHMARK_COMMIT_HASH}
 lake build Benchmark.Cases.TermMax.OrderV2BuyXtSingleSegment.Compile`
 
 const UPSTREAM_ORDER_V2 =
@@ -24,17 +20,16 @@ const UPSTREAM_CURVE =
 const UPSTREAM_MATH =
   'https://github.com/term-structure/termmax-contract-v2/blob/64bd47b98e064c7fb91ab4a59b70520e0ec285d5/contracts/v1/lib/MathLib.sol'
 
-const BENCHMARK_REPO =
-  'https://github.com/lfglabs-dev/verity-benchmark'
+const BENCHMARK_REPO = 'https://github.com/lfglabs-dev/verity-benchmark'
 
-const BENCHMARK_COMMIT =
-  `https://github.com/lfglabs-dev/verity-benchmark/blob/${BENCHMARK_COMMIT_HASH}`
+const BENCHMARK_BLOB =
+  'https://github.com/lfglabs-dev/verity-benchmark/blob/main'
 
 const CASE_PATH = 'Benchmark/Cases/TermMax/OrderV2BuyXtSingleSegment'
-const CONTRACT_LINK = `${BENCHMARK_COMMIT}/${CASE_PATH}/Contract.lean`
-const SPECS_LINK = `${BENCHMARK_COMMIT}/${CASE_PATH}/Specs.lean`
-const PROOFS_LINK = `${BENCHMARK_COMMIT}/${CASE_PATH}/Proofs.lean`
-const CASE_LINK = `${BENCHMARK_COMMIT}/${CASE_PATH}`
+const CONTRACT_LINK = `${BENCHMARK_BLOB}/${CASE_PATH}/Contract.lean`
+const SPECS_LINK = `${BENCHMARK_BLOB}/${CASE_PATH}/Specs.lean`
+const PROOFS_LINK = `${BENCHMARK_BLOB}/${CASE_PATH}/Proofs.lean`
+const CASE_LINK = `${BENCHMARK_BLOB}/${CASE_PATH}`
 
 export default function TermMaxOrderV2BuyXtSingleSegmentPage() {
   const otherResearch = getSortedResearch().filter(
@@ -76,10 +71,11 @@ export default function TermMaxOrderV2BuyXtSingleSegmentPage() {
               <ExternalLink href="https://github.com/term-structure">
                 Term Structure
               </ExternalLink>
-              ) is a fixed-rate lending protocol. Users trade between debt tokens
-              and XT (extended tokens) through on-chain order books, where pricing
-              is governed by a bonding curve parameterized by liquidity, a
-              time-dependent interest factor, and configurable fee ratios.
+              ) is a fixed-rate lending protocol. Users trade between debt
+              tokens and XT (extended tokens) through on-chain order books,
+              where pricing is governed by a bonding curve parameterized by
+              liquidity, a time-dependent interest factor, and configurable fee
+              ratios.
             </p>
             <p className="mt-4 text-muted text-[15px] leading-relaxed">
               The{' '}
@@ -87,15 +83,17 @@ export default function TermMaxOrderV2BuyXtSingleSegmentPage() {
                 TermMaxOrderV2
               </ExternalLink>{' '}
               contract&apos;s{' '}
-              <code className="font-mono text-[13px]">swapExactTokenToToken</code>{' '}
+              <code className="font-mono text-[13px]">
+                swapExactTokenToToken
+              </code>{' '}
               function is the entry point for exact-input swaps. This case study
               isolates the{' '}
               <code className="font-mono text-[13px]">debtToken → XT</code> path
               on a single curve segment: the path a user takes when borrowing
-              against a single liquidity position. The proof tracks the full call
+              against one active curve cut. The proof tracks the modeled call
               stack from the swap entry point down through the curve library and
-              confirms that the on-chain reserve update matches the curve
-              computation exactly.
+              confirms that the reserve update matches the curve computation
+              exactly inside that model.
             </p>
           </section>
 
@@ -106,12 +104,12 @@ export default function TermMaxOrderV2BuyXtSingleSegmentPage() {
             <p className="leading-relaxed mb-6">
               The{' '}
               <code className="font-mono text-[13px]">virtualXtReserve</code> is
-              the accounting variable that tracks how much XT liquidity remains in
-              the order. Every subsequent swap prices off this value. If the
+              the accounting variable that tracks how much XT liquidity remains
+              in the order. Every subsequent swap prices off this value. If the
               reserve update diverges from the curve computation, even by one
               wei, all future swaps on that order will price off an incorrect
-              base, and the order&apos;s implied interest rate will drift from its
-              configured curve.
+              base, and the order&apos;s implied interest rate will drift from
+              its configured curve.
             </p>
             <Disclosure title="What this covers">
               <p className="mb-3 text-muted text-[15px]">
@@ -128,16 +126,27 @@ export default function TermMaxOrderV2BuyXtSingleSegmentPage() {
                   <code className="font-mono text-[12px]">
                     swapExactTokenToToken
                   </code>{' '}
-                  → <code className="font-mono text-[12px]">_swapAndUpdateReserves</code>{' '}
-                  → <code className="font-mono text-[12px]">_buyXt</code>{' '}
-                  → <code className="font-mono text-[12px]">_buyToken</code>{' '}
-                  → <code className="font-mono text-[12px]">_buyXtStep</code>{' '}
-                  → <code className="font-mono text-[12px]">TermMaxCurve.buyXt</code>{' '}
-                  → <code className="font-mono text-[12px]">cutsReverseIter</code>{' '}
-                  → <code className="font-mono text-[12px]">calcIntervalProps</code>
+                  →{' '}
+                  <code className="font-mono text-[12px]">
+                    _swapAndUpdateReserves
+                  </code>{' '}
+                  → <code className="font-mono text-[12px]">_buyXt</code> →{' '}
+                  <code className="font-mono text-[12px]">_buyToken</code> →{' '}
+                  <code className="font-mono text-[12px]">_buyXtStep</code> →{' '}
+                  <code className="font-mono text-[12px]">
+                    TermMaxCurve.buyXt
+                  </code>{' '}
+                  →{' '}
+                  <code className="font-mono text-[12px]">cutsReverseIter</code>{' '}
+                  →{' '}
+                  <code className="font-mono text-[12px]">
+                    calcIntervalProps
+                  </code>
                 </li>
                 <li>
-                  <code className="font-mono text-[12px]">MathLib.plusInt256</code>{' '}
+                  <code className="font-mono text-[12px]">
+                    MathLib.plusInt256
+                  </code>{' '}
                   (signed-integer addition on uint256) is also modeled.
                 </li>
                 <li>
@@ -156,7 +165,7 @@ export default function TermMaxOrderV2BuyXtSingleSegmentPage() {
                 <code className="font-mono text-[12px]">
                   onlyBorrowingIsAllowed
                 </code>
-                ), token transfers, rebalancing, events, and multi-segment curve
+                ), token transfers, rebalancing, events, and multi-cut curve
                 iteration.
               </p>
             </Disclosure>
@@ -167,8 +176,8 @@ export default function TermMaxOrderV2BuyXtSingleSegmentPage() {
               How this was modeled
             </h2>
             <p className="leading-relaxed mb-4">
-              The benchmark extracts eight Solidity functions across three source
-              files (
+              The benchmark extracts eight Solidity functions across three
+              source files (
               <ExternalLink href={UPSTREAM_ORDER_V2}>
                 TermMaxOrderV2.sol
               </ExternalLink>
@@ -176,21 +185,19 @@ export default function TermMaxOrderV2BuyXtSingleSegmentPage() {
               <ExternalLink href={UPSTREAM_CURVE}>
                 TermMaxCurve.sol
               </ExternalLink>
-              ,{' '}
-              <ExternalLink href={UPSTREAM_MATH}>
-                MathLib.sol
-              </ExternalLink>
-              ) into a single Verity contract block. Each Solidity helper is kept
-              as a separate Verity function to preserve the call structure of the
-              original code.
+              , <ExternalLink href={UPSTREAM_MATH}>MathLib.sol</ExternalLink>)
+              into a single Verity contract block. Each Solidity helper is kept
+              as a separate Verity function to preserve the call structure of
+              the original code.
             </p>
             <p className="leading-relaxed mb-4">
-              TermMax&apos;s curve can have multiple segments, each with its own
+              TermMax&apos;s curve can have multiple cuts, each with its own
               liquidity parameters. This model covers the case where there is
-              exactly one segment. That means the Solidity loop that iterates
-              over segments runs exactly once, and if the swap needs more
-              liquidity than that single segment provides, the contract reverts
-              with{' '}
+              exactly one active cut at index 0 and that cut has
+              <code className="font-mono text-[13px]"> xtReserve = 0</code>.
+              That means the Solidity loop that iterates over cuts runs exactly
+              once, and if the swap needs more liquidity than that single cut
+              provides, the model reverts with{' '}
               <code className="font-mono text-[13px]">
                 InsufficientLiquidity()
               </code>
@@ -198,17 +205,20 @@ export default function TermMaxOrderV2BuyXtSingleSegmentPage() {
             </p>
             <Disclosure title="Simplifications" className="mb-4">
               <p className="mb-3 text-muted text-[15px]">
-                The model faithfully reproduces the Solidity logic, but with a
-                few deliberate simplifications. The full details are documented
-                in{' '}
+                The model preserves the reserve-update logic for this execution
+                path, with deliberate simplifications. The full details are
+                documented in{' '}
                 <ExternalLink href={CONTRACT_LINK}>Contract.lean</ExternalLink>.
               </p>
               <ul className="mb-3 text-muted list-disc pl-5 space-y-2 text-[14px]">
                 <li>
-                  <strong>Single curve segment only.</strong> The Solidity
-                  contract supports multiple curve segments and iterates over
-                  them. This model covers exactly one segment. Multi-segment
-                  swaps are not covered.
+                  <strong>Single active curve cut only.</strong> The Solidity
+                  contract supports multiple curve cuts and iterates over them.
+                  This model covers exactly one active cut at index 0, with{' '}
+                  <code className="font-mono text-[12px]">
+                    cuts[0].xtReserve = 0
+                  </code>
+                  . Multi-cut swaps are not covered.
                 </li>
                 <li>
                   <strong>One swap direction.</strong> Only the{' '}
@@ -233,6 +243,14 @@ export default function TermMaxOrderV2BuyXtSingleSegmentPage() {
                   reserve write and are guarded by{' '}
                   <code className="font-mono text-[12px]">nonReentrant</code>,
                   so they cannot affect the proven property.
+                </li>
+                <li>
+                  <strong>Checked arithmetic abstracted.</strong> Solidity 0.8
+                  checked arithmetic in{' '}
+                  <code className="font-mono text-[12px]">plusInt256</code> is
+                  modeled with Verity&apos;s unsigned arithmetic operations.
+                  This proof verifies the reserve update inside that arithmetic
+                  model, not Solidity&apos;s overflow-revert behavior.
                 </li>
               </ul>
               <p className="text-muted text-[14px]">
@@ -282,7 +300,8 @@ export default function TermMaxOrderV2BuyXtSingleSegmentPage() {
                 <tbody className="font-mono">
                   <tr className="border-t border-gray-100">
                     <td className="px-4 py-1.5">
-                      virtualXtReserve&prime; = virtualXtReserve &minus; curveOutput
+                      virtualXtReserve&prime; = virtualXtReserve &minus;
+                      curveOutput
                     </td>
                     <td className="px-4 py-1.5 text-center text-green-600">
                       proven
@@ -293,7 +312,9 @@ export default function TermMaxOrderV2BuyXtSingleSegmentPage() {
             </div>
             <p className="mt-3 text-muted text-sm space-x-4">
               <ExternalLink href={SPECS_LINK}>View specs in Lean</ExternalLink>
-              <ExternalLink href={PROOFS_LINK}>View proofs in Lean</ExternalLink>
+              <ExternalLink href={PROOFS_LINK}>
+                View proofs in Lean
+              </ExternalLink>
             </p>
           </section>
 
@@ -330,17 +351,17 @@ export default function TermMaxOrderV2BuyXtSingleSegmentPage() {
                 constraint="plusInt256(virtualXtReserve, cutOffset) ≠ 0"
                 source="calcIntervalProps divides by vXtReserve"
               >
-                The curve formula divides the liquidity squared by the virtual XT
-                reserve (after applying the curve offset). A zero virtual reserve
-                would cause a division-by-zero revert.
+                The curve formula divides the liquidity squared by the virtual
+                XT reserve (after applying the curve offset). A zero virtual
+                reserve would cause a division-by-zero revert.
               </Hypothesis>
               <Hypothesis
                 name="hNoCross"
                 constraint="curveOutput ≤ virtualXtReserve"
-                source="cutsReverseIter single-segment liquidity check"
+                source="cutsReverseIter single-cut liquidity check"
               >
-                The computed XT output cannot exceed the available reserve. In the
-                Solidity source, exceeding this triggers{' '}
+                The computed XT output cannot exceed the available reserve. In
+                the Solidity source, exceeding this triggers{' '}
                 <code className="font-mono text-[12px]">
                   revert InsufficientLiquidity()
                 </code>
@@ -363,7 +384,9 @@ export default function TermMaxOrderV2BuyXtSingleSegmentPage() {
             </ul>
             <p className="mt-3 text-muted text-sm space-x-4">
               <ExternalLink href={SPECS_LINK}>View specs in Lean</ExternalLink>
-              <ExternalLink href={PROOFS_LINK}>View proofs in Lean</ExternalLink>
+              <ExternalLink href={PROOFS_LINK}>
+                View proofs in Lean
+              </ExternalLink>
             </p>
           </section>
 
@@ -381,22 +404,19 @@ export default function TermMaxOrderV2BuyXtSingleSegmentPage() {
                 TermMaxCurve.sol
               </ExternalLink>
               {', '}
-              <ExternalLink href={UPSTREAM_MATH}>
-                MathLib.sol
-              </ExternalLink>
-              .
+              <ExternalLink href={UPSTREAM_MATH}>MathLib.sol</ExternalLink>.
             </p>
             <p className="leading-relaxed mb-2">
-              <ExternalLink href={CASE_LINK}>
-                Full case directory
-              </ExternalLink>
+              <ExternalLink href={CASE_LINK}>Full case directory</ExternalLink>
               {' in the Verity benchmark repository.'}
             </p>
             <p className="leading-relaxed mb-2">
               <ExternalLink href={BENCHMARK_REPO}>
                 Verity benchmark repository
               </ExternalLink>
-              {', which contains the formal specification, machine-checked proofs, and the broader benchmark suite this case belongs to.'}
+              {
+                ', which contains the formal specification, machine-checked proofs, and the broader benchmark suite this case belongs to.'
+              }
             </p>
             <p className="leading-relaxed">
               <Link
